@@ -4,15 +4,17 @@
 基于WebSocket的消息增强器，目前支持单发和群发功能。
 
 #### 软件架构
-软件架构说明
+Maven+SpringBoot
 
 
 
-#### 安装教程
+#### 使用教程
 
-1.  xxxx
-2.  xxxx
-3.  xxxx
+1.  下载代码到本地，打包安装至Maven仓库
+2.  Maven项目导入该依赖
+3.  启动类添加@EnableMessagePlus来启动增强器
+4.  自己创建的WebSocket依赖MessagePlusBase并实现抽象方法（其中的@ServerEndpoint中的路径必须包含sid路径参数）
+5.  使用ChatUtils工具类来创建群组、单发消息或者群发消息
 
 #### 使用说明
 
