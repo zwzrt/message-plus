@@ -10,6 +10,16 @@ import lombok.Data;
 @Data
 public class Message {
     private Integer code; // 消息编码
+    private String type; // 消息类型
     private Object data;
     private String msg;
+
+    public Message() {
+    }
+    public Message(Integer code, String type, Object data, String msg) {
+        this.code = code;
+        this.type = type;
+        this.data = data;
+        this.msg = msg;
+    }
 }

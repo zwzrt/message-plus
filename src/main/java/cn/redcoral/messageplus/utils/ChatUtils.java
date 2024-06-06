@@ -52,13 +52,14 @@ public class ChatUtils {
      * @return 返回全部在线人数
      */
     public static Long joinChat(String id, Session session) {
-        userIdSessionMap.put(id, session);
         // 为空则多个在线人数，在线人数加一；若不为空，则为顶替，无需加一
         if (userIdSessionMap.get(id)==null) {
             userNumLock.lock();
             userNum++;
             userNumLock.unlock();
         }
+        // 录入session库
+        userIdSessionMap.put(id, session);
         List<String> groupIdList = ChatUtils.userByGroupIdMap.get(id);
         if (groupIdList!=null) {
             groupIdList.forEach((groupId)->{

@@ -1,9 +1,11 @@
 package cn.redcoral.messageplus;
 
 import cn.redcoral.messageplus.entity.Message;
+import cn.redcoral.messageplus.entity.MessageType;
 import cn.redcoral.messageplus.utils.ChatUtils;
 import com.alibaba.fastjson.JSON;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.web.servlet.tags.MessageTag;
 
 import javax.websocket.*;
 import javax.websocket.server.PathParam;
@@ -60,13 +62,45 @@ public abstract class MessagePlusBase {
             return;
         }
         Message message = JSON.parseObject(messageJSON, Message.class);
+        // 调用接收消息方法
         this.onMessage(message.getData(), session);
+        //根据消息类型调用对应方法
+        switch (MessageType.valueOf(message.getType())) {
+            // 单发
+            case SINGLE_SHOT: {
+                this.onMessageBySingle(message.getData(), session);
+                break;
+            }
+            // 群发
+            case MASS_SHOT: {
+                this.onMessageByMass(message.getData(), session);
+                break;
+            }
+            // 系统
+            case SYSTEM_SHOT: {
+                this.onMessageBySystem(message.getData(), session);
+                break;
+            }
+        }
+
     }
     /**
      * 收到客户端消息后调用的方法
      * @param message 客户端发送过来的消息
      */
-    public abstract void onMessage(Object message, Session session);
+    public void onMessage(Object message, Session session){}
+    /**
+     * 收到单发类型的消息后调用的方法
+     */
+    public abstract void onMessageBySingle(Object message, Session session);
+    /**
+     * 收到群发类型的消息后调用的方法
+     */
+    public abstract void onMessageByMass(Object message, Session session);
+    /**
+     * 收到系统类型的消息后调用的方法
+     */
+    public abstract void onMessageBySystem(Object message, Session session);
 
     /**
      * 处理过程中发生错误

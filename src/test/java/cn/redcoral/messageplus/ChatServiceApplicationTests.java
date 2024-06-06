@@ -1,5 +1,6 @@
 package cn.redcoral.messageplus;
 
+import cn.redcoral.messageplus.config.SpringConfig;
 import cn.redcoral.messageplus.utils.ChatUtils;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,7 +16,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ThreadFactory;
 
-@SpringBootTest(classes = {AopTest.class, MyAopTest.class})
+@SpringBootTest(classes = {AopTest.class, MyAopTest.class, SpringConfig.class})
 @EnableMessagePlus
 class ChatServiceApplicationTests {
 
