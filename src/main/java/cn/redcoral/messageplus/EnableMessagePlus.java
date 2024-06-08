@@ -14,6 +14,6 @@ import java.lang.annotation.*;
 @Target({ElementType.TYPE})
 @Retention(RetentionPolicy.RUNTIME)
 @Inherited
-@Import({SpringConfig.class})
+@Import({SpringConfig.class, PersistenceConfig.class, MessageInitialize.class})
 public @interface EnableMessagePlus {
 }

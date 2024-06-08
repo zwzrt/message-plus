@@ -4,6 +4,7 @@ import cn.redcoral.messageplus.entity.Message;
 import cn.redcoral.messageplus.entity.MessageType;
 import cn.redcoral.messageplus.utils.ChatUtils;
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.servlet.tags.MessageTag;
 
@@ -61,7 +62,20 @@ public abstract class MessagePlusBase {
             log.warn("对方返回空数据。");
             return;
         }
-        Message message = JSON.parseObject(messageJSON, Message.class);
+        Message message;
+        try {
+            message = JSON.parseObject(messageJSON, Message.class);
+        } catch (JSONException e) {
+            log.error("消息数据格式错误！");
+            return;
+        }
+        // 消息类型为空
+        if (message.getType()==null||message.getType().isEmpty()) {
+            log.error("消息类型为空！");
+            return;
+        }
+
+        // 调用下游方法
         // 调用接收消息方法
         this.onMessage(message.getData(), session);
         //根据消息类型调用对应方法
@@ -82,7 +96,6 @@ public abstract class MessagePlusBase {
                 break;
             }
         }
-
     }
     /**
      * 收到客户端消息后调用的方法

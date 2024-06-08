@@ -4,12 +4,15 @@
 
 ### 语言（Language）
 
-- [中文](#介绍)
-- [English](#Introduction)
+- [中文](#中文)
+- [English](#English)
 
 ---
 
+### 中文
+
 #### 介绍
+
 基于WebSocket的消息增强器，目前支持单发和群发功能。
 
 #### 软件架构
@@ -17,11 +20,61 @@ Maven+SpringBoot+WebSocket
 
 #### 使用教程
 
-1.  下载代码到本地，打包安装至Maven仓库
-2.  Maven项目导入该依赖
-3.  启动类添加@EnableMessagePlus来启动增强器
-4.  自己创建的WebSocket依赖MessagePlusBase并实现抽象方法（其中的@ServerEndpoint中的路径必须包含sid路径参数，如：/websocket/{sid}）
-5.  使用ChatUtils工具类来创建群组、单发消息或者群发消息
+1. 下载代码到本地，打包安装至Maven仓库
+
+2. Maven项目导入该依赖
+
+   ```xml
+   <dependency>
+       <groupId>cn.redcoral.messageplus</groupId>
+       <artifactId>message-plus</artifactId>
+       <version>0.0.2-beta</version>
+   </dependency>
+   ```
+
+3. 启动类添加@EnableMessagePlus来启动增强器
+
+   ```java
+   @SpringBootApplication
+   @EnableMessagePlus // 开启message增强
+   public class ChatTestApplication {
+       public static void main(String[] args) {
+           SpringApplication.run(ChatTestApplication.class, args);
+       }
+   }
+   ```
+
+4. 自己创建的WebSocket依赖MessagePlusBase并实现抽象方法（其中的@ServerEndpoint中的路径必须包含sid路径参数，如：/websocket/{sid}）
+
+   ```java
+   @Service
+   @ServerEndpoint("/websocket/{sid}")
+   public class MessageUtil extends MessagePlusBase {
+       // 出现新连接时调用
+       @Override
+       public void onOpen(Session session,  String sid) {}
+       // 断开连接时调用
+       @Override
+       public void onClose() {}
+       // 接收到消息时调用（优先级高于下面三个方法）
+       @Override
+       public void onMessage(Object message, Session session) {}
+       // 消息类型为单发时调用
+       @Override
+       public void onMessageBySingle(Object message, Session session) {}
+       // 消息类型为群发时调用
+       @Override
+       public void onMessageByMass(Object message, Session session) {}
+       // 消息类型为系统时调用
+       @Override
+       public void onMessageBySystem(Object message, Session session) {}
+       // 过程中出现异常调用（会断开连接）
+       @Override
+       public void onError(Session session, Throwable error) {}
+   }
+   ```
+
+5. 使用ChatUtils工具类来创建群组、单发消息或者群发消息
 
 #### 使用说明
 
@@ -47,7 +100,10 @@ Maven+SpringBoot+WebSocket
 
 ---
 
+### English
+
 #### Introduction
+
 A WebSocket-based message booster that currently supports single and group sending.
 
 #### SoftwareArchitecture
@@ -55,11 +111,61 @@ Maven+SpringBoot+WebSocket
 
 #### UsingTheTutorial
 
-1.  Download the code to the local, package and install it to the Maven repository.
-2.  The Maven project imports the dependency.
-3.  Start the class to add @EnableMessagePlus to start the enhancer.
-4.  Create your own WebSocket dependency MessagePlusBase and implement abstract methods (the path in the @ServerEndpoint must contain sid path parameters, such as:/websocket/{sid})
-5.  Use the ChatUtils tool class to create groups, single messages, or mass messages.
+1. Download the code to the local, package and install it to the Maven repository.
+
+2. The Maven project imports the dependency.
+
+   ```xml
+   <dependency>
+       <groupId>cn.redcoral.messageplus</groupId>
+       <artifactId>message-plus</artifactId>
+       <version>0.0.2-beta</version>
+   </dependency>
+   ```
+
+3. Start the class to add @EnableMessagePlus to start the enhancer.
+
+   ```java
+   @SpringBootApplication
+   @EnableMessagePlus // Enable MessagePlus
+   public class ChatTestApplication {
+       public static void main(String[] args) {
+           SpringApplication.run(ChatTestApplication.class, args);
+       }
+   }
+   ```
+
+4. Create your own WebSocket dependency MessagePlusBase and implement abstract methods (the path in the @ServerEndpoint must contain sid path parameters, such as:/websocket/{sid})
+
+   ```java
+   @Service
+   @ServerEndpoint("/websocket/{sid}")
+   public class MessageUtil extends MessagePlusBase {
+       // Called when a new connection appears
+       @Override
+       public void onOpen(Session session,  String sid) {}
+       // Called when disconnected
+       @Override
+       public void onClose() {}
+       // Called when a message is received (precedence over the following three methods)
+       @Override
+       public void onMessage(Object message, Session session) {}
+       // Called when the message type is single
+       @Override
+       public void onMessageBySingle(Object message, Session session) {}
+       // Called when the message type is group sending
+       @Override
+       public void onMessageByMass(Object message, Session session) {}
+       // Called when the message type is system
+       @Override
+       public void onMessageBySystem(Object message, Session session) {}
+       // An abnormal call occurs during the process (will disconnect)
+       @Override
+       public void onError(Session session, Throwable error) {}
+   }
+   ```
+
+5. Use the ChatUtils tool class to create groups, single messages, or mass messages.
 
 #### InstructionsForUse
 

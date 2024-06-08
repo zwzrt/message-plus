@@ -5,13 +5,19 @@
 
     <groupId>cn.redcoral.messageplus</groupId>
     <artifactId>message-plus</artifactId>
-    <version>0.0.1-beta</version>
+    <version>0.0.2-beta</version>
 
     <dependencies>
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-aop</artifactId>
             <version>2.2.5.RELEASE</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-data-redis</artifactId>
+            <version>2.3.7.RELEASE</version>
+            <optional>true</optional>
         </dependency>
         <!-- WebSocket -->
         <dependency>
