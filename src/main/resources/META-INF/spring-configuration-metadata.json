@@ -1,0 +1,19 @@
+{
+  "groups": [
+    {
+      "name": "messageplus",
+      "type": "cn.redcoral.messageplus.properties.MessagePlusProperties",
+      "sourceType": "cn.redcoral.messageplus.properties.MessagePlusProperties"
+    }
+  ],
+  "properties": [
+    {
+      "name": "messageplus.persistence",
+      "type": "java.lang.Boolean",
+      "description": "是否开启持久化",
+      "sourceType": "cn.redcoral.messageplus.properties.MessagePlusProperties",
+      "defaultValue": false
+    }
+  ],
+  "hints": []
+}

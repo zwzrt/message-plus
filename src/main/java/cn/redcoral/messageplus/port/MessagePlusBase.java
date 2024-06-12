@@ -1,4 +1,4 @@
-package cn.redcoral.messageplus;
+package cn.redcoral.messageplus.port;
 
 import cn.redcoral.messageplus.entity.Message;
 import cn.redcoral.messageplus.entity.MessageType;
@@ -6,7 +6,7 @@ import cn.redcoral.messageplus.utils.ChatUtils;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONException;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.web.servlet.tags.MessageTag;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.websocket.*;
 import javax.websocket.server.PathParam;
@@ -43,7 +43,8 @@ public abstract class MessagePlusBase {
      */
     @OnClose
     public void baseOnClose() {
-        ChatUtils.quitChat(this.client_id);
+//        System.out.println(ChatUtils());
+//        getChatUtils().quitChat(this.client_id);
         this.onClose();
     }
     /**

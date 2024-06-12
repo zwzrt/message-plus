@@ -20,9 +20,9 @@ Maven+SpringBoot+WebSocket
 
 #### 使用教程
 
-1. 下载代码到本地，打包安装至Maven仓库
+1. 下载代码到本地，打包安装至Maven仓库。
 
-2. Maven项目导入该依赖
+2. Maven项目导入该依赖。
 
    ```xml
    <dependency>
@@ -32,7 +32,7 @@ Maven+SpringBoot+WebSocket
    </dependency>
    ```
 
-3. 启动类添加@EnableMessagePlus来启动增强器
+3. 启动类添加@EnableMessagePlus来启动增强器。
 
    ```java
    @SpringBootApplication
@@ -74,13 +74,44 @@ Maven+SpringBoot+WebSocket
    }
    ```
 
-5. 使用ChatUtils工具类来创建群组、单发消息或者群发消息
+5. 使用ChatUtils工具类来创建群组、单发消息或者群发消息。
+
+6. 前端需要使用/src/main/resources/message-plus.js中的方法去封装对象，然后发送给后端。
+
+7. 如果没有开启持久化但是需要导入自己的群组，则需要调用ChatUtils.createGroup(createUserId,  name,  client_ids)来创建群组，如果想用更简单的办法并且开启持久化，请继续向下看。
+
+8. 如果想要使用持久化功能（提前需要你的项目具有Redis），可以配置如下来打开：
+
+   ```yml
+   messageplus:
+     persistence: true # 开启持久化
+   ```
+
+9. 使用持久化后，如果想要导入自己的群组，可以继承GroupInterface并实现接口：
+
+   ```java
+   @Component
+   public class MyGroupInterface implements GroupInterface {
+       /**
+        * 开发者自定义的群组查询接口（二级）
+        * @param groupId 群组ID
+        * @return 群组
+        */
+       @Override
+       public Group getGroupInCustom(String groupId) {
+           // 此处自己去实现代码，然后调用下面的方法去创建群组对象，然后返回即可。
+           Group.BuildGroup(id, createUserId, groupName, clientIdList);
+           return null;
+       }
+   }
+   ```
 
 #### 使用说明
 
-1.  如果使用过程出现bug或者存在不足，可以向red_coral20240606@163.com发送邮箱，我们将会积极修复并提供更强大的功能。
-2.  目前该项目还并不支持多个服务间同步或联系的功能。
-3.  该项目并不能做群组或用户信息的持久化，需要开发者自己去做持久化的代码。
+1.  如果你想要测试一下，可以去我的仓库中的message-plus-text拉取代码来测试。(https://github.com/zwzrt/message-plus-test.git、https://gitee.com/modmb/message-plus-test.git)
+2.  如果使用过程出现bug或者存在不足，可以向red_coral20240606@163.com发送邮箱，我们将会积极修复并提供更强大的功能。
+3.  目前该项目还并不支持多个服务间同步或联系的功能。
+4.  该项目并不能做群组或用户信息的持久化，需要开发者自己去做持久化的代码。
 
 #### 参与贡献
 
@@ -166,6 +197,8 @@ Maven+SpringBoot+WebSocket
    ```
 
 5. Use the ChatUtils tool class to create groups, single messages, or mass messages.
+
+6. The front-end needs to use methods in src/main/resources/message-plus.js to encapsulate the object and send it to the back end.
 
 #### InstructionsForUse
 

@@ -1,6 +1,7 @@
 package cn.redcoral.messageplus.entity;
 
 import cn.redcoral.messageplus.utils.ChatUtils;
+import cn.redcoral.messageplus.utils.SpringUtils;
 import lombok.Data;
 
 import java.util.ArrayList;
@@ -51,23 +52,34 @@ public class Group {
         this.clientIdList = new ArrayList<>();
     }
 
+    public static Group BuildGroup(String id, String createUserId, String groupName, List<String> clientIdList) {
+        Group group = new Group();
+        group.id = id;
+        group.createUserId = createUserId;
+        group.name = groupName;
+        group.clientIdList = clientIdList;
+        // 加入群组
+        clientIdList.forEach(group::joinGroup);
+        return group;
+    }
+
     /**
      * 加入群组
      * @param userId
-     * @param dialogue
      * @return 总人数
      */
-    public int joinGroup(String userId, Dialogue dialogue) {
-        if (userId==null||dialogue==null) return -1;
+    public int joinGroup(String userId) {
+        if (userId==null) return -1;
 
+        int index = clientIdList.indexOf(userId);
         // 在线且已经加入
-        if (dialogue.isOnLine() && ChatUtils.userIdSessionMap.get(userId)!=null) {
+        if (ChatUtils.userIdSessionMap.get(userId)!=null&&index!=-1) {
             userNumLock.lock();
             this.onlineUserNum++;
             userNumLock.unlock();
         }
-        // 在线但是没有加入
-        else if (dialogue.isOnLine() && ChatUtils.userIdSessionMap.get(userId)==null) {
+        // 不在线但是没有加入
+        else if (ChatUtils.userIdSessionMap.get(userId)==null&&index==-1) {
             userNumLock.lock();
             userNum++;
             this.onlineUserNum++;
@@ -78,12 +90,57 @@ public class Group {
             userNumLock.lock();
             userNum++;
             userNumLock.unlock();
+        }
+
+
+        // 未加入群组
+        if (index==-1) {
             // 加入群组
             clientIdList.add(userId);
         }
-
 //        userIdDialogueMap.put(userId, dialogue);
 
         return userNum;
+    }
+    /**
+     * 上线
+     */
+    public void topLine(String userId) {
+        userNumLock.lock();
+        this.onlineUserNum++;
+        userNumLock.unlock();
+    }
+    /**
+     * 下线
+     */
+    public void downLine(String userId) {
+        userNumLock.lock();
+        this.onlineUserNum--;
+        userNumLock.unlock();
+    }
+
+    private String getEasyStr() {
+        return this.getCreateUserId()+":"+this.getName();
+    }
+    private static String getEasyStr(String createUserId, String name) {
+        return createUserId+":"+name;
+    }
+
+    /**
+     * 判断两个群组是否相同
+     * @param group1
+     * @param group2
+     * @return
+     */
+    public static boolean isSame(Group group1, Group group2) {
+        return group1.getEasyStr().equals(group2.getEasyStr());
+    }
+    /**
+     * 判断两个群组是否相同
+     * @param group2
+     * @return
+     */
+    public static boolean isSame(String createUserId, String name, Group group2) {
+        return getEasyStr(createUserId, name).equals(group2.getEasyStr());
     }
 }
