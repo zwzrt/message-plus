@@ -5,7 +5,7 @@
 
     <groupId>cn.redcoral.messageplus</groupId>
     <artifactId>message-plus</artifactId>
-    <version>0.0.2-beta</version>
+    <version>0.0.4-beta</version>
 
     <dependencies>
         <dependency>
@@ -42,6 +42,12 @@
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
             <version>1.18.28</version>
+        </dependency>
+        <!--hutool-->
+        <dependency>
+            <groupId>cn.hutool</groupId>
+            <artifactId>hutool-all</artifactId>
+            <version>5.7.17</version>
         </dependency>
 
         <dependency>

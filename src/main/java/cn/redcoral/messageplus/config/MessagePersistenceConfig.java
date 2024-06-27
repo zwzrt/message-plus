@@ -9,7 +9,7 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;
 
 /**
- * 持久化配置类
+ * message-plus的持久化配置类
  * @author mo
  * @日期: 2024-06-07 15:48
  **/

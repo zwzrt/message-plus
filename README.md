@@ -13,7 +13,7 @@
 
 #### 介绍
 
-基于WebSocket的消息增强器，目前支持单发和群发功能。
+基于WebSocket的消息增强器，目前支持单发、群发及系统功能；支持集群架构的服务架构，以及数据持久化（持久化基于Redis实现，使用中请开发者注意Redis的持久化配置或重新去数据库做持久化）；支持失败消息的持久化及重发功能。
 
 #### 软件架构
 Maven+SpringBoot+WebSocket
@@ -28,7 +28,7 @@ Maven+SpringBoot+WebSocket
    <dependency>
        <groupId>cn.redcoral.messageplus</groupId>
        <artifactId>message-plus</artifactId>
-       <version>0.0.2-beta</version>
+       <version>0.0.4-beta</version>
    </dependency>
    ```
 
@@ -56,54 +56,84 @@ Maven+SpringBoot+WebSocket
        // 断开连接时调用
        @Override
        public void onClose() {}
-       // 接收到消息时调用（优先级高于下面三个方法）
+       /**
+        * 接收到消息时调用（优先级高于下面三个方法）
+        * @return 用于判断消息是否发送成功 
+        */
        @Override
-       public void onMessage(Object message, Session session) {}
-       // 消息类型为单发时调用
+       public boolean onMessage(Object message, Session session) {}
+       /**
+        * 消息类型为单发时调用
+        * @return 用于判断消息是否发送成功 
+        */
        @Override
-       public void onMessageBySingle(Object message, Session session) {}
-       // 消息类型为群发时调用
+       public boolean onMessageBySingle(Object message, Session session) {}
+       /**
+        * 消息类型为群发时调用
+        * @return 用户ID列表（用于判断有哪些用户没有接收到消息）
+        */
        @Override
-       public void onMessageByMass(Object message, Session session) {}
-       // 消息类型为系统时调用
+       public List<String> onMessageByMass(Object message, Session session) {}
+       /**
+        * 消息类型为系统时调用
+        * @return 用于判断消息是否发送成功 
+        */
        @Override
-       public void onMessageBySystem(Object message, Session session) {}
+       public boolean onMessageBySystem(Object message, Session session) {}
+       /**
+        * 收到收件箱的单发消息
+        */
+       @Override
+       public void onMessageByInboxAndSingle(Object message, Session session) {}
+       /**
+        * 收到收件箱的群发消息
+        */
+       @Override
+       public void onMessageByInboxAndByMass(Object message, Session session) {}
+       /**
+        * 收到收件箱的系统消息
+        */
+       @Override
+       public void onMessageByInboxAndSystem(Object message, Session session) {}
        // 过程中出现异常调用（会断开连接）
        @Override
        public void onError(Session session, Throwable error) {}
    }
    ```
 
-5. 使用ChatUtils工具类来创建群组、单发消息或者群发消息。
+5. 使用ChatUtils工具类来单发消息或者群发消息。
 
 6. 前端需要使用/src/main/resources/message-plus.js中的方法去封装对象，然后发送给后端。
 
-7. 如果没有开启持久化但是需要导入自己的群组，则需要调用ChatUtils.createGroup(createUserId,  name,  client_ids)来创建群组，如果想用更简单的办法并且开启持久化，请继续向下看。
+   ```javascript
+   /**
+    * 创建单发消息
+    * @param id 用户ID
+    * @param data 消息内容
+    */
+   function NewSingleShotMessage(id, data);
+   /**
+    * 创建群发消息
+    * @param id 群组ID
+    * @param data 消息内容
+    */
+   function NewMassShotMessage(id, data);
+   /**
+    * 创建系统消息
+    * @param data 消息内容
+    */
+   function NewSystemShotMessage(data);
+   ```
+
+7. 在当前版本即时没有开启持久化的情况下也不在需要去调用ChatUtils.createGroup(createUserId,  name,  client_ids)来创建、导入群组，你只需要实现GroupInterface接口即可（需要被Bean容器管理）。
 
 8. 如果想要使用持久化功能（提前需要你的项目具有Redis），可以配置如下来打开：
 
    ```yml
    messageplus:
+     serviceId: ... # 服务ID，需要唯一，为空是会自动生成
      persistence: true # 开启持久化
-   ```
-
-9. 使用持久化后，如果想要导入自己的群组，可以继承GroupInterface并实现接口：
-
-   ```java
-   @Component
-   public class MyGroupInterface implements GroupInterface {
-       /**
-        * 开发者自定义的群组查询接口（二级）
-        * @param groupId 群组ID
-        * @return 群组
-        */
-       @Override
-       public Group getGroupInCustom(String groupId) {
-           // 此处自己去实现代码，然后调用下面的方法去创建群组对象，然后返回即可。
-           Group.BuildGroup(id, createUserId, groupName, clientIdList);
-           return null;
-       }
-   }
+     messagePersistence: true # 消息持久化（默认开启，需要开启persistence才可以生效）
    ```
 
 #### 使用说明
@@ -111,7 +141,6 @@ Maven+SpringBoot+WebSocket
 1.  如果你想要测试一下，可以去我的仓库中的message-plus-text拉取代码来测试。(https://github.com/zwzrt/message-plus-test.git、https://gitee.com/modmb/message-plus-test.git)
 2.  如果使用过程出现bug或者存在不足，可以向red_coral20240606@163.com发送邮箱，我们将会积极修复并提供更强大的功能。
 3.  目前该项目还并不支持多个服务间同步或联系的功能。
-4.  该项目并不能做群组或用户信息的持久化，需要开发者自己去做持久化的代码。
 
 #### 参与贡献
 
@@ -135,7 +164,7 @@ Maven+SpringBoot+WebSocket
 
 #### Introduction
 
-A WebSocket-based message booster that currently supports single and group sending.
+Websocket-based message enhancer, currently supports single, group and system functions; Support cluster architecture service architecture, and data persistence (persistence based on Redis implementation, please pay attention to the Redis persistence configuration or re-to the database to persist); Supports the persistence and resending of failure messages.
 
 #### SoftwareArchitecture
 Maven+SpringBoot+WebSocket
@@ -150,7 +179,7 @@ Maven+SpringBoot+WebSocket
    <dependency>
        <groupId>cn.redcoral.messageplus</groupId>
        <artifactId>message-plus</artifactId>
-       <version>0.0.2-beta</version>
+       <version>0.0.4-beta</version>
    </dependency>
    ```
 
@@ -172,60 +201,90 @@ Maven+SpringBoot+WebSocket
    @Service
    @ServerEndpoint("/websocket/{sid}")
    public class MessageUtil extends MessagePlusBase {
-       // Called when a new connection appears
+       // called when a new connection occurs
        @Override
        public void onOpen(Session session,  String sid) {}
-       // Called when disconnected
+       // called when disconnected
        @Override
        public void onClose() {}
-       // Called when a message is received (precedence over the following three methods)
+       /**
+        * Called when a message is received (takes precedence over the following three methods)
+        * @return Used to determine whether the message was sent successfully
+        */
        @Override
-       public void onMessage(Object message, Session session) {}
-       // Called when the message type is single
+       public boolean onMessage(Object message, Session session) {}
+       /**
+        * Called when the message type is single
+        * @return Used to determine whether the message was sent successfully
+        */
        @Override
-       public void onMessageBySingle(Object message, Session session) {}
-       // Called when the message type is group sending
+       public boolean onMessageBySingle(Object message, Session session) {}
+       /**
+        * called when the message type is mass
+        * @return User ID list (used to determine which users did not receive the message)
+        */
        @Override
-       public void onMessageByMass(Object message, Session session) {}
-       // Called when the message type is system
+       public List<String> onMessageByMass(Object message, Session session) {}
+       /**
+        * called when the message type is system
+        * @return Used to determine whether the message was sent successfully 
+        */
        @Override
-       public void onMessageBySystem(Object message, Session session) {}
-       // An abnormal call occurs during the process (will disconnect)
+       public boolean onMessageBySystem(Object message, Session session) {}
+       /**
+        * single message received in inbox
+        */
+       @Override
+       public void onMessageByInboxAndSingle(Object message, Session session) {}
+       /**
+        * receive mass messages in your inbox
+        */
+       @Override
+       public void onMessageByInboxAndByMass(Object message, Session session) {}
+       /**
+        * system message received in inbox
+        */
+       @Override
+       public void onMessageByInboxAndSystem(Object message, Session session) {}
+       // exception call in process disconnects
        @Override
        public void onError(Session session, Throwable error) {}
    }
    ```
 
-5. Use the ChatUtils tool class to create groups, single messages, or mass messages.
+5. Use ChatUtils utility classes to send single or mass messages.
 
 6. The front-end needs to use methods in src/main/resources/message-plus.js to encapsulate the object and send it to the back end.
 
-7. If persistence is not enabled but you need to import your own group, you need to call ChatUtils.createGroup(createUserId, name, client_ids) to create the group. If you want an easier way and enable persistence, look down.
+   ```
+   /**
+    * create a single message
+    * @param id USER ID
+    * @param data message content
+    */
+   function NewSingleShotMessage(id, data);
+   /**
+    * create a mass message
+    * @param id GROUP ID
+    * @param data message content
+    */
+   function NewMassShotMessage(id, data);
+   /**
+    * create system message
+    * @param data message content
+    */
+   function NewSystemShotMessage(data);
+   ```
+
+7. Under the condition that persistence is not turned on in the current version, there is no need to call ChatUtils.createGroup(createUserId, name, client_ids) to create and import groups. You only need to implement GroupInterface interface (which needs to be managed by Bean container).
 
 8. If you want to use the persistence feature (which requires your project to have Redis in advance), you can configure it as follows:
 
    ```yml
    messageplus:
-     persistence: true # Enable persistence
-   ```
-
-9. After using persistence, if you want to import your own groups, you can inherit the GroupInterface and implement the interface:
-
-   ```java
-   @Component
-   public class MyGroupInterface implements GroupInterface {
-       /**
-        * Developer-defined group query interface (Level 2)
-        * @param groupId Group ID
-        * @return Group
-        */
-       @Override
-       public Group getGroupInCustom(String groupId) {
-           // Implement the code yourself here, then call the following method to create the group object, and then return.
-           Group.BuildGroup(id, createUserId, groupName, clientIdList);
-           return null;
-       }
-   }
+     serviceId: ... # The service ID must be unique. If it is empty, it will be generated automatically.
+     persistence: true # enable persistence
+     messagePersistence: true # Message persistence (enabled by default. persistence must be enabled to take effect)
    ```
 
 #### InstructionsForUse

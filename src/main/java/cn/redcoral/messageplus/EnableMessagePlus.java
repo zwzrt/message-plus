@@ -1,9 +1,7 @@
 package cn.redcoral.messageplus;
 
 import cn.redcoral.messageplus.config.MessagePersistenceConfig;
-import cn.redcoral.messageplus.config.SpringConfig;
-import cn.redcoral.messageplus.initialize.MessageInitialize;
-import cn.redcoral.messageplus.utils.ChatUtils;
+import cn.redcoral.messageplus.config.MessagePlusConfig;
 import cn.redcoral.messageplus.utils.GroupManage;
 import cn.redcoral.messageplus.utils.SpringUtils;
 import org.springframework.context.annotation.Import;
@@ -19,6 +17,6 @@ import java.lang.annotation.*;
 @Target({ElementType.TYPE})
 @Retention(RetentionPolicy.RUNTIME)
 @Inherited
-@Import({SpringConfig.class, MessagePersistenceConfig.class, MessageInitialize.class, GroupManage.class, SpringUtils.class})
+@Import({MessagePlusConfig.class, MessagePersistenceConfig.class, GroupManage.class, SpringUtils.class})
 public @interface EnableMessagePlus {
 }

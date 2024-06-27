@@ -1,7 +1,7 @@
 package cn.redcoral.messageplus.initialize;
 
 import cn.redcoral.messageplus.entity.Group;
-import cn.redcoral.messageplus.utils.GroupManage;
+import cn.redcoral.messageplus.utils.ChatUtils;
 import com.alibaba.fastjson.JSON;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.ProceedingJoinPoint;
@@ -12,13 +12,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Component;
 
-import java.util.Arrays;
-import java.util.List;
+import javax.websocket.OnClose;
+import javax.websocket.OnOpen;
+import javax.websocket.Session;
+import javax.websocket.server.PathParam;
 
 import static cn.redcoral.messageplus.utils.GroupManage.GROUP_KEY;
 
 /**
- * 持久化功能的初始化
+ * message-plus的持久化初始化类
  * @author mo
  * @日期: 2024-06-11 15:11
  **/
@@ -35,9 +37,6 @@ public class MessagePersistenceInitialize {
      */
     @Pointcut("execution(public cn.redcoral.messageplus.entity.Group cn.redcoral.messageplus.utils.GroupManage.createGroup(String, String, java.util.List))")
     void createGroup() {}
-    /**
-     * 环绕通知
-     */
     @Around("createGroup()")
     public Group around(ProceedingJoinPoint pj) throws Throwable {
         Object[] args = pj.getArgs();
@@ -61,4 +60,25 @@ public class MessagePersistenceInitialize {
         group.setId(value);
         return group;
     }
+
+//    /**
+//     * 连接成功的AOP增强
+//     */
+//    @Pointcut("execution(public void cn.redcoral.messageplus.port.MessagePlusBaseInterface.baseOnOpen(javax.websocket.Session, String))")
+//    void baseOnOpen() {}
+//    @Around("baseOnOpen()")
+//    public void baseOnOpen(ProceedingJoinPoint pjp) throws Throwable {
+//        System.out.println("连接...");
+//        pjp.proceed();
+//    }
+//    /**
+//     * 断开连接的AOP增强
+//     */
+//    @Pointcut("execution(public void cn.redcoral.messageplus.port.MessagePlusBaseInterface.baseOnClose())")
+//    void baseOnClose() {}
+//    @Around("baseOnClose()")
+//    public void baseOnClose(ProceedingJoinPoint pjp) throws Throwable {
+//        System.out.println("断开...");
+//        pjp.proceed();
+//    }
 }

@@ -44,8 +44,6 @@ public class GroupManage {
         // 集合中不存在，向Redis查询
         if (group == null) {
             group = getGroupByIdInCache(groupId);
-            // 加入到本地数据
-            idGroupMap.put(group.getId(), group);
         }
         return group;
     }
@@ -84,6 +82,9 @@ public class GroupManage {
         }
         // 反序列化为对象
         Group group = JSON.parseObject(groupJson, Group.class);
+        // 加入到本地数据
+        idGroupMap.put(group.getId(), group);
+        // 返回
         return group;
     }
 

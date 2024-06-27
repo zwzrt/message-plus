@@ -52,13 +52,21 @@ public class Group {
         this.clientIdList = new ArrayList<>();
     }
 
+    /**
+     * 创建群组
+     * @param id 群组ID
+     * @param createUserId 创建者ID
+     * @param groupName 群组名称
+     * @param clientIdList 成员ID（无需携带创建者ID）
+     * @return 群组
+     */
     public static Group BuildGroup(String id, String createUserId, String groupName, List<String> clientIdList) {
         Group group = new Group();
         group.id = id;
         group.createUserId = createUserId;
         group.name = groupName;
-        group.clientIdList = clientIdList;
         // 加入群组
+        group.joinGroup(createUserId);
         clientIdList.forEach(group::joinGroup);
         return group;
     }

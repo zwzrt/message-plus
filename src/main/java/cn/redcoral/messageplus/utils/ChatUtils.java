@@ -4,6 +4,8 @@ import cn.redcoral.messageplus.entity.Group;
 
 import javax.websocket.*;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.locks.Lock;
@@ -16,6 +18,9 @@ import java.util.concurrent.locks.ReentrantLock;
  **/
 public class ChatUtils {
 
+    /**
+     * 群组管理
+     **/
     private static GroupManage groupManage;
 
     protected static GroupManage getGroupManage() {
@@ -96,7 +101,6 @@ public class ChatUtils {
      * @return 群组ID
      */
     public static Group createGroup(String createUserId, String name, List<String> client_ids) {
-        System.out.println(getGroupManage());
         return getGroupManage().createGroup(createUserId, name, client_ids);
     }
 
@@ -116,44 +120,53 @@ public class ChatUtils {
      * 群发（包括自己）
      * @param groupId
      * @param message
+     * @return 失败用户ID
      */
-    public static void sendMessageToGroup(String groupId, String message) {
+    public static List<String> sendMessageToGroup(String groupId, String message) {
         Group group = getGroupManage().getGroupById(groupId);
-        if (group==null) return;
+        if (group==null) return Collections.emptyList();
 //        group.getUserIdDialogueMap().forEachEntry(group.getUserIdDialogueMap().size(), action -> {
 //            // 在线
 //            if (action.getValue().isOnLine()) {
 //                sendMessage(action.getValue().getSession(), message);
 //            }
 //        });
+        List<String> offLineClientIdList = new ArrayList<>();
         group.getClientIdList().forEach(clientId->{
             // 在线
             if (userIdSessionMap.get(clientId)!=null) {
                 sendMessage(userIdSessionMap.get(clientId), message);
+            } else {
+                offLineClientIdList.add(clientId);
             }
         });
+        return offLineClientIdList;
     }
-
     /**
      * 群发（不包括自己）
      * @param userId
      * @param groupId
      * @param message
+     * @return 失败用户ID
      */
-    public static void sendMessageToGroup(String userId, String groupId, String message) {
+    public static List<String> sendMessageToGroupBarringMe(String userId, String groupId, String message) {
         Group group = getGroupManage().getGroupById(groupId);
-        if (group==null) return;
+        if (group==null) return Collections.emptyList();
 //        group.getUserIdDialogueMap().forEachEntry(group.getUserIdDialogueMap().size(), action -> {
 //            if (action.getKey().equals(userId)) return;
 //            sendMessage(action.getValue().getSession(), message);
 //        });
+        List<String> offLineClientIdList = new ArrayList<>();
         group.getClientIdList().forEach(clientId->{
             if (clientId.equals(userId)) return;
             // 在线
             if (userIdSessionMap.get(clientId)!=null) {
                 sendMessage(userIdSessionMap.get(clientId), message);
+            } else {
+                offLineClientIdList.add(clientId);
             }
         });
+        return offLineClientIdList;
     }
 
     /**
@@ -172,6 +185,12 @@ public class ChatUtils {
      */
     public static Long getUserNum() {
         return userNum;
+    }
+    /**
+     * 获取对应ID群组
+     */
+    public static Group getGroupById(String groupId) {
+        return getGroupManage().getGroupById(groupId);
     }
 
 }

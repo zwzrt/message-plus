@@ -18,37 +18,39 @@ const MessageType = {
 }
 /**
  * 创建单发消息
- * @param data
+ * @param id 用户ID
+ * @param data 消息内容
  * @returns {{msg: string, code: number, data, type: string}}
  * @constructor
  */
-function NewSingleShotMessage(data) {
+function NewSingleShotMessage(id, data) {
     var message = {
         code: 200,
         type: MessageType.SINGLE_SHOT,
-        data: data,
-        msg: ''
+        _id: id,
+        data: data
     };
     return message;
 }
 /**
  * 创建群发消息
- * @param data
+ * @param id 群组ID
+ * @param data 消息内容
  * @returns {{msg: string, code: number, data, type: string}}
  * @constructor
  */
-function NewMassShotMessage(data) {
+function NewMassShotMessage(id, data) {
     var message = {
         code: 200,
         type: MessageType.MASS_SHOT,
-        data: data,
-        msg: ''
+        _id: id,
+        data: data
     };
     return message;
 }
 /**
  * 创建系统消息
- * @param data
+ * @param data 消息内容
  * @returns {{msg: string, code: number, data, type: string}}
  * @constructor
  */
@@ -56,8 +58,8 @@ function NewSystemShotMessage(data) {
     var message = {
         code: 200,
         type: MessageType.SYSTEM_SHOT,
-        data: data,
-        msg: ''
+        _id: '',
+        data: data
     };
     return message;
 }
