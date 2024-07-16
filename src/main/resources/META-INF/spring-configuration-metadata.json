@@ -20,6 +20,13 @@
       "description": "服务ID",
       "sourceType": "cn.redcoral.messageplus.properties.MessagePlusProperties",
       "defaultValue": ""
+    },
+    {
+      "name": "messageplus.path-param-name",
+      "type": "java.lang.String",
+      "description": "路径参数名称",
+      "sourceType": "cn.redcoral.messageplus.properties.MessagePlusProperties",
+      "defaultValue": "sid"
     }
   ],
   "hints": []

@@ -5,7 +5,7 @@
 
     <groupId>cn.redcoral.messageplus</groupId>
     <artifactId>message-plus</artifactId>
-    <version>0.0.4-beta</version>
+    <version>0.0.5-beta</version>
 
     <dependencies>
         <dependency>

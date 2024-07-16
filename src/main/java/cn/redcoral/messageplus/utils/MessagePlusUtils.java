@@ -1,22 +1,32 @@
 package cn.redcoral.messageplus.utils;
 
 import cn.redcoral.messageplus.entity.Group;
+import cn.redcoral.messageplus.entity.Message;
+import cn.redcoral.messageplus.entity.MessageType;
+import cn.redcoral.messageplus.port.MessagePlusBase;
+import com.alibaba.fastjson.JSON;
 
 import javax.websocket.*;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
+import java.util.stream.Collectors;
+
+import static cn.redcoral.messageplus.utils.BeanUtil.messagePlusProperties;
+import static cn.redcoral.messageplus.utils.BeanUtil.stringRedisTemplate;
 
 /**
+ * 消息增强器工具类
+ *
  * @author mo
- * @Description:
  * @日期: 2024-05-14 20:44
  **/
-public class ChatUtils {
+public class MessagePlusUtils {
 
     /**
      * 群组管理
@@ -28,6 +38,10 @@ public class ChatUtils {
         return groupManage;
     }
 
+    /**
+     * 对应响应类Map
+     */
+    public static ConcurrentHashMap<String, MessagePlusBase> userIdBaseMap = new ConcurrentHashMap<>();
     /**
      * 会话Map
      */
@@ -47,13 +61,14 @@ public class ChatUtils {
      * @param session 用户对应session
      * @return 返回全部在线人数
      */
-    public static Long joinChat(String id, Session session) {
+    public static Long joinChat(String id, MessagePlusBase base, Session session) {
         // 为空则多个在线人数，在线人数加一；若不为空，则为顶替，无需加一
         if (userIdSessionMap.get(id)==null) {
             userNumLock.lock();
             userNum++;
             userNumLock.unlock();
         }
+        userIdBaseMap.put(id, base);
         // 录入session库
         userIdSessionMap.put(id, session);
 //        List<String> groupIdList = userByGroupIdMap.get(id);
@@ -62,6 +77,8 @@ public class ChatUtils {
 //                idGroupMap.get(groupId).joinGroup(id, new Dialogue(session));
 //            });
 //        }
+        // 在Redis中存储
+        recordConnect(id, base, session);
         return userNum;
     }
     /**
@@ -72,12 +89,90 @@ public class ChatUtils {
     public static Long quitChat(String id) {
         // 为空则多个在线人数，在线人数加一；若不为空，则为顶替，无需加一
         if (userIdSessionMap.get(id)!=null) {
-            userIdSessionMap.remove(id);
             userNumLock.lock();
             userNum--;
             userNumLock.unlock();
         }
+        userIdBaseMap.remove(id);
+        userIdSessionMap.remove(id);
         return userNum;
+    }
+
+    /**s
+     * 记录连接（持久化）
+     */
+    protected static void recordConnect(String id, MessagePlusBase base, Session session) {
+        // 持久化标识
+        boolean persistence = messagePlusProperties().isPersistence();
+        // 消息持久化标识
+        boolean messagePersistence = messagePlusProperties().isMessagePersistence();
+        // 服务ID
+        String serviceId = messagePlusProperties().getServiceId();
+        // 确保开启了持久化
+        if (persistence) {
+            // 记录该用户所在的服务ID
+            stringRedisTemplate().opsForValue().set(RedisPrefixConstant.USER_SERVICE_PREFIX+id, serviceId);
+            // 开启了消息持久化
+            if (messagePersistence) {
+                // 判断有没有未接收到的消息并获取全部发送失败的消息
+                List<String> msgs = new ArrayList<>();
+                String msg = stringRedisTemplate().opsForList().rightPop(RedisPrefixConstant.USER_MESSAGES_PREFIX+id);
+                while (msg!=null) {
+                    msgs.add(msg);
+                    msg = stringRedisTemplate().opsForList().rightPop(RedisPrefixConstant.USER_MESSAGES_PREFIX+id);
+                }
+                // 发送消息
+                msgs.stream().filter(Objects::nonNull).map(s -> {
+                    return JSON.parseObject(s, Message.class);
+                }).forEach(m -> {
+                    switch (MessageType.valueOf(m.getType())) {
+                        case SINGLE_SHOT: {
+                            base.onMessageByInboxAndSingle(m.getData(), session);
+                            break;
+                        }
+                        case MASS_SHOT: {
+                            base.onMessageByInboxAndByMass(m.getData(), session);
+                            break;
+                        }
+                        case SYSTEM_SHOT: {
+                            base.onMessageByInboxAndSystem(m.getData(), session);
+                            break;
+                        }
+                    }
+                });
+            }
+        }
+    }
+
+    /**
+     * 提示指定用户存在新消息
+     * @param userId 用户ID
+     */
+    public static void hasNewMessage(String userId) {
+        Session session = userIdSessionMap.get(userId);
+        // 不在线，不进行新消息处理
+        if (session==null) return;
+        // 获取该用户的消息
+        List<Message> newMessageList = getNewMessage(userId);
+        if (newMessageList.isEmpty()) return;
+        // 发送消息
+        MessagePlusBase base = userIdBaseMap.get(userId);
+        for (Message m : newMessageList) {
+            switch (MessageType.valueOf(m.getType())) {
+                case SINGLE_SHOT: {
+                    base.onMessageByInboxAndSingle(m.getData(), session);
+                    break;
+                }
+                case MASS_SHOT: {
+                    base.onMessageByInboxAndByMass(m.getData(), session);
+                    break;
+                }
+                case SYSTEM_SHOT: {
+                    base.onMessageByInboxAndSystem(m.getData(), session);
+                    break;
+                }
+            }
+        }
     }
 
     /**
@@ -191,6 +286,43 @@ public class ChatUtils {
      */
     public static Group getGroupById(String groupId) {
         return getGroupManage().getGroupById(groupId);
+    }
+
+    /**
+     *
+     */
+    public static Session getSessionByClientId(String clientId) {
+        Session session = userIdSessionMap.get(clientId);
+        return session;
+    }
+
+
+    /**
+     * 用户是否在线
+     * @param userId 用户ID
+     */
+    public static boolean isOnLine(String userId) {
+        return userIdSessionMap.get(userId)!=null;
+    }
+
+    /**
+     * 查询指定用户的未接收消息
+     * @param userId 用户ID
+     * @return
+     */
+    public static List<Message> getNewMessage(String userId) {
+        List<String> msgs = new ArrayList<>();
+        // 查询全部消息
+        String msg = stringRedisTemplate().opsForList().rightPop(RedisPrefixConstant.USER_MESSAGES_PREFIX+userId);
+        while (msg!=null) {
+            msgs.add(msg);
+            msg = stringRedisTemplate().opsForList().rightPop(RedisPrefixConstant.USER_MESSAGES_PREFIX+userId);
+        }
+        // 转换并返回
+        return msgs.stream()
+                .filter(Objects::nonNull)
+                .map(s -> JSON.parseObject(s, Message.class))
+                .collect(Collectors.toList());
     }
 
 }

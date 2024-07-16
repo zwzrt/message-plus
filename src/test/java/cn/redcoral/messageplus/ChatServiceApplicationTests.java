@@ -1,7 +1,7 @@
 package cn.redcoral.messageplus;
 
 import cn.redcoral.messageplus.config.MessagePlusConfig;
-import cn.redcoral.messageplus.utils.ChatUtils;
+import cn.redcoral.messageplus.utils.MessagePlusUtils;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -26,10 +26,10 @@ class ChatServiceApplicationTests {
     @Test
     void contextLoads() throws InterruptedException {
         ThreadFactory factory = new CustomizableThreadFactory();
-        ChatUtils chatUtils = new ChatUtils();
+        MessagePlusUtils messagePlusUtils = new MessagePlusUtils();
         for (int i = 0; i < 100; i++) {
             factory.newThread(() -> {
-                chatUtils.joinChat("1", new Session() {
+                messagePlusUtils.joinChat("1", null, new Session() {
                     public WebSocketContainer getContainer() {return null;}
                     public void addMessageHandler(MessageHandler messageHandler) throws IllegalStateException {}
                     public Set<MessageHandler> getMessageHandlers() {return null;}
@@ -63,7 +63,7 @@ class ChatServiceApplicationTests {
             }).start();
         }
         Thread.sleep(5000);
-        System.out.println(chatUtils.getUserNum());
+        System.out.println(messagePlusUtils.getUserNum());
     }
 
     @Test

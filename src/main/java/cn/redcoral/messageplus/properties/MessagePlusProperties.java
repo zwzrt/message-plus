@@ -26,6 +26,11 @@ public class MessagePlusProperties {
      * 消息持久化
      */
     public static boolean messagePersistence = true;
+    /**
+     * 路径参数名称
+     */
+    public final static String pathParamName = "sid";
+
 
     public static boolean isPersistence() {
         return MessagePlusProperties.persistence;

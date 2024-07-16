@@ -1,7 +1,6 @@
 package cn.redcoral.messageplus.initialize;
 
 import cn.redcoral.messageplus.entity.Group;
-import cn.redcoral.messageplus.utils.ChatUtils;
 import com.alibaba.fastjson.JSON;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.ProceedingJoinPoint;
@@ -11,11 +10,6 @@ import org.aspectj.lang.annotation.Pointcut;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Component;
-
-import javax.websocket.OnClose;
-import javax.websocket.OnOpen;
-import javax.websocket.Session;
-import javax.websocket.server.PathParam;
 
 import static cn.redcoral.messageplus.utils.GroupManage.GROUP_KEY;
 

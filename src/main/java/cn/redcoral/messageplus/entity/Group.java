@@ -1,7 +1,6 @@
 package cn.redcoral.messageplus.entity;
 
-import cn.redcoral.messageplus.utils.ChatUtils;
-import cn.redcoral.messageplus.utils.SpringUtils;
+import cn.redcoral.messageplus.utils.MessagePlusUtils;
 import lombok.Data;
 
 import java.util.ArrayList;
@@ -81,13 +80,13 @@ public class Group {
 
         int index = clientIdList.indexOf(userId);
         // 在线且已经加入
-        if (ChatUtils.userIdSessionMap.get(userId)!=null&&index!=-1) {
+        if (MessagePlusUtils.userIdSessionMap.get(userId)!=null&&index!=-1) {
             userNumLock.lock();
             this.onlineUserNum++;
             userNumLock.unlock();
         }
         // 不在线但是没有加入
-        else if (ChatUtils.userIdSessionMap.get(userId)==null&&index==-1) {
+        else if (MessagePlusUtils.userIdSessionMap.get(userId)==null&&index==-1) {
             userNumLock.lock();
             userNum++;
             this.onlineUserNum++;

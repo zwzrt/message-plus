@@ -11,8 +11,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 
-import static cn.redcoral.messageplus.utils.ChatUtils.userIdSessionMap;
-
 /**
  * 群组管理
  * @author mo
