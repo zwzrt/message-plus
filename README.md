@@ -16,7 +16,7 @@
 基于WebSocket的消息增强器，目前支持单发、群发及系统功能；支持集群架构的服务架构，以及数据持久化（持久化基于Redis实现，使用中请开发者注意Redis的持久化配置或重新去数据库做持久化）；支持失败消息的持久化及重发功能。
 
 #### 软件架构
-Maven+SpringBoot+WebSocket
+Maven + SpringBoot + WebSocket + Redis
 
 #### 使用教程
 

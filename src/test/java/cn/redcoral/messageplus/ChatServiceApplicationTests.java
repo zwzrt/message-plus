@@ -63,7 +63,7 @@ class ChatServiceApplicationTests {
             }).start();
         }
         Thread.sleep(5000);
-        System.out.println(messagePlusUtils.getUserNum());
+        System.out.println(messagePlusUtils.getOnLinePeopleNum());
     }
 
     @Test

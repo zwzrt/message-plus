@@ -1,7 +1,9 @@
 package cn.redcoral.messageplus.utils;
 
+import cn.redcoral.messageplus.config.CacheConfig;
 import cn.redcoral.messageplus.properties.MessagePlusProperties;
 import cn.redcoral.messageplus.service.PublishService;
+import com.github.benmanes.caffeine.cache.Cache;
 import org.springframework.data.redis.core.StringRedisTemplate;
 
 /**
@@ -25,5 +27,8 @@ public class BeanUtil {
     public static PublishService publishService() {
         if (publishService1 == null) publishService1 = SpringUtils.getBean(PublishService.class);
         return publishService1;
+    }
+    public static Cache<String, Long> stringLongCache() {
+        return CacheConfig.stringLongCache;
     }
 }

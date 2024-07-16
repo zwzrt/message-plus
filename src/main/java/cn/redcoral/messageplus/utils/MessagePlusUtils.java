@@ -4,14 +4,12 @@ import cn.redcoral.messageplus.entity.Group;
 import cn.redcoral.messageplus.entity.Message;
 import cn.redcoral.messageplus.entity.MessageType;
 import cn.redcoral.messageplus.port.MessagePlusBase;
+import cn.redcoral.messageplus.properties.MessagePlusProperties;
 import com.alibaba.fastjson.JSON;
 
 import javax.websocket.*;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
@@ -53,7 +51,7 @@ public class MessagePlusUtils {
     /**
      * 总在线人数
      */
-    private static Long userNum = 0L;
+    private static Long onLinePeopleNum = 0L;
 
     /**
      * 加入聊天
@@ -65,7 +63,7 @@ public class MessagePlusUtils {
         // 为空则多个在线人数，在线人数加一；若不为空，则为顶替，无需加一
         if (userIdSessionMap.get(id)==null) {
             userNumLock.lock();
-            userNum++;
+            onLinePeopleNum++;
             userNumLock.unlock();
         }
         userIdBaseMap.put(id, base);
@@ -79,7 +77,7 @@ public class MessagePlusUtils {
 //        }
         // 在Redis中存储
         recordConnect(id, base, session);
-        return userNum;
+        return onLinePeopleNum;
     }
     /**
      * 退出聊天
@@ -90,12 +88,12 @@ public class MessagePlusUtils {
         // 为空则多个在线人数，在线人数加一；若不为空，则为顶替，无需加一
         if (userIdSessionMap.get(id)!=null) {
             userNumLock.lock();
-            userNum--;
+            onLinePeopleNum--;
             userNumLock.unlock();
         }
         userIdBaseMap.remove(id);
         userIdSessionMap.remove(id);
-        return userNum;
+        return onLinePeopleNum;
     }
 
     /**s
@@ -111,15 +109,15 @@ public class MessagePlusUtils {
         // 确保开启了持久化
         if (persistence) {
             // 记录该用户所在的服务ID
-            stringRedisTemplate().opsForValue().set(RedisPrefixConstant.USER_SERVICE_PREFIX+id, serviceId);
+            stringRedisTemplate().opsForValue().set(CachePrefixConstant.USER_SERVICE_PREFIX+id, serviceId);
             // 开启了消息持久化
             if (messagePersistence) {
                 // 判断有没有未接收到的消息并获取全部发送失败的消息
                 List<String> msgs = new ArrayList<>();
-                String msg = stringRedisTemplate().opsForList().rightPop(RedisPrefixConstant.USER_MESSAGES_PREFIX+id);
+                String msg = stringRedisTemplate().opsForList().rightPop(CachePrefixConstant.USER_MESSAGES_PREFIX+id);
                 while (msg!=null) {
                     msgs.add(msg);
-                    msg = stringRedisTemplate().opsForList().rightPop(RedisPrefixConstant.USER_MESSAGES_PREFIX+id);
+                    msg = stringRedisTemplate().opsForList().rightPop(CachePrefixConstant.USER_MESSAGES_PREFIX+id);
                 }
                 // 发送消息
                 msgs.stream().filter(Objects::nonNull).map(s -> {
@@ -278,8 +276,22 @@ public class MessagePlusUtils {
     /**
      * 获取总在线人数
      */
-    public static Long getUserNum() {
-        return userNum;
+    public static Long getOnLinePeopleNum() {
+        // 开启了持久化
+        if (MessagePlusProperties.persistence) {
+            // 从本地缓存获取
+            Long num = BeanUtil.stringLongCache().get(CachePrefixConstant.ON_LINE_PEOPLE_NUM, k -> 0L);
+            // 不存在，从Redis获取
+            if (num == 0) {
+                Set<String> keys = stringRedisTemplate().keys(CachePrefixConstant.USER_SERVICE_PREFIX.concat("*"));
+                BeanUtil.stringLongCache().put(CachePrefixConstant.ON_LINE_PEOPLE_NUM, keys == null ? 0L : keys.size());
+                return keys == null ? 0L : keys.size();
+            } else {
+                return num;
+            }
+        } else {
+            return onLinePeopleNum;
+        }
     }
     /**
      * 获取对应ID群组
@@ -313,10 +325,10 @@ public class MessagePlusUtils {
     public static List<Message> getNewMessage(String userId) {
         List<String> msgs = new ArrayList<>();
         // 查询全部消息
-        String msg = stringRedisTemplate().opsForList().rightPop(RedisPrefixConstant.USER_MESSAGES_PREFIX+userId);
+        String msg = stringRedisTemplate().opsForList().rightPop(CachePrefixConstant.USER_MESSAGES_PREFIX+userId);
         while (msg!=null) {
             msgs.add(msg);
-            msg = stringRedisTemplate().opsForList().rightPop(RedisPrefixConstant.USER_MESSAGES_PREFIX+userId);
+            msg = stringRedisTemplate().opsForList().rightPop(CachePrefixConstant.USER_MESSAGES_PREFIX+userId);
         }
         // 转换并返回
         return msgs.stream()

@@ -5,7 +5,7 @@
 
     <groupId>cn.redcoral.messageplus</groupId>
     <artifactId>message-plus</artifactId>
-    <version>0.0.5-beta</version>
+    <version>0.0.51-beta</version>
 
     <dependencies>
         <dependency>
@@ -49,6 +49,12 @@
             <artifactId>hutool-all</artifactId>
             <version>5.7.17</version>
         </dependency>
+        <!--caffeine-->
+        <dependency>
+            <groupId>com.github.ben-manes.caffeine</groupId>
+            <artifactId>caffeine</artifactId>
+            <version>2.9.3</version>
+        </dependency>
 
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -78,5 +84,12 @@
             </plugin>
         </plugins>
     </build>
+    <repositories>
+        <repository>
+            <id>maven_central</id>
+            <name>Maven Central</name>
+            <url>https://repo.maven.apache.org/maven2/</url>
+        </repository>
+    </repositories>
 
 </project>

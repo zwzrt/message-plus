@@ -4,17 +4,14 @@ import cn.redcoral.messageplus.entity.Message;
 import cn.redcoral.messageplus.entity.MessageType;
 import cn.redcoral.messageplus.properties.MessagePlusProperties;
 import cn.redcoral.messageplus.utils.MessagePlusUtils;
-import cn.redcoral.messageplus.utils.RedisPrefixConstant;
+import cn.redcoral.messageplus.utils.CachePrefixConstant;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONException;
 import lombok.extern.slf4j.Slf4j;
 
 import javax.websocket.*;
 import javax.websocket.server.PathParam;
-import javax.websocket.server.ServerEndpoint;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 import static cn.redcoral.messageplus.utils.BeanUtil.*;
 
@@ -58,7 +55,7 @@ public abstract class MessagePlusBase {
         // 确保开启了持久化
         if (MessagePlusProperties.persistence) {
             // 删除用户所在的服务ID
-            stringRedisTemplate().delete(RedisPrefixConstant.USER_SERVICE_PREFIX+client_id);
+            stringRedisTemplate().delete(CachePrefixConstant.USER_SERVICE_PREFIX+client_id);
         }
         this.onClose();
     }
@@ -103,7 +100,7 @@ public abstract class MessagePlusBase {
                 // 确保开启持久化以及消息持久化，并且消息发送失败
                 if (MessagePlusProperties.persistence && MessagePlusProperties.messagePersistence && !bo1 && !bo2) {
                     // 存储消息到对方会话的数组中
-                    stringRedisTemplate().opsForList().leftPush(RedisPrefixConstant.USER_MESSAGES_PREFIX+message.get_id(), messageJSON);
+                    stringRedisTemplate().opsForList().leftPush(CachePrefixConstant.USER_MESSAGES_PREFIX+message.get_id(), messageJSON);
                     // 提示系统该用户有新消息
                     publishService().publish(message.get_id());
                 }
@@ -117,7 +114,7 @@ public abstract class MessagePlusBase {
                     // 存储到群组中每个成员的消息队列
                     for (String cid : offLineClientIdList) {
                         // 存储消息到对方会话的数组中
-                        stringRedisTemplate().opsForList().leftPush(RedisPrefixConstant.USER_MESSAGES_PREFIX+cid, messageJSON);
+                        stringRedisTemplate().opsForList().leftPush(CachePrefixConstant.USER_MESSAGES_PREFIX+cid, messageJSON);
                         // 提示系统该用户有新消息
                         publishService().publish(cid);
                     }
@@ -130,7 +127,7 @@ public abstract class MessagePlusBase {
                 // 确保开启持久化以及消息持久化，并且消息发送失败
                 if (MessagePlusProperties.persistence && MessagePlusProperties.messagePersistence && !bo1 && !bo2) {
                     // 存储消息到对方会话的数组中
-                    stringRedisTemplate().opsForList().leftPush(RedisPrefixConstant.USER_MESSAGES_PREFIX+message.get_id(), messageJSON);
+                    stringRedisTemplate().opsForList().leftPush(CachePrefixConstant.USER_MESSAGES_PREFIX+message.get_id(), messageJSON);
                 }
                 break;
             }

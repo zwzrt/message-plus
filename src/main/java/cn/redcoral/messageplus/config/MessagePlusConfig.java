@@ -1,5 +1,6 @@
 package cn.redcoral.messageplus.config;
 
+import cn.redcoral.messageplus.controller.MessagePlusController;
 import cn.redcoral.messageplus.initialize.MessageInitialize;
 import cn.redcoral.messageplus.properties.MessagePlusProperties;
 import lombok.extern.slf4j.Slf4j;
@@ -17,7 +18,7 @@ import javax.annotation.Resource;
  **/
 @Slf4j
 @EnableAspectJAutoProxy // 声明有注解AOP开发
-@Import({MessagePlusProperties.class})
+@Import({MessagePlusProperties.class, MessagePlusController.class})
 public class MessagePlusConfig {
     /**
      * 	注入ServerEndpointExporter，

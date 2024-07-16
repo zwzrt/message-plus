@@ -19,7 +19,7 @@ import org.springframework.stereotype.Component;
 @Component
 @ConditionalOnProperty(name = "messageplus.persistence", havingValue = "true")
 @ConditionalOnClass({RedisTemplate.class})
-@Import({MessagePersistenceInitialize.class, RedisConfig.class, RedisReceiver.class, PublishService.class})
+@Import({MessagePersistenceInitialize.class, CacheConfig.class, RedisReceiver.class, PublishService.class})
 public class MessagePersistenceConfig {
     static {
         log.info("Persistence function of message enhancer has been turned on...");
