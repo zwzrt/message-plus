@@ -101,7 +101,7 @@ Maven + SpringBoot + WebSocket + Redis
    }
    ```
 
-5. 使用ChatUtils工具类来单发消息或者群发消息。
+5. 使用MessagePlusUtils工具类来单发消息或者群发消息。
 
 6. 前端需要使用/src/main/resources/message-plus.js中的方法去封装对象，然后发送给后端。
 
@@ -140,7 +140,7 @@ Maven + SpringBoot + WebSocket + Redis
 
 1.  如果你想要测试一下，可以去我的仓库中的message-plus-text拉取代码来测试。(https://github.com/zwzrt/message-plus-test.git、https://gitee.com/modmb/message-plus-test.git)
 2.  如果使用过程出现bug或者存在不足，可以向red_coral20240606@163.com发送邮箱，我们将会积极修复并提供更强大的功能。
-3.  目前该项目还并不支持多个服务间同步或联系的功能。
+3.  在大流量的情况下，可能出现同时调用一个session导致的写冲突，引发异常。
 
 #### 参与贡献
 
@@ -252,7 +252,7 @@ Maven+SpringBoot+WebSocket
    }
    ```
 
-5. Use ChatUtils utility classes to send single or mass messages.
+5. Use MessagePlusUtils utility classes to send single or mass messages.
 
 6. The front-end needs to use methods in src/main/resources/message-plus.js to encapsulate the object and send it to the back end.
 
@@ -291,8 +291,7 @@ Maven+SpringBoot+WebSocket
 
 1.  If you want to test it, you can go to my repository and pull up the message-plus-text code to test it. (https://github.com/zwzrt/message-plus-test.git, https://gitee.com/modmb/message-plus-test.git)
 2.  If there is a bug or deficiency in the use process, you can send an email to red_coral20240606@163.com, and we will actively fix it and provide more powerful functions.
-3.  At present, the project does not support the function of synchronization or contact between multiple services.
-4.  The project can not do group or user information persistence, developers need to do their own persistence code.
+3.  In the case of heavy traffic, write conflicts may occur when a session is called at the same time, resulting in an exception.
 
 #### ParticipationContribution
 
