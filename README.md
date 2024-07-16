@@ -28,7 +28,7 @@ Maven+SpringBoot+WebSocket
    <dependency>
        <groupId>cn.redcoral.messageplus</groupId>
        <artifactId>message-plus</artifactId>
-       <version>0.0.4-beta</version>
+       <version>0.0.5-beta</version>
    </dependency>
    ```
 
@@ -131,7 +131,7 @@ Maven+SpringBoot+WebSocket
 
    ```yml
    messageplus:
-     serviceId: ... # 服务ID，需要唯一，为空是会自动生成
+     serviceId: ... # 服务ID，需要唯一，为空时会自动生成
      persistence: true # 开启持久化
      messagePersistence: true # 消息持久化（默认开启，需要开启persistence才可以生效）
    ```
@@ -179,7 +179,7 @@ Maven+SpringBoot+WebSocket
    <dependency>
        <groupId>cn.redcoral.messageplus</groupId>
        <artifactId>message-plus</artifactId>
-       <version>0.0.4-beta</version>
+       <version>0.0.5-beta</version>
    </dependency>
    ```
 
