@@ -7,7 +7,6 @@ import org.springframework.stereotype.Service;
 
 /**
  * @author mo
- * @日期: 2024-07-15 16:16
  **/
 @Service
 public class PublishService {

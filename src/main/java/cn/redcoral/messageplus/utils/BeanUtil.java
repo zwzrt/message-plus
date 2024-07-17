@@ -9,7 +9,6 @@ import org.springframework.data.redis.core.StringRedisTemplate;
 /**
  * 获取对象
  * @author mo
- * @日期: 2024-07-11 11:53
  **/
 public class BeanUtil {
     private static MessagePlusProperties messagePlusProperties1;

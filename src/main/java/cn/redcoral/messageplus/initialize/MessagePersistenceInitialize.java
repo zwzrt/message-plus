@@ -16,7 +16,6 @@ import static cn.redcoral.messageplus.utils.GroupManage.GROUP_KEY;
 /**
  * message-plus的持久化初始化类
  * @author mo
- * @日期: 2024-06-11 15:11
  **/
 @Slf4j
 @Aspect

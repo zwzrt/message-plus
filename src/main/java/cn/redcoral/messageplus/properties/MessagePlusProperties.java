@@ -8,7 +8,6 @@ import org.springframework.stereotype.Component;
 /**
  * MessagePlus配置类
  * @author mo
- * @日期: 2024-06-11 13:52
  **/
 @Data
 @Component("messagePlusProperties")

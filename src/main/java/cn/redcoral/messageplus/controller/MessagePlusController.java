@@ -7,7 +7,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 /**
  * @author mo
- * @日期: 2024-07-16 14:48
  **/
 @RestController
 @RequestMapping("/messageplus")

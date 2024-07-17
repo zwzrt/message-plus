@@ -10,9 +10,8 @@ import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
 /**
+ * 群组
  * @author mo
- * @Description: 群组
- * @日期: 2024-05-14 20:45
  **/
 @Data
 public class Group {
@@ -72,7 +71,7 @@ public class Group {
 
     /**
      * 加入群组
-     * @param userId
+     * @param userId 用户ID
      * @return 总人数
      */
     public int joinGroup(String userId) {
@@ -135,17 +134,15 @@ public class Group {
 
     /**
      * 判断两个群组是否相同
-     * @param group1
-     * @param group2
-     * @return
+     * @param group1 群组ID
+     * @param group2 群组ID
      */
     public static boolean isSame(Group group1, Group group2) {
         return group1.getEasyStr().equals(group2.getEasyStr());
     }
     /**
      * 判断两个群组是否相同
-     * @param group2
-     * @return
+     * @param group2 群组ID
      */
     public static boolean isSame(String createUserId, String name, Group group2) {
         return getEasyStr(createUserId, name).equals(group2.getEasyStr());

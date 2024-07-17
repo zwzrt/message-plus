@@ -3,7 +3,6 @@ package cn.redcoral.messageplus.entity;
 /**
  * 消息类型
  * @author mo
- * @日期: 2024-06-06 16:25
  **/
 public enum MessageType {
     /**

@@ -20,9 +20,7 @@ import static cn.redcoral.messageplus.utils.BeanUtil.stringRedisTemplate;
 
 /**
  * 消息增强器工具类
- *
  * @author mo
- * @日期: 2024-05-14 20:44
  **/
 public class MessagePlusUtils {
 
@@ -211,8 +209,8 @@ public class MessagePlusUtils {
 
     /**
      * 群发（包括自己）
-     * @param groupId
-     * @param message
+     * @param groupId 群组ID
+     * @param message 消息内容
      * @return 失败用户ID
      */
     public static List<String> sendMessageToGroup(String groupId, String message) {
@@ -237,9 +235,9 @@ public class MessagePlusUtils {
     }
     /**
      * 群发（不包括自己）
-     * @param userId
-     * @param groupId
-     * @param message
+     * @param userId 用户ID
+     * @param groupId 群组ID
+     * @param message 消息内容
      * @return 失败用户ID
      */
     public static List<String> sendMessageToGroupBarringMe(String userId, String groupId, String message) {
@@ -320,7 +318,6 @@ public class MessagePlusUtils {
     /**
      * 查询指定用户的未接收消息
      * @param userId 用户ID
-     * @return
      */
     public static List<Message> getNewMessage(String userId) {
         List<String> msgs = new ArrayList<>();

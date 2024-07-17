@@ -14,7 +14,6 @@ import java.util.concurrent.ConcurrentHashMap;
 /**
  * 群组管理
  * @author mo
- * @日期: 2024-06-11 20:42
  **/
 @Configuration
 public class GroupManage {
@@ -113,8 +112,8 @@ public class GroupManage {
 
     /**
      * 记录每个用户的群组ID
-     * @param client_id
-     * @param groupId
+     * @param client_id 用户ID
+     * @param groupId 群组ID
      */
     protected void addUserByGroupIdMap(String client_id, String groupId) {
         List<String> groupIdList = userByGroupIdMap.get(client_id);

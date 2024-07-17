@@ -9,10 +9,7 @@ import org.springframework.context.annotation.DependsOn;
 import org.springframework.stereotype.Component;
 
 /**
- * @Description: SpringContext  获取 Spring 上下文信息
- * @Author: mingtian
- * @CreateDate: 2020/6/8 14:59
- * @Version: 1.0
+ * SpringContext  获取 Spring 上下文信息
  */
 @Component
 //@DependsOn("invocationTargetException")
@@ -37,8 +34,6 @@ public class SpringContext implements ApplicationContextAware {
 
     /**
      * 获取 applicationContext
-     *
-     * @return
      */
     public static ApplicationContext getApplicationContext() {
         return applicationContext;
@@ -46,9 +41,6 @@ public class SpringContext implements ApplicationContextAware {
 
     /**
      * 通过 name 获取 bean 对象
-     *
-     * @param name
-     * @return
      */
     public static Object getBean(String name) {
 
@@ -57,10 +49,6 @@ public class SpringContext implements ApplicationContextAware {
 
     /**
      * 通过 class 获取 bean 对象
-     *
-     * @param clazz
-     * @param <T>
-     * @return
      */
     public static <T> T getBean(Class<T> clazz) {
         return getApplicationContext().getBean(clazz);
@@ -68,11 +56,6 @@ public class SpringContext implements ApplicationContextAware {
 
     /**
      * 通过 name，clazz  获取指定的 bean 对象
-     *
-     * @param name
-     * @param clazz
-     * @param <T>
-     * @return
      */
     public static <T> T getBean(String name, Class<T> clazz) {
         return getApplicationContext().getBean(name, clazz);

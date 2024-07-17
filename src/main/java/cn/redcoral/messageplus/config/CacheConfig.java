@@ -16,7 +16,6 @@ import java.util.concurrent.TimeUnit;
 
 /**
  * @author mo
- * @日期: 2024-07-15 16:09
  **/
 @Configuration
 public class CacheConfig {

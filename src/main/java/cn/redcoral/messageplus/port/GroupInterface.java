@@ -5,7 +5,6 @@ import cn.redcoral.messageplus.entity.Group;
 /**
  * 查询群组二级接口类
  * @author mo
- * @日期: 2024-06-11 21:06
  **/
 public interface GroupInterface {
     /**

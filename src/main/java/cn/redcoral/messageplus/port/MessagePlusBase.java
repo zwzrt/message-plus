@@ -17,7 +17,6 @@ import static cn.redcoral.messageplus.utils.BeanUtil.*;
 
 /**
  * @author mo
- * @日期: 2024-05-25 11:33
  **/
 @Slf4j
 public abstract class MessagePlusBase {
@@ -168,8 +167,6 @@ public abstract class MessagePlusBase {
 
     /**
      * 处理过程中发生错误
-     * @param session
-     * @param error
      */
     @OnError
     public void baseOnError(Session session, Throwable error) {
@@ -177,8 +174,6 @@ public abstract class MessagePlusBase {
     }
     /**
      * 处理过程中发生错误
-     * @param session
-     * @param error
      */
     public abstract void onError(Session session, Throwable error);
 }

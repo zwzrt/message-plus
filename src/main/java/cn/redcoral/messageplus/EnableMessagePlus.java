@@ -11,7 +11,6 @@ import java.lang.annotation.*;
 /**
  * 消息增强插件启动注解
  * @author mo
- * @日期: 2024-05-24 19:29
  **/
 @Documented
 @Target({ElementType.TYPE})

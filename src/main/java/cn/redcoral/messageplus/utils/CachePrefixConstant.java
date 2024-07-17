@@ -3,7 +3,6 @@ package cn.redcoral.messageplus.utils;
 /**
  * 缓存前缀常量
  * @author mo
- * @日期: 2024-06-16 16:24
  **/
 public class CachePrefixConstant {
     /**

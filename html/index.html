@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="ch">
+<head>
+    <meta charset="UTF-8">
+    <title>消息增强器 - 帮助文档</title>
+    <link rel="icon" href="icon.png">
+    <script type="text/javascript" src="res_js/vue.global.js"></script>
+    <!-- import CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/element-plus/dist/index.css">
+    <!--图标-->
+    <script src="//unpkg.com/@element-plus/icons-vue"></script>
+    <!-- import JavaScript -->
+    <script src="res_js/element-plus.js"></script>
+    <style>
+        body {
+            border: 0;
+            margin: 0;
+            padding: 0;
+        }
+        .flex-grow {
+            flex-grow: 1;
+        }
+        .h1 {
+            height: 35px;
+            font-size: 25px;
+            line-height: 35px;
+            border-left: 3px solid rgba(240,0,0,1);
+            padding-left: 8px;
+            margin: 10px 0;
+        }
+        .code_block {
+            background: #2d2d2d;
+            color: rgb(201,209,217);
+            font-family: Consolas;
+            text-align: left;
+            padding: 1em;
+            padding-left: 0.8em;
+            margin: 1em;
+            border-radius: 5px;
+            counter-reset: line;
+            white-space: pre;
+            word-spacing: normal;
+            word-break: normal;
+            word-wrap: normal;
+            line-height: 1.5;
+        }
+        .code_block span {
+            display: block;
+            line-height: 1.5rem;
+            white-space: pre;
+        }
+        .code_block span:before {
+            counter-increment: line;
+            content: counter(line);
+            display: inline-block;
+            width: 3em;
+            text-align: right;
+            border-right: 2px solid #999;
+            padding-right: .8em;
+            margin-right: 1em;
+            color: #999;
+        }
+    </style>
+</head>
+<body>
+    <div id="app">
+        <div class="common-layout">
+            <el-container>
+                <el-header style="width: 100%; padding: 0">
+                    <el-menu class="el-menu-demo"
+                             mode="horizontal"
+                             background-color="#24243E"
+                             text-color="#fff"
+                             active-text-color="#ffd04b"
+                             :ellipsis="false" style="width: 100%; margin: 0; padding: 0">
+                        <el-menu-item style="overflow: hidden; width: 160px">
+                            <img style="width: 160px" src="logo.png" alt="message-plus logo">
+                        </el-menu-item>
+                        <div class="flex-grow"></div>
+                        <el-menu-item index="1">Processing Center</el-menu-item>
+                        <el-sub-menu index="2">
+                            <template #title>Workspace</template>
+                            <el-menu-item index="2-1">item one</el-menu-item>
+                            <el-menu-item index="2-2">item two</el-menu-item>
+                            <el-menu-item index="2-3">item three</el-menu-item>
+                            <el-sub-menu index="2-4">
+                                <template #title>item four</template>
+                                <el-menu-item index="2-4-1">item one</el-menu-item>
+                                <el-menu-item index="2-4-2">item two</el-menu-item>
+                                <el-menu-item index="2-4-3">item three</el-menu-item>
+                            </el-sub-menu>
+                        </el-sub-menu>
+                    </el-menu>
+                </el-header>
+                <el-container>
+                    <el-aside width="200px">
+                        <el-menu default-active="2"
+                                 class="el-menu-vertical-demo"
+                                 @select="handleSelect">
+                            <el-menu-item index="1">概述</el-menu-item>
+                            <el-sub-menu index="2">
+                                <template #title>快速开始</template>
+                                <el-menu-item index="2-1">导入依赖</el-menu-item>
+                                <el-menu-item-group title="Group One">
+                                    <el-menu-item index="1-1">item one</el-menu-item>
+                                    <el-menu-item index="1-2">item two</el-menu-item>
+                                </el-menu-item-group>
+                                <el-menu-item-group title="Group Two">
+                                    <el-menu-item index="1-3">item three</el-menu-item>
+                                </el-menu-item-group>
+                                <el-sub-menu index="1-4">
+                                    <template #title>item four</template>
+                                    <el-menu-item index="1-4-1">item one</el-menu-item>
+                                </el-sub-menu>
+                            </el-sub-menu>
+                            <el-menu-item index="4">
+                                <el-icon><setting /></el-icon>
+                                <span>Navigator Four</span>
+                            </el-menu-item>
+                        </el-menu>
+                    </el-aside>
+                    <el-main>
+                        <div style="width: 1000px; margin: 0 auto;">
+                            <div title="概述" v-if="mainIndex==='1'">概述</div>
+                            <div title="导入依赖" v-else-if="mainIndex==='2-1'">
+                                <div class="h1">下载项目</div>
+                                <a title="Gitee" href="https://gitee.com/modmb/message-plus" target="_blank">Gitee</a>
+                                <br>
+                                <a title="GitHub" href="https://github.com/zwzrt/message-plus" target="_blank">GitHub</a>
+                                <div class="h1">安装至本地Maven仓库</div>
+                                <a href="https://blog.csdn.net/Mason97/article/details/106944925" target="_blank">教程链接</a>
+                                <div class="h1">导入依赖</div>
+                                <pre class="code_block">
+                                    <span><dependency></span>
+                                        <groupId>cn.redcoral.messageplus</groupId>
+                                        <artifactId>message-plus</artifactId>
+                                        <version>0.0.51-beta</version>
+                                    </dependency>
+                                </pre>
+                            </div>
+                        </div>
+                    </el-main>
+                </el-container>
+            </el-container>
+        </div>
+    </div>
+    <script>
+        const App = {
+            mounted() {
+            },
+            methods: {
+                handleSelect(key, keyPath) {
+                    this.mainIndex = key;
+                }
+            },
+            data() {
+                return {
+                    mainIndex: '1',
+                };
+            }
+        };
+        const app = Vue.createApp(App);
+        for (const [key, component] of Object.entries(ElementPlusIconsVue)) {
+            app.component(key, component)
+        }
+        app.use(ElementPlus);
+        app.mount("#app");
+    </script>
+</body>
+</html>

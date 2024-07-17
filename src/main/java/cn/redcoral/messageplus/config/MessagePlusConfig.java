@@ -14,7 +14,6 @@ import javax.annotation.Resource;
 /**
  * message-plus的普通配置类
  * @author mo
- * @日期: 2024-05-25 14:01
  **/
 @Slf4j
 @EnableAspectJAutoProxy // 声明有注解AOP开发
