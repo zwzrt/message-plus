@@ -1,6 +1,7 @@
 package cn.redcoral.messageplus.utils;
 
 import cn.redcoral.messageplus.config.CacheConfig;
+import cn.redcoral.messageplus.port.MessagePlusBase;
 import cn.redcoral.messageplus.properties.MessagePlusProperties;
 import cn.redcoral.messageplus.service.PublishService;
 import com.github.benmanes.caffeine.cache.Cache;
@@ -14,6 +15,7 @@ public class BeanUtil {
     private static MessagePlusProperties messagePlusProperties1;
     private static StringRedisTemplate stringRedisTemplate1;
     private static PublishService publishService1;
+    private static MessagePlusBase messagePlusBase1;
 
     public static MessagePlusProperties messagePlusProperties() {
         if (messagePlusProperties1 == null) messagePlusProperties1 = SpringUtils.getBean(MessagePlusProperties.class);
@@ -29,5 +31,9 @@ public class BeanUtil {
     }
     public static Cache<String, Long> stringLongCache() {
         return CacheConfig.stringLongCache;
+    }
+    public static MessagePlusBase messagePlusBase() {
+        if (messagePlusBase1 == null) messagePlusBase1 = SpringUtils.getBean(MessagePlusBase.class);
+        return messagePlusBase1;
     }
 }

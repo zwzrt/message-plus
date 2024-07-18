@@ -29,6 +29,10 @@ public class MessagePlusProperties {
      * 路径参数名称
      */
     public final static String pathParamName = "sid";
+    /**
+     * 自动发送消息
+     */
+    public static boolean autoSend = false;
 
 
     public static boolean isPersistence() {
@@ -50,5 +54,11 @@ public class MessagePlusProperties {
     }
     public void setMessagePersistence(boolean messagePersistence) {
         MessagePlusProperties.messagePersistence = messagePersistence;
+    }
+    public static boolean isAutoSend() {
+        return MessagePlusProperties.autoSend;
+    }
+    public void setAutoSend(boolean autoSend) {
+        MessagePlusProperties.autoSend = autoSend;
     }
 }

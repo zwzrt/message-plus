@@ -3,7 +3,7 @@ package cn.redcoral.messageplus.utils;
 import cn.redcoral.messageplus.entity.Group;
 import cn.redcoral.messageplus.entity.Message;
 import cn.redcoral.messageplus.entity.MessageType;
-import cn.redcoral.messageplus.port.MessagePlusBase;
+import cn.redcoral.messageplus.service.MessagePlusService;
 import cn.redcoral.messageplus.properties.MessagePlusProperties;
 import com.alibaba.fastjson.JSON;
 
@@ -37,7 +37,7 @@ public class MessagePlusUtils {
     /**
      * 对应响应类Map
      */
-    public static ConcurrentHashMap<String, MessagePlusBase> userIdBaseMap = new ConcurrentHashMap<>();
+    public static ConcurrentHashMap<String, MessagePlusService> userIdBaseMap = new ConcurrentHashMap<>();
     /**
      * 会话Map
      */
@@ -57,7 +57,7 @@ public class MessagePlusUtils {
      * @param session 用户对应session
      * @return 返回全部在线人数
      */
-    public static Long joinChat(String id, MessagePlusBase base, Session session) {
+    public static Long joinChat(String id, MessagePlusService base, Session session) {
         // 为空则多个在线人数，在线人数加一；若不为空，则为顶替，无需加一
         if (userIdSessionMap.get(id)==null) {
             userNumLock.lock();
@@ -97,7 +97,7 @@ public class MessagePlusUtils {
     /**s
      * 记录连接（持久化）
      */
-    protected static void recordConnect(String id, MessagePlusBase base, Session session) {
+    protected static void recordConnect(String id, MessagePlusService base, Session session) {
         // 持久化标识
         boolean persistence = messagePlusProperties().isPersistence();
         // 消息持久化标识
@@ -152,7 +152,7 @@ public class MessagePlusUtils {
         List<Message> newMessageList = getNewMessage(userId);
         if (newMessageList.isEmpty()) return;
         // 发送消息
-        MessagePlusBase base = userIdBaseMap.get(userId);
+        MessagePlusService base = userIdBaseMap.get(userId);
         for (Message m : newMessageList) {
             switch (MessageType.valueOf(m.getType())) {
                 case SINGLE_SHOT: {
