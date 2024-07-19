@@ -254,7 +254,7 @@ Maven+SpringBoot+WebSocket
 
 5. Use MessagePlusUtils utility classes to send single or mass messages.
 
-6. The front-end needs to use methods in src/main/resources/message-plus.js to encapsulate the object and send it to the back end.
+6. The front-end needs to use methods in src/main/resources/message-plus1.js to encapsulate the object and send it to the back end.
 
    ```
    /**

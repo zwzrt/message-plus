@@ -22,10 +22,6 @@ public class MessagePlusProperties {
      */
     public static String serviceId = UUID.randomUUID().toString(true);
     /**
-     * 消息持久化
-     */
-    public static boolean messagePersistence = true;
-    /**
      * 路径参数名称
      */
     public final static String pathParamName = "sid";
@@ -47,13 +43,6 @@ public class MessagePlusProperties {
     }
     public void setServiceId(String serviceId) {
         MessagePlusProperties.serviceId = serviceId;
-    }
-
-    public static boolean isMessagePersistence() {
-        return MessagePlusProperties.messagePersistence;
-    }
-    public void setMessagePersistence(boolean messagePersistence) {
-        MessagePlusProperties.messagePersistence = messagePersistence;
     }
     public static boolean isAutoSend() {
         return MessagePlusProperties.autoSend;

@@ -17,7 +17,7 @@ import javax.annotation.Resource;
  **/
 @Slf4j
 @EnableAspectJAutoProxy // 声明有注解AOP开发
-@Import({MessagePlusProperties.class, MessagePlusController.class})
+@Import({MessagePlusController.class})
 public class MessagePlusConfig {
     /**
      * 	注入ServerEndpointExporter，
@@ -28,12 +28,10 @@ public class MessagePlusConfig {
         return new ServerEndpointExporter();
     }
 
-    @Resource
-    private MessagePlusProperties messagePlusProperties;
     @Bean
     public MessageInitialize messageInitialize() {
         log.info("MessagePlus is enabled...");
-        log.info("ServiceId: {}", messagePlusProperties.getServiceId());
+        log.info("ServiceId: {}", MessagePlusProperties.getServiceId());
         return new MessageInitialize();
     }
 

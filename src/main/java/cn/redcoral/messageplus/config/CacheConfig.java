@@ -1,6 +1,7 @@
 package cn.redcoral.messageplus.config;
 
-import cn.redcoral.messageplus.utils.CachePrefixConstant;
+import cn.redcoral.messageplus.constant.CachePrefixConstant;
+import cn.redcoral.messageplus.properties.MessagePlusProperties;
 import com.github.benmanes.caffeine.cache.Cache;
 import com.github.benmanes.caffeine.cache.Caffeine;
 import org.springframework.context.annotation.Bean;
@@ -34,30 +35,11 @@ public class CacheConfig {
 //                .removalListener((key, val, removalCause) -> { })
             //记录命中
 //                .recordStats()
-            .build();;
+            .build();
 
     @Bean
     public Cache<String, Long> stringStringCache() {
         return stringLongCache;
-    }
-
-
-    public static final String REDIS_TOPIC = CachePrefixConstant.PREFIX_HEAD + "newmessage";
-
-    @Bean
-    public RedisMessageListenerContainer listenerContainer(RedisConnectionFactory factory,
-                                                           MessageListenerAdapter messageListenerAdapter){
-        RedisMessageListenerContainer container = new RedisMessageListenerContainer();
-        container.setConnectionFactory(factory);
-        container.addMessageListener(messageListenerAdapter, new PatternTopic(REDIS_TOPIC));
-        return container;
-    }
-
-    @Bean
-    public MessageListenerAdapter messageListenerAdapter(RedisReceiver redisReceiver){
-        MessageListenerAdapter messageListenerAdapter = new MessageListenerAdapter(redisReceiver,
-                "onMessage");
-        return messageListenerAdapter;
     }
 
 }

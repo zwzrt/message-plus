@@ -4,6 +4,11 @@
       "name": "messageplus",
       "type": "cn.redcoral.messageplus.properties.MessagePlusProperties",
       "sourceType": "cn.redcoral.messageplus.properties.MessagePlusProperties"
+    },
+    {
+      "name": "messageplus.message",
+      "type": "cn.redcoral.messageplus.properties.MessagePersistenceProperties",
+      "sourceType": "cn.redcoral.messageplus.properties.MessagePersistenceProperties"
     }
   ],
   "properties": [
@@ -27,7 +32,28 @@
       "description": "路径参数名称",
       "sourceType": "cn.redcoral.messageplus.properties.MessagePlusProperties",
       "defaultValue": "sid"
-    }
+    },
+    {
+      "name": "messageplus.auto-send",
+      "type": "java.lang.Boolean",
+      "description": "自动发送消息",
+      "sourceType": "cn.redcoral.messageplus.properties.MessagePlusProperties",
+      "defaultValue": false
+    },
+    {
+      "name": "messageplus.message.expiration-time",
+      "type": "java.lang.Integer",
+      "description": "消息过期时间（默认-1永不过期）",
+      "sourceType": "cn.redcoral.messageplus.properties.MessagePersistenceProperties",
+      "defaultValue": -1
+    },
+    {
+      "name": "messageplus.message.message-persistence",
+      "type": "java.lang.Boolean",
+      "description": "消息持久化",
+      "sourceType": "cn.redcoral.messageplus.properties.MessagePersistenceProperties",
+      "defaultValue": true
+    },
   ],
   "hints": []
 }

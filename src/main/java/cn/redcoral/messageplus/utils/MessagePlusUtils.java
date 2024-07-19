@@ -1,8 +1,11 @@
 package cn.redcoral.messageplus.utils;
 
+import cn.redcoral.messageplus.constant.CachePrefixConstant;
 import cn.redcoral.messageplus.entity.Group;
 import cn.redcoral.messageplus.entity.Message;
 import cn.redcoral.messageplus.entity.MessageType;
+import cn.redcoral.messageplus.exteriorUtils.SpringUtils;
+import cn.redcoral.messageplus.properties.MessagePersistenceProperties;
 import cn.redcoral.messageplus.service.MessagePlusService;
 import cn.redcoral.messageplus.properties.MessagePlusProperties;
 import com.alibaba.fastjson.JSON;
@@ -15,8 +18,7 @@ import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 import java.util.stream.Collectors;
 
-import static cn.redcoral.messageplus.utils.BeanUtil.messagePlusProperties;
-import static cn.redcoral.messageplus.utils.BeanUtil.stringRedisTemplate;
+import static cn.redcoral.messageplus.utils.BeanUtil.*;
 
 /**
  * 消息增强器工具类
@@ -67,12 +69,6 @@ public class MessagePlusUtils {
         userIdBaseMap.put(id, base);
         // 录入session库
         userIdSessionMap.put(id, session);
-//        List<String> groupIdList = userByGroupIdMap.get(id);
-//        if (groupIdList!=null) {
-//            groupIdList.forEach((groupId)->{
-//                idGroupMap.get(groupId).joinGroup(id, new Dialogue(session));
-//            });
-//        }
         // 在Redis中存储
         recordConnect(id, base, session);
         return onLinePeopleNum;
@@ -101,13 +97,13 @@ public class MessagePlusUtils {
         // 持久化标识
         boolean persistence = messagePlusProperties().isPersistence();
         // 消息持久化标识
-        boolean messagePersistence = messagePlusProperties().isMessagePersistence();
+        boolean messagePersistence = MessagePersistenceProperties.messagePersistence;
         // 服务ID
         String serviceId = messagePlusProperties().getServiceId();
         // 确保开启了持久化
         if (persistence) {
             // 记录该用户所在的服务ID
-            stringRedisTemplate().opsForValue().set(CachePrefixConstant.USER_SERVICE_PREFIX+id, serviceId);
+            stringRedisUtil().setUserService(id);
             // 开启了消息持久化
             if (messagePersistence) {
                 // 判断有没有未接收到的消息并获取全部发送失败的消息
@@ -123,15 +119,15 @@ public class MessagePlusUtils {
                 }).forEach(m -> {
                     switch (MessageType.valueOf(m.getType())) {
                         case SINGLE_SHOT: {
-                            base.onMessageByInboxAndSingle(m.getData(), session);
+                            BeanUtil.messagePlusBase().onMessageByInboxAndSingle(m.getSenderId(), m.getReceiverId(), m.getData());
                             break;
                         }
                         case MASS_SHOT: {
-                            base.onMessageByInboxAndByMass(m.getData(), session);
+                            BeanUtil.messagePlusBase().onMessageByInboxAndByMass(m.getSenderId(), m.getGroupId(), m.getReceiverId(), m.getData());
                             break;
                         }
                         case SYSTEM_SHOT: {
-                            base.onMessageByInboxAndSystem(m.getData(), session);
+                            BeanUtil.messagePlusBase().onMessageBySystem(m.getSenderId(), m.getData());
                             break;
                         }
                     }
@@ -156,15 +152,15 @@ public class MessagePlusUtils {
         for (Message m : newMessageList) {
             switch (MessageType.valueOf(m.getType())) {
                 case SINGLE_SHOT: {
-                    base.onMessageByInboxAndSingle(m.getData(), session);
+                    BeanUtil.messagePlusBase().onMessageByInboxAndSingle(m.getSenderId(), m.getReceiverId(), m.getData());
                     break;
                 }
                 case MASS_SHOT: {
-                    base.onMessageByInboxAndByMass(m.getData(), session);
+                    BeanUtil.messagePlusBase().onMessageByInboxAndByMass(m.getSenderId(), m.getGroupId(), m.getReceiverId(), m.getData());
                     break;
                 }
                 case SYSTEM_SHOT: {
-                    base.onMessageByInboxAndSystem(m.getData(), session);
+                    BeanUtil.messagePlusBase().onMessageBySystem(m.getSenderId(), m.getData());
                     break;
                 }
             }
@@ -310,9 +306,13 @@ public class MessagePlusUtils {
     /**
      * 用户是否在线
      * @param userId 用户ID
+     * @return "0"-本地在线 "-1"-不在线 "其它"-其它服务器在线
      */
-    public static boolean isOnLine(String userId) {
-        return userIdSessionMap.get(userId)!=null;
+    public static String isOnLine(String userId) {
+        Session session = userIdSessionMap.get(userId);
+        if (session != null) return "0";
+        String serviceId = BeanUtil.stringRedisUtil().getUserService(userId);
+        return serviceId == null ? "-1" : serviceId;
     }
 
     /**

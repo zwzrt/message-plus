@@ -1,4 +1,4 @@
-package cn.redcoral.messageplus.utils;
+package cn.redcoral.messageplus.constant;
 
 /**
  * 缓存前缀常量

@@ -1,4 +1,4 @@
-package cn.redcoral.messageplus.utils;
+package cn.redcoral.messageplus.exteriorUtils;
 
 import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
