@@ -5,7 +5,7 @@
 
     <groupId>io.github.zwzrt</groupId>
     <artifactId>message-plus</artifactId>
-    <version>0.0.61-beta</version>
+    <version>0.0.62-beta</version>
     <name>message-plus</name>
     <description>消息增强器（message-plus），基于Websocket的消息插件，增强即时聊天系统。</description>
     <url>https://zwzrt.github.io/</url>
