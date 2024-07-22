@@ -137,37 +137,6 @@ public class MessagePlusUtils {
     }
 
     /**
-     * 提示指定用户存在新消息
-     * @param userId 用户ID
-     */
-    public static void hasNewMessage(String userId) {
-        Session session = userIdSessionMap.get(userId);
-        // 不在线，不进行新消息处理
-        if (session==null) return;
-        // 获取该用户的消息
-        List<Message> newMessageList = getNewMessage(userId);
-        if (newMessageList.isEmpty()) return;
-        // 发送消息
-        MessagePlusService base = userIdBaseMap.get(userId);
-        for (Message m : newMessageList) {
-            switch (MessageType.valueOf(m.getType())) {
-                case SINGLE_SHOT: {
-                    BeanUtil.messagePlusBase().onMessageByInboxAndSingle(m.getSenderId(), m.getReceiverId(), m.getData());
-                    break;
-                }
-                case MASS_SHOT: {
-                    BeanUtil.messagePlusBase().onMessageByInboxAndByMass(m.getSenderId(), m.getGroupId(), m.getReceiverId(), m.getData());
-                    break;
-                }
-                case SYSTEM_SHOT: {
-                    BeanUtil.messagePlusBase().onMessageBySystem(m.getSenderId(), m.getData());
-                    break;
-                }
-            }
-        }
-    }
-
-    /**
      * 给指定用户发送消息
      */
     public static boolean sendMessage(String id, String msg) {
@@ -295,7 +264,7 @@ public class MessagePlusUtils {
     }
 
     /**
-     *
+     * 获取指定ID的session
      */
     public static Session getSessionByClientId(String clientId) {
         Session session = userIdSessionMap.get(clientId);
@@ -306,7 +275,7 @@ public class MessagePlusUtils {
     /**
      * 用户是否在线
      * @param userId 用户ID
-     * @return "0"-本地在线 "-1"-不在线 "其它"-其它服务器在线
+     * @return "0"-本地在线 "-1"-不在线 "服务器ID"-其它服务器在线
      */
     public static String isOnLine(String userId) {
         Session session = userIdSessionMap.get(userId);
@@ -316,7 +285,7 @@ public class MessagePlusUtils {
     }
 
     /**
-     * 查询指定用户的未接收消息
+     * 查询指定用户的未接收消息（该方法主要用于集群架构中跨服务使用，框架自己调用，开发者一般不需要）
      * @param userId 用户ID
      */
     public static List<Message> getNewMessage(String userId) {
@@ -332,6 +301,37 @@ public class MessagePlusUtils {
                 .filter(Objects::nonNull)
                 .map(s -> JSON.parseObject(s, Message.class))
                 .collect(Collectors.toList());
+    }
+
+    /**
+     * 提示指定用户存在新消息（该方法主要用于集群架构中跨服务使用，框架自己调用，开发者一般不需要）
+     * @param userId 用户ID
+     */
+    public static void hasNewMessage(String userId) {
+        Session session = userIdSessionMap.get(userId);
+        // 不在线，不进行新消息处理
+        if (session==null) return;
+        // 获取该用户的消息
+        List<Message> newMessageList = getNewMessage(userId);
+        if (newMessageList.isEmpty()) return;
+        // 发送消息
+        MessagePlusService base = userIdBaseMap.get(userId);
+        for (Message m : newMessageList) {
+            switch (MessageType.valueOf(m.getType())) {
+                case SINGLE_SHOT: {
+                    BeanUtil.messagePlusBase().onMessageByInboxAndSingle(m.getSenderId(), m.getReceiverId(), m.getData());
+                    break;
+                }
+                case MASS_SHOT: {
+                    BeanUtil.messagePlusBase().onMessageByInboxAndByMass(m.getSenderId(), m.getGroupId(), m.getReceiverId(), m.getData());
+                    break;
+                }
+                case SYSTEM_SHOT: {
+                    BeanUtil.messagePlusBase().onMessageBySystem(m.getSenderId(), m.getData());
+                    break;
+                }
+            }
+        }
     }
 
 }

@@ -8,7 +8,7 @@ import org.springframework.stereotype.Component;
  * @author mo
  **/
 @Data
-@Component("messagePlusProperties")
+@Component("messagePersistenceProperties")
 @ConfigurationProperties(prefix = "messageplus.message")
 public class MessagePersistenceProperties {
     /**

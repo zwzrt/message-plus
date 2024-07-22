@@ -53,7 +53,7 @@
       "description": "消息持久化",
       "sourceType": "cn.redcoral.messageplus.properties.MessagePersistenceProperties",
       "defaultValue": true
-    },
+    }
   ],
   "hints": []
 }
