@@ -230,7 +230,9 @@ public class MessagePlusUtils {
      */
     protected static void sendMessage(Session session, String message) {
         try {
-            session.getBasicRemote().sendText(message);
+            synchronized (session) {
+                session.getBasicRemote().sendText(message);
+            }
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

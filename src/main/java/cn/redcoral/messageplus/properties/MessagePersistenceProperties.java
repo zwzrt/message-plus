@@ -16,6 +16,10 @@ public class MessagePersistenceProperties {
      */
     public static boolean messagePersistence = true;
     /**
+     * 消息并发数
+     */
+    public static int concurrentNumber = 1;
+    /**
      * 消息过期时间（默认-1永不过期）
      */
     public static int expirationTime = -1;
@@ -25,5 +29,17 @@ public class MessagePersistenceProperties {
     }
     public void setMessagePersistence(boolean messagePersistence) {
         MessagePersistenceProperties.messagePersistence = messagePersistence;
+    }
+    public static int getExpirationTime() {
+        return expirationTime;
+    }
+    public static void setExpirationTime(int expirationTime) {
+        MessagePersistenceProperties.expirationTime = expirationTime;
+    }
+    public static int getConcurrentNumber() {
+        return concurrentNumber;
+    }
+    public static void setConcurrentNumber(int concurrentNumber) {
+        MessagePersistenceProperties.concurrentNumber = concurrentNumber;
     }
 }

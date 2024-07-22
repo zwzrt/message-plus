@@ -9,11 +9,15 @@ import cn.redcoral.messageplus.properties.MessagePlusProperties;
 import cn.redcoral.messageplus.service.PublishService;
 import cn.redcoral.messageplus.utils.BeanUtil;
 import cn.redcoral.messageplus.constant.CachePrefixConstant;
+import cn.redcoral.messageplus.utils.CounterIdentifierUtil;
 import cn.redcoral.messageplus.utils.MessagePlusUtils;
 import com.alibaba.fastjson.JSON;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * @author mo
@@ -29,6 +33,7 @@ public class MessagePlusController {
     @Autowired
     private PublishService publishService;
 
+
     /**
      * 获取当前在线人数
      * @return 在线人数
@@ -38,7 +43,6 @@ public class MessagePlusController {
         return MessagePlusUtils.getOnLinePeopleNum().toString();
     }
 
-
     /**
      * 发送单发类消息
      * @param receiverId 用户ID
@@ -46,6 +50,13 @@ public class MessagePlusController {
      */
     @PostMapping("/send/single")
     public void sendSingleMessage(HttpServerRequest request, @RequestParam("id1") String myId, @RequestParam("id2") String receiverId, @RequestBody Object msg) {
+        // 短时间发送消息达到上限，禁止发送消息
+        if (CounterIdentifierUtil.isLessThanOrEqual(myId, MessagePersistenceProperties.concurrentNumber)) {
+            return;
+        }
+        // 计数器加一
+        CounterIdentifierUtil.numberOfSendsIncrease(myId);
+        // 进行权限校验
         boolean bo = messagePlusBase.onMessageCheck(request, myId);
         // 权限校验不通过
         if (!bo) return;
@@ -77,6 +88,7 @@ public class MessagePlusController {
                 }
             }
         }
+        CounterIdentifierUtil.numberOfSendsDecrease(myId);
     }
 
     /**
@@ -86,6 +98,13 @@ public class MessagePlusController {
      */
     @PostMapping("/send/mass")
     public void sendMassMessage(HttpServerRequest request, @RequestParam("id1") String senderId, @RequestParam("id2") String groupId, @RequestBody Object msg) {
+        // 短时间发送消息达到上限，禁止发送消息
+        if (CounterIdentifierUtil.isLessThanOrEqual(senderId, MessagePersistenceProperties.concurrentNumber)) {
+            return;
+        }
+        // 计数器加一
+        CounterIdentifierUtil.numberOfSendsIncrease(senderId);
+        // 进行权限校验
         boolean bo = BeanUtil.messagePlusBase().onMessageCheck(request, senderId);
         // 权限校验不通过
         if (!bo) return;
@@ -121,6 +140,7 @@ public class MessagePlusController {
                 }
             }
         }
+        CounterIdentifierUtil.numberOfSendsDecrease(senderId);
     }
 
     /**
@@ -129,11 +149,19 @@ public class MessagePlusController {
      */
     @PostMapping("/send/system")
     public void sendSystemMessage(HttpServerRequest request, @RequestParam("id1") String myId, @RequestBody Object msg) {
+        // 短时间发送消息达到上限，禁止发送消息
+        if (CounterIdentifierUtil.isLessThanOrEqual(myId, MessagePersistenceProperties.concurrentNumber)) {
+            return;
+        }
+        // 计数器加一
+        CounterIdentifierUtil.numberOfSendsIncrease(myId);
+        // 进行权限校验
         boolean bo = BeanUtil.messagePlusBase().onMessageCheck(request, myId);
         // 权限校验不通过
         if (!bo) return;
         // 发送消息
         messagePlusBase.onMessageBySystem(myId, msg);
+        CounterIdentifierUtil.numberOfSendsDecrease(myId);
     }
 
 }
