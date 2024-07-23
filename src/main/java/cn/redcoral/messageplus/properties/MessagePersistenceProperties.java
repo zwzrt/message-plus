@@ -33,13 +33,13 @@ public class MessagePersistenceProperties {
     public static int getExpirationTime() {
         return expirationTime;
     }
-    public static void setExpirationTime(int expirationTime) {
+    public void setExpirationTime(int expirationTime) {
         MessagePersistenceProperties.expirationTime = expirationTime;
     }
     public static int getConcurrentNumber() {
         return concurrentNumber;
     }
-    public static void setConcurrentNumber(int concurrentNumber) {
+    public void setConcurrentNumber(int concurrentNumber) {
         MessagePersistenceProperties.concurrentNumber = concurrentNumber;
     }
 }
