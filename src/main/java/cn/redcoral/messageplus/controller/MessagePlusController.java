@@ -3,6 +3,7 @@ package cn.redcoral.messageplus.controller;
 import cn.hutool.http.server.HttpServerRequest;
 import cn.redcoral.messageplus.entity.Group;
 import cn.redcoral.messageplus.entity.Message;
+import cn.redcoral.messageplus.entity.MessageType;
 import cn.redcoral.messageplus.port.MessagePlusBase;
 import cn.redcoral.messageplus.properties.MessagePersistenceProperties;
 import cn.redcoral.messageplus.properties.MessagePlusProperties;
@@ -58,7 +59,7 @@ public class MessagePlusController {
         // 计数器加一
         CounterIdentifierUtil.numberOfSendsIncrease(myId);
         // 进行权限校验
-        boolean bo = messagePlusBase.onMessageCheck(request, myId);
+        boolean bo = messagePlusBase.onMessageCheck(request, myId, MessageType.SINGLE_SHOT);
         // 权限校验不通过
         if (!bo) return;
         // 查看用户是否在线
@@ -106,7 +107,7 @@ public class MessagePlusController {
         // 计数器加一
         CounterIdentifierUtil.numberOfSendsIncrease(senderId);
         // 进行权限校验
-        boolean bo = BeanUtil.messagePlusBase().onMessageCheck(request, senderId);
+        boolean bo = BeanUtil.messagePlusBase().onMessageCheck(request, senderId, MessageType.MASS_SHOT);
         // 权限校验不通过
         if (!bo) return;
         // 调用开发者实现的群发接口
@@ -157,7 +158,7 @@ public class MessagePlusController {
         // 计数器加一
         CounterIdentifierUtil.numberOfSendsIncrease(myId);
         // 进行权限校验
-        boolean bo = BeanUtil.messagePlusBase().onMessageCheck(request, myId);
+        boolean bo = BeanUtil.messagePlusBase().onMessageCheck(request, myId, MessageType.SYSTEM_SHOT);
         // 权限校验不通过
         if (!bo) return;
         // 发送消息

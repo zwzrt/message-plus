@@ -1,6 +1,7 @@
 package cn.redcoral.messageplus.port;
 
 import cn.hutool.http.server.HttpServerRequest;
+import cn.redcoral.messageplus.entity.MessageType;
 import org.springframework.http.HttpRequest;
 
 import javax.websocket.*;
@@ -23,10 +24,10 @@ public interface MessagePlusBase {
     /**
      * 收到消息时的权限校验
      * @param request HTTP请求信息
-     * @param sendId 发生者ID
+     * @param senderId 发生者ID
      * @return 是否允许发送消息
      */
-    public boolean onMessageCheck(HttpServerRequest request, String sendId);
+    public boolean onMessageCheck(HttpServerRequest request, String senderId, MessageType mt);
     /**
      * 收到系统类型的消息后调用的方法
      * @param senderId 发送者ID
