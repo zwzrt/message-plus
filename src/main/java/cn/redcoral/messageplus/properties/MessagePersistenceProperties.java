@@ -16,13 +16,21 @@ public class MessagePersistenceProperties {
      */
     public static boolean messagePersistence = true;
     /**
+     * 消息过期时间（默认-1永不过期）
+     */
+    public static int expirationTime = -1;
+    /**
      * 消息并发数
      */
     public static int concurrentNumber = 1;
     /**
-     * 消息过期时间（默认-1永不过期）
+     * 限制消息周期的时间（单位：s）
      */
-    public static int expirationTime = -1;
+    public static int cycleRestrictionsTime = 1;
+    /**
+     * 限制消息周期内的次数
+     */
+    public static int cycleRestrictionsNum = 10;
 
     public static boolean isMessagePersistence() {
         return MessagePersistenceProperties.messagePersistence;
@@ -41,5 +49,17 @@ public class MessagePersistenceProperties {
     }
     public void setConcurrentNumber(int concurrentNumber) {
         MessagePersistenceProperties.concurrentNumber = concurrentNumber;
+    }
+    public static int getCycleRestrictionsTime() {
+        return cycleRestrictionsTime;
+    }
+    public void setCycleRestrictionsTime(int cycleRestrictionsTime) {
+        MessagePersistenceProperties.cycleRestrictionsTime = cycleRestrictionsTime;
+    }
+    public static int getCycleRestrictionsNum() {
+        return cycleRestrictionsNum;
+    }
+    public void setCycleRestrictionsNum(int cycleRestrictionsNum) {
+        MessagePersistenceProperties.cycleRestrictionsNum = cycleRestrictionsNum;
     }
 }

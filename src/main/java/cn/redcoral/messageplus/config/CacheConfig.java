@@ -1,17 +1,10 @@
 package cn.redcoral.messageplus.config;
 
-import cn.redcoral.messageplus.constant.CachePrefixConstant;
-import cn.redcoral.messageplus.properties.MessagePlusProperties;
+import cn.redcoral.messageplus.properties.MessagePersistenceProperties;
 import com.github.benmanes.caffeine.cache.Cache;
 import com.github.benmanes.caffeine.cache.Caffeine;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.data.redis.connection.RedisConnectionFactory;
-import org.springframework.data.redis.listener.PatternTopic;
-import org.springframework.data.redis.listener.RedisMessageListenerContainer;
-import org.springframework.data.redis.listener.adapter.MessageListenerAdapter;
-
-import cn.redcoral.messageplus.receiver.RedisReceiver;
 
 import java.util.concurrent.TimeUnit;
 
@@ -36,6 +29,20 @@ public class CacheConfig {
             //记录命中
 //                .recordStats()
             .build();
+    /**
+     * 消息限制缓存
+     */
+    public static Cache<String, Integer> messageRestrictionsCache = Caffeine.newBuilder()
+            .initialCapacity(1000)
+            .maximumSize(1000000000)
+            //最后一次写操作后经过指定时间过期
+            .expireAfterWrite(MessagePersistenceProperties.cycleRestrictionsTime, TimeUnit.SECONDS)
+            .build();
+
+    @Bean
+    public Cache<String, Integer> messageRestrictionsCache() {
+        return messageRestrictionsCache;
+    }
 
     @Bean
     public Cache<String, Long> stringStringCache() {

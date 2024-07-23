@@ -35,16 +35,6 @@ public class MessagePlusController {
     @Autowired
     private PublishService publishService;
 
-
-    /**
-     * 获取当前在线人数
-     * @return 在线人数
-     */
-    @GetMapping
-    public String getOnLinePeopleNum() {
-        return MessagePlusUtils.getOnLinePeopleNum().toString();
-    }
-
     /**
      * 发送单发类消息
      * @param receiverId 用户ID
