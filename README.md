@@ -19,7 +19,7 @@ Maven + SpringBoot + WebSocket + Redis
    <dependency>
        <groupId>io.github.zwzrt</groupId>
        <artifactId>message-plus</artifactId>
-       <version>0.0.7-beta</version>
+       <version>0.1.1-beta</version>
    </dependency>
    ```
 
