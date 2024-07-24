@@ -32,9 +32,20 @@ public class Message {
     public static Message buildSingle(String senderId, String receiverId, Object data) {
         return new Message(200, MessageType.SINGLE_SHOT.name(), senderId, receiverId, data);
     }
+    public static Message buildMass(String senderId, String groupId, Object data) {
+        return buildMass(senderId, groupId, null, data);
+    }
     public static Message buildMass(String senderId, String groupId, String receiverId, Object data) {
         Message message = new Message(200, MessageType.MASS_SHOT.name(), senderId, receiverId, data);
         message.setGroupId(groupId);
         return message;
     }
+    public static Message buildSystem(String senderId, Object data) {
+        Message message = new Message();
+        message.setType(MessageType.SYSTEM_SHOT.name());
+        message.setSenderId(senderId);
+        message.setData(data);
+        return message;
+    }
+
 }

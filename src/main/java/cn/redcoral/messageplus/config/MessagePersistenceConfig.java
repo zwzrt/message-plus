@@ -2,7 +2,7 @@ package cn.redcoral.messageplus.config;
 
 import cn.redcoral.messageplus.initialize.MessagePersistenceInitialize;
 import cn.redcoral.messageplus.receiver.RedisReceiver;
-import cn.redcoral.messageplus.service.PublishService;
+import cn.redcoral.messageplus.handler.PublishService;
 import cn.redcoral.messageplus.utils.StringRedisUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;

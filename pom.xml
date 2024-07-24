@@ -5,7 +5,7 @@
 
     <groupId>io.github.zwzrt</groupId>
     <artifactId>message-plus</artifactId>
-    <version>0.0.63-beta</version>
+    <version>0.1.1-beta</version>
     <name>消息增强器</name>
     <description>消息增强器（message-plus），基于Websocket的消息插件，增强即时聊天系统。</description>
     <url>https://zwzrt.github.io/</url>
@@ -56,6 +56,12 @@
             <optional>true</optional>
         </dependency>
         <dependency>
+            <groupId>com.baomidou</groupId>
+            <artifactId>mybatis-plus-boot-starter</artifactId>
+            <version>3.5.7</version>
+            <optional>true</optional>
+        </dependency>
+        <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-data-redis</artifactId>
             <version>2.3.7.RELEASE</version>
@@ -83,7 +89,7 @@
         <dependency>
             <groupId>cn.hutool</groupId>
             <artifactId>hutool-all</artifactId>
-            <version>5.7.17</version>
+            <version>5.8.25</version>
         </dependency>
         <!--caffeine-->
         <dependency>

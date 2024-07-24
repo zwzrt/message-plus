@@ -1,19 +1,16 @@
-package cn.redcoral.messageplus.service;
+package cn.redcoral.messageplus.handler;
 
+import cn.redcoral.messageplus.config.MessageEncoder;
 import cn.redcoral.messageplus.entity.Message;
-import cn.redcoral.messageplus.entity.MessageType;
 import cn.redcoral.messageplus.properties.MessagePlusProperties;
 import cn.redcoral.messageplus.utils.BeanUtil;
 import cn.redcoral.messageplus.utils.MessagePlusUtils;
 import cn.redcoral.messageplus.constant.CachePrefixConstant;
-import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONException;
 import lombok.extern.slf4j.Slf4j;
 
 import javax.websocket.*;
 import javax.websocket.server.PathParam;
 import javax.websocket.server.ServerEndpoint;
-import java.util.List;
 
 import static cn.redcoral.messageplus.utils.BeanUtil.*;
 
@@ -22,7 +19,7 @@ import static cn.redcoral.messageplus.utils.BeanUtil.*;
  * @author mo
  **/
 @Slf4j
-@ServerEndpoint("/messageplus/ws/{sid}")
+@ServerEndpoint(value = "/messageplus/ws/{sid}", encoders = { MessageEncoder.class })
 public class MessagePlusService {
     /**
      * 客户端唯一标识
@@ -71,7 +68,8 @@ public class MessagePlusService {
      */
     @OnError
     public void baseOnError(Session session, Throwable error) {
-        BeanUtil.messagePlusBase().onError(session, error);
+        log.error("发送错误：session: {}", session);
+        error.printStackTrace();
     }
 
 }

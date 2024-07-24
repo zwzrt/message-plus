@@ -1,12 +1,12 @@
-package cn.redcoral.messageplus.service;
+package cn.redcoral.messageplus.handler;
 
-import cn.redcoral.messageplus.config.CacheConfig;
 import cn.redcoral.messageplus.config.RedisListenerConfig;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
 
 /**
+ * 用于通知其它服务器
  * @author mo
  **/
 @Service

@@ -5,14 +5,17 @@ import cn.redcoral.messageplus.entity.Group;
 import cn.redcoral.messageplus.entity.Message;
 import cn.redcoral.messageplus.entity.MessageType;
 import cn.redcoral.messageplus.exteriorUtils.SpringUtils;
+import cn.redcoral.messageplus.handler.MessageHandler;
 import cn.redcoral.messageplus.properties.MessagePersistenceProperties;
-import cn.redcoral.messageplus.service.MessagePlusService;
+import cn.redcoral.messageplus.handler.MessagePlusService;
 import cn.redcoral.messageplus.properties.MessagePlusProperties;
 import com.alibaba.fastjson.JSON;
 
 import javax.websocket.*;
+import java.awt.*;
 import java.io.IOException;
 import java.util.*;
+import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
@@ -117,20 +120,7 @@ public class MessagePlusUtils {
                 msgs.stream().filter(Objects::nonNull).map(s -> {
                     return JSON.parseObject(s, Message.class);
                 }).forEach(m -> {
-                    switch (MessageType.valueOf(m.getType())) {
-                        case SINGLE_SHOT: {
-                            BeanUtil.messagePlusBase().onMessageByInboxAndSingle(m.getSenderId(), m.getReceiverId(), m.getData());
-                            break;
-                        }
-                        case MASS_SHOT: {
-                            BeanUtil.messagePlusBase().onMessageByInboxAndByMass(m.getSenderId(), m.getGroupId(), m.getReceiverId(), m.getData());
-                            break;
-                        }
-                        case SYSTEM_SHOT: {
-                            BeanUtil.messagePlusBase().onMessageBySystem(m.getSenderId(), m.getData());
-                            break;
-                        }
-                    }
+                    messageHandler().handlerMessage(m);
                 });
             }
         }
@@ -139,7 +129,7 @@ public class MessagePlusUtils {
     /**
      * 给指定用户发送消息
      */
-    public static boolean sendMessage(String id, String msg) {
+    public static boolean sendMessage(String id, Message msg) {
         Session session = userIdSessionMap.get(id);
         if (session==null) {
             return false;
@@ -178,7 +168,7 @@ public class MessagePlusUtils {
      * @param message 消息内容
      * @return 失败用户ID
      */
-    public static List<String> sendMessageToGroup(String groupId, String message) {
+    public static List<String> sendMessageToGroup(String groupId, Message message) {
         Group group = getGroupManage().getGroupById(groupId);
         if (group==null) return Collections.emptyList();
 //        group.getUserIdDialogueMap().forEachEntry(group.getUserIdDialogueMap().size(), action -> {
@@ -205,7 +195,7 @@ public class MessagePlusUtils {
      * @param message 消息内容
      * @return 失败用户ID
      */
-    public static List<String> sendMessageToGroupBarringMe(String userId, String groupId, String message) {
+    public static List<String> sendMessageToGroupBarringMe(String userId, String groupId, Message message) {
         Group group = getGroupManage().getGroupById(groupId);
         if (group==null) return Collections.emptyList();
 //        group.getUserIdDialogueMap().forEachEntry(group.getUserIdDialogueMap().size(), action -> {
@@ -234,6 +224,18 @@ public class MessagePlusUtils {
                 session.getBasicRemote().sendText(message);
             }
         } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+    /**
+     * 服务端发送消息
+     */
+    protected static void sendMessage(Session session, Message message) {
+        try {
+            synchronized (session) {
+                session.getBasicRemote().sendObject(message);
+            }
+        } catch (EncodeException | IOException e) {
             throw new RuntimeException(e);
         }
     }
@@ -319,20 +321,7 @@ public class MessagePlusUtils {
         // 发送消息
         MessagePlusService base = userIdBaseMap.get(userId);
         for (Message m : newMessageList) {
-            switch (MessageType.valueOf(m.getType())) {
-                case SINGLE_SHOT: {
-                    BeanUtil.messagePlusBase().onMessageByInboxAndSingle(m.getSenderId(), m.getReceiverId(), m.getData());
-                    break;
-                }
-                case MASS_SHOT: {
-                    BeanUtil.messagePlusBase().onMessageByInboxAndByMass(m.getSenderId(), m.getGroupId(), m.getReceiverId(), m.getData());
-                    break;
-                }
-                case SYSTEM_SHOT: {
-                    BeanUtil.messagePlusBase().onMessageBySystem(m.getSenderId(), m.getData());
-                    break;
-                }
-            }
+            messageHandler().handlerMessage(m);
         }
     }
 
