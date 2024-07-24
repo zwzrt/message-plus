@@ -218,7 +218,7 @@ public class MessagePlusUtils {
     /**
      * 服务端发送消息
      */
-    protected static void sendMessage(Session session, String message) {
+    public static void sendMessage(Session session, String message) {
         try {
             synchronized (session) {
                 session.getBasicRemote().sendText(message);
@@ -230,7 +230,7 @@ public class MessagePlusUtils {
     /**
      * 服务端发送消息
      */
-    protected static void sendMessage(Session session, Message message) {
+    public static void sendMessage(Session session, Message message) {
         try {
             synchronized (session) {
                 session.getBasicRemote().sendObject(message);

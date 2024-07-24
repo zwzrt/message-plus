@@ -2,7 +2,6 @@ package cn.redcoral.messageplus.port;
 
 import cn.hutool.http.server.HttpServerRequest;
 import cn.redcoral.messageplus.entity.Message;
-import cn.redcoral.messageplus.entity.MessageType;
 
 import javax.websocket.*;
 

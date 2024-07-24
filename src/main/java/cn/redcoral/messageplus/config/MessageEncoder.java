@@ -9,7 +9,6 @@ import javax.websocket.EndpointConfig;
 
 /**
  * @author mo
- * @日期: 2024-07-24 17:01
  **/
 public class MessageEncoder implements Encoder.Text<Message> {
     @Override
