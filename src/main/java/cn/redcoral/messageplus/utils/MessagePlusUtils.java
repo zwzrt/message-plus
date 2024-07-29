@@ -1,6 +1,7 @@
 package cn.redcoral.messageplus.utils;
 
 import cn.redcoral.messageplus.constant.CachePrefixConstant;
+import cn.redcoral.messageplus.entity.ChatRoom;
 import cn.redcoral.messageplus.entity.Group;
 import cn.redcoral.messageplus.entity.Message;
 import cn.redcoral.messageplus.entity.MessageType;
@@ -120,7 +121,10 @@ public class MessagePlusUtils {
                 msgs.stream().filter(Objects::nonNull).map(s -> {
                     return JSON.parseObject(s, Message.class);
                 }).forEach(m -> {
-                    messageHandler().handlerMessage(m);
+                    // 聊天室消息不发送
+                    if (m.getType().equals(MessageType.CHAT_ROOM_SHOT.name())) return;
+                    sendMessage(id, m);
+//                    messageHandler().handlerMessage(m);
                 });
             }
         }
@@ -214,6 +218,29 @@ public class MessagePlusUtils {
         });
         return offLineClientIdList;
     }
+    /**
+     * 聊天室群发（不包括自己）
+     * @param userId 用户ID
+     * @param chatRoomId 聊天室ID
+     * @param message 消息内容
+     * @return 失败用户ID
+     */
+    public static List<String> sendMessageToChatRoomBarringMe(String userId, String chatRoomId, Message message) {
+        ChatRoom chatRoom = BeanUtil.chatRoomManage().getChatRoomById(chatRoomId);
+        if (chatRoom==null) return Collections.emptyList();
+
+        List<String> offLineClientIdList = new ArrayList<>();
+        chatRoom.getClientIdList().forEach(clientId->{
+            if (clientId.equals(userId)) return;
+            // 在线
+            if (userIdSessionMap.get(clientId)!=null) {
+                sendMessage(userIdSessionMap.get(clientId), message);
+            } else {
+                offLineClientIdList.add(clientId);
+            }
+        });
+        return offLineClientIdList;
+    }
 
     /**
      * 服务端发送消息
@@ -287,6 +314,14 @@ public class MessagePlusUtils {
         String serviceId = BeanUtil.stringRedisUtil().getUserService(userId);
         return serviceId == null ? "-1" : serviceId;
     }
+    /**
+     * 查询用户的服务ID
+     * @param userId 用户ID
+     * @return 服务器ID
+     */
+    public static String getUserServiceId(String userId) {
+        return BeanUtil.stringRedisUtil().getUserService(userId);
+    }
 
     /**
      * 查询指定用户的未接收消息（该方法主要用于集群架构中跨服务使用，框架自己调用，开发者一般不需要）
@@ -323,6 +358,16 @@ public class MessagePlusUtils {
         for (Message m : newMessageList) {
             messageHandler().handlerMessage(m);
         }
+    }
+    /**
+     * 提示指定聊天室存在新消息（该方法主要用于集群架构中跨服务使用，框架自己调用，开发者一般不需要）
+     * @param message 聊天室消息
+     */
+    public static void hasNewMessageByChatRoom(Message message) {
+        if (message == null) return;
+        if (!message.getType().equals(MessageType.CHAT_ROOM_SHOT.name())) return;
+        // 广播消息
+        BeanUtil.simpMessagingTemplate().convertAndSend("/topic/chat/"+message.getChatRoomId(), message.getData());
     }
 
 }

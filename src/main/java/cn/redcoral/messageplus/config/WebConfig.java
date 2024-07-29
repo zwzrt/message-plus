@@ -19,7 +19,8 @@ public class WebConfig implements WebMvcConfigurer {
         registry.addInterceptor(controllerInterceptor()).addPathPatterns(
                 "/messageplus/send/single",
                 "/messageplus/send/mass",
-                "/messageplus/send/system"
+                "/messageplus/send/system",
+                "/messageplus/send/chatroom"
         );
     }
 }

@@ -16,5 +16,9 @@ public enum MessageType {
     /**
      * 系统
      */
-    SYSTEM_SHOT;
+    SYSTEM_SHOT,
+    /**
+     * 聊天室
+     */
+    CHAT_ROOM_SHOT
 }

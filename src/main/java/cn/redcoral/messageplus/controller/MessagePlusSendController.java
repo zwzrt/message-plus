@@ -1,21 +1,18 @@
 package cn.redcoral.messageplus.controller;
 
 import cn.hutool.http.server.HttpServerRequest;
-import cn.redcoral.messageplus.entity.Group;
 import cn.redcoral.messageplus.entity.Message;
-import cn.redcoral.messageplus.entity.MessageType;
 import cn.redcoral.messageplus.handler.MessageHandler;
+import cn.redcoral.messageplus.handler.PublishService;
 import cn.redcoral.messageplus.port.MessagePlusBase;
 import cn.redcoral.messageplus.properties.MessagePersistenceProperties;
+import cn.redcoral.messageplus.properties.MessagePlusClusterProperties;
 import cn.redcoral.messageplus.properties.MessagePlusProperties;
-import cn.redcoral.messageplus.handler.PublishService;
-import cn.redcoral.messageplus.utils.BeanUtil;
-import cn.redcoral.messageplus.constant.CachePrefixConstant;
 import cn.redcoral.messageplus.utils.CounterIdentifierUtil;
-import cn.redcoral.messageplus.utils.MessagePlusUtils;
-import com.alibaba.fastjson.JSON;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.redis.core.StringRedisTemplate;
+import org.springframework.messaging.handler.annotation.MessageMapping;
+import org.springframework.messaging.handler.annotation.SendTo;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.web.bind.annotation.*;
 
 /**
@@ -24,12 +21,17 @@ import org.springframework.web.bind.annotation.*;
  **/
 @RestController
 @RequestMapping("/messageplus")
-public class MessagePlusController {
+public class MessagePlusSendController {
 
     @Autowired
     private MessagePlusBase messagePlusBase;
     @Autowired
     private MessageHandler messageHandler;
+    @Autowired
+    private SimpMessagingTemplate simpMessagingTemplate;
+    @Autowired
+    private PublishService publishService;
+
 
     /**
      * 发送单发类消息
@@ -37,7 +39,7 @@ public class MessagePlusController {
      * @param msg 消息体
      */
     @PostMapping("/send/single")
-    public void sendSingleMessage(HttpServerRequest request, @RequestParam("id1") String senderId, @RequestParam("id2") String receiverId, @RequestBody String msg) {
+    public void sendSingleMessage(HttpServerRequest request, @RequestParam("id1") String senderId, @RequestParam("id2") String receiverId, @RequestBody String msg) throws Exception {
         // 1.并发限流
         // 短时间发送消息达到上限，禁止发送消息
         if (CounterIdentifierUtil.isLessThanOrEqual(senderId, MessagePersistenceProperties.concurrentNumber)) {
@@ -68,7 +70,7 @@ public class MessagePlusController {
      * @param msg 消息体
      */
     @PostMapping("/send/mass")
-    public void sendMassMessage(HttpServerRequest request, @RequestParam("id1") String senderId, @RequestParam("id2") String groupId, @RequestBody Object msg) {
+    public void sendMassMessage(HttpServerRequest request, @RequestParam("id1") String senderId, @RequestParam("id2") String groupId, @RequestBody Object msg) throws Exception {
         // 1.并发限流
         // 短时间发送消息达到上限，禁止发送消息
         if (CounterIdentifierUtil.isLessThanOrEqual(senderId, MessagePersistenceProperties.concurrentNumber)) {
@@ -94,11 +96,51 @@ public class MessagePlusController {
     }
 
     /**
+     * 发送聊天室消息
+     * @param senderId 发送者ID
+     * @param chatRoomId 聊天室ID
+     * @param msg 消息体
+     */
+    @PostMapping("/send/chatroom")
+    public void sendChatRoomMessage(HttpServerRequest request, @RequestParam("id1") String senderId, @RequestParam("id2") String chatRoomId, @RequestBody Object msg) throws Exception {
+        // 1.并发限流
+        // 短时间发送消息达到上限，禁止发送消息
+        if (CounterIdentifierUtil.isLessThanOrEqual(senderId, MessagePersistenceProperties.concurrentNumber)) {
+            return;
+        }
+        // 计数器加一
+        CounterIdentifierUtil.numberOfSendsIncrease(senderId);
+
+        // 2.查询是否禁言
+
+        // 3.权限校验
+        Message message = Message.buildChatRoom(senderId, chatRoomId, msg);
+        // 进行权限校验
+        boolean bo = messagePlusBase.onMessageCheck(request, message);
+        // 权限校验不通过
+        if (!bo) return;
+
+        // 4.发送消息
+//        messageHandler.handleChatRoomMessage(senderId, chatRoomId, message);
+        // 开启集群化部署
+        if (MessagePlusClusterProperties.open) {
+            // 向其它服务器发送聊天室消息
+            publishService.publishByCharRoom(message);
+        }
+        // 广播
+        simpMessagingTemplate.convertAndSend("/topic/chat/"+chatRoomId, message);
+
+
+        // 计数器减一
+        CounterIdentifierUtil.numberOfSendsDecrease(senderId);
+    }
+
+    /**
      * 发送系统类消息
      * @param msg 消息体
      */
     @PostMapping("/send/system")
-    public void sendSystemMessage(HttpServerRequest request, @RequestParam("id1") String senderId, @RequestBody Object msg) {
+    public void sendSystemMessage(HttpServerRequest request, @RequestParam("id1") String senderId, @RequestBody Object msg) throws Exception {
         // 1.并发限流
         // 短时间发送消息达到上限，禁止发送消息
         if (CounterIdentifierUtil.isLessThanOrEqual(senderId, MessagePersistenceProperties.concurrentNumber)) {
@@ -121,6 +163,13 @@ public class MessagePlusController {
 
         // 计数器减一
         CounterIdentifierUtil.numberOfSendsDecrease(senderId);
+    }
+
+    @MessageMapping("/hello") // @MessageMapping 和 @RequestMapping 功能类似，浏览器向服务器发起消息，映射到该地址。
+    @SendTo("/messageplus/getResponse") // 如果服务器接受到了消息，就会对订阅了 @SendTo 括号中的地址的浏览器发送消息。
+    public String say(String message) throws Exception {
+//        Thread.sleep(3000);
+        return message;
     }
 
 }

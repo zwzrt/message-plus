@@ -25,7 +25,7 @@ public interface MessagePlusBase {
      * @param message 消息对象
      * @return 是否允许发送消息
      */
-    public boolean onMessageCheck(HttpServerRequest request, Message message);
+    public boolean onMessageCheck(HttpServerRequest request, Message message) throws Exception;
     /**
      * 收到系统消息
      * @param senderId 发送者ID

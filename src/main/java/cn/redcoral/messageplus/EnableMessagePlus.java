@@ -3,6 +3,7 @@ package cn.redcoral.messageplus;
 import cn.redcoral.messageplus.config.MessagePersistenceConfig;
 import cn.redcoral.messageplus.config.MessagePlusConfig;
 import cn.redcoral.messageplus.config.WebConfig;
+import cn.redcoral.messageplus.config.WebSocketConfig;
 import cn.redcoral.messageplus.handler.MessageHandler;
 import cn.redcoral.messageplus.properties.MessagePersistenceProperties;
 import cn.redcoral.messageplus.properties.MessagePlusProperties;
@@ -27,7 +28,8 @@ import java.lang.annotation.*;
         GroupManage.class, SpringUtils.class,
         MessagePlusService.class, MessagePlusProperties.class, MessagePersistenceProperties.class,
         WebConfig.class,
-        MessageHandler.class
+        MessageHandler.class,
+        WebSocketConfig.class
 })
 public @interface EnableMessagePlus {
 }
