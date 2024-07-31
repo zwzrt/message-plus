@@ -1,4 +1,4 @@
-package cn.redcoral.messageplus.entity;
+package cn.redcoral.messageplus.data.entity;
 
 import lombok.Data;
 
@@ -13,6 +13,7 @@ public class Message {
     private String senderId; // 发送者ID
     private String groupId; // 群组ID
     private String chatRoomId; // 聊天室ID
+    private long thumbsUpNum; // 点赞数量
     private String receiverId; // 接收者ID
     private Object data;
 

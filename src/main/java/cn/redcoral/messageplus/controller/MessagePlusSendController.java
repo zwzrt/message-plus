@@ -1,13 +1,12 @@
 package cn.redcoral.messageplus.controller;
 
 import cn.hutool.http.server.HttpServerRequest;
-import cn.redcoral.messageplus.entity.Message;
+import cn.redcoral.messageplus.data.entity.Message;
 import cn.redcoral.messageplus.handler.MessageHandler;
 import cn.redcoral.messageplus.handler.PublishService;
 import cn.redcoral.messageplus.port.MessagePlusBase;
 import cn.redcoral.messageplus.properties.MessagePersistenceProperties;
 import cn.redcoral.messageplus.properties.MessagePlusClusterProperties;
-import cn.redcoral.messageplus.properties.MessagePlusProperties;
 import cn.redcoral.messageplus.utils.CounterIdentifierUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.handler.annotation.MessageMapping;
@@ -121,7 +120,6 @@ public class MessagePlusSendController {
         if (!bo) return;
 
         // 4.发送消息
-//        messageHandler.handleChatRoomMessage(senderId, chatRoomId, message);
         // 开启集群化部署
         if (MessagePlusClusterProperties.open) {
             // 向其它服务器发送聊天室消息

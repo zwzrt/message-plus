@@ -7,6 +7,7 @@ import cn.redcoral.messageplus.utils.StringRedisUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Import;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;
@@ -19,6 +20,10 @@ import org.springframework.stereotype.Component;
 @Component
 @ConditionalOnProperty(name = "messageplus.persistence", havingValue = "true")
 @ConditionalOnClass({RedisTemplate.class})
+@ComponentScan({
+        "cn.redcoral.messageplus.config.cluster",
+        "cn.redcoral.messageplus.redis"
+})
 @Import({MessagePersistenceInitialize.class, CacheConfig.class, RedisReceiver.class, PublishService.class, StringRedisUtil.class, RedisListenerConfig.class})
 public class MessagePersistenceConfig {
     static {

@@ -1,19 +1,17 @@
 package cn.redcoral.messageplus.utils;
 
 import cn.redcoral.messageplus.constant.CachePrefixConstant;
-import cn.redcoral.messageplus.entity.ChatRoom;
-import cn.redcoral.messageplus.entity.Group;
-import cn.redcoral.messageplus.entity.Message;
-import cn.redcoral.messageplus.entity.MessageType;
+import cn.redcoral.messageplus.data.entity.vo.ChatRoom;
+import cn.redcoral.messageplus.data.entity.Group;
+import cn.redcoral.messageplus.data.entity.Message;
+import cn.redcoral.messageplus.data.entity.MessageType;
 import cn.redcoral.messageplus.exteriorUtils.SpringUtils;
-import cn.redcoral.messageplus.handler.MessageHandler;
 import cn.redcoral.messageplus.properties.MessagePersistenceProperties;
 import cn.redcoral.messageplus.handler.MessagePlusService;
 import cn.redcoral.messageplus.properties.MessagePlusProperties;
 import com.alibaba.fastjson.JSON;
 
 import javax.websocket.*;
-import java.awt.*;
 import java.io.IOException;
 import java.util.*;
 import java.util.List;

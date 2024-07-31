@@ -1,11 +1,14 @@
 package cn.redcoral.messageplus.utils;
 
-import cn.redcoral.messageplus.entity.ChatRoom;
-import cn.redcoral.messageplus.entity.Group;
+import cn.redcoral.messageplus.data.entity.vo.ChatRoom;
+import cn.redcoral.messageplus.data.service.ChatRoomService;
 import cn.redcoral.messageplus.exteriorUtils.SpringUtils;
+import cn.redcoral.messageplus.redis.utils.ChatRoomRedisUtil;
 import com.alibaba.fastjson.JSON;
 import org.springframework.beans.BeansException;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.StringRedisTemplate;
 
 import java.util.ArrayList;
@@ -28,8 +31,14 @@ public class ChatRoomManage {
      * 聊天室数组（聊天室ID，聊天室）
      */
     private ConcurrentHashMap<String, ChatRoom> chatRoomByIdMap = new ConcurrentHashMap<>();
-
+    @Autowired
     private StringRedisTemplate stringRedisTemplate;
+    @Autowired
+    private RedisTemplate<String, ChatRoom> chatRoomRedisTemplate;
+    @Autowired
+    private ChatRoomService chatRoomService;
+    @Autowired
+    private ChatRoomRedisUtil chatRoomRedisUtil;
 
 
 
@@ -40,13 +49,33 @@ public class ChatRoomManage {
      * @return 聊天室ID
      */
     public ChatRoom createChatRoom(String createUserId, String name) {
-        ChatRoom chatRoom = new ChatRoom();
+        // 查询该数组是否存在
+        String value = stringRedisTemplate.opsForValue().get(CHAT_ROOM_KEY+createUserId+":"+name);
+        ChatRoom chatRoom = null;
+        // 该群组不存在，进行创建
+        if (value == null) {
+            // 调用原始方法
+            chatRoom = new ChatRoom();
+            chatRoom.setCreateUserId(createUserId);
+            chatRoom.setName(name);
 
-        chatRoom.setCreateUserId(createUserId);
-        chatRoom.setName(name);
+            // 数据库创建
+            chatRoom = chatRoomService.insertChatRoom(chatRoom);
+            if (chatRoom == null) {
+                return null;
+            }
 
-        chatRoomByIdMap.put(chatRoom.getId(), chatRoom);
+            chatRoomByIdMap.put(chatRoom.getId(), chatRoom);
 
+            // 添加群组缓存（用于判断是否存在）
+            stringRedisTemplate.opsForValue().set(CHAT_ROOM_KEY + createUserId+":"+name, chatRoom.getId());
+            // 添加群组信息缓存
+            stringRedisTemplate.opsForValue().set(CHAT_ROOM_KEY + chatRoom.getId(), JSON.toJSONString(chatRoom));
+            // 返回群组信息
+            return chatRoom;
+        }
+        chatRoom = new ChatRoom();
+        chatRoom.setId(value);
         return chatRoom;
     }
 
@@ -62,6 +91,12 @@ public class ChatRoomManage {
         chatRoom.setId(chatRoomId);
         chatRoom.setCreateUserId(createUserId);
         chatRoom.setName(name);
+
+        // 数据库创建
+        chatRoom = chatRoomService.insertChatRoom(chatRoom);
+        if (chatRoom == null) {
+            return null;
+        }
 
         chatRoomByIdMap.put(chatRoom.getId(), chatRoom);
 
@@ -91,10 +126,10 @@ public class ChatRoomManage {
      */
     public void joinChatRoomById(String client_id, String chatRoomId) {
         ChatRoom chatRoom = chatRoomByIdMap.get(chatRoomId);
-        if (chatRoom==null) return;
+        if (chatRoom == null) return;
         chatRoom.joinChatRoom(client_id);
         List<String> chatRoomIdList = userByChatRoomIdMap.get(client_id);
-        if (chatRoomIdList==null) {
+        if (chatRoomIdList == null) {
             chatRoomIdList = new ArrayList<>();
             chatRoomIdList.add(chatRoomId);
             userByChatRoomIdMap.put(client_id, chatRoomIdList);
@@ -103,6 +138,21 @@ public class ChatRoomManage {
             chatRoomIdList.add(chatRoomId);
         }
     }
+
+
+    /**
+     * 关闭聊天室
+     * @param client_id 关闭者ID
+     * @param chatRoomId 聊天室ID
+     */
+    public boolean closeChatRoomById(String client_id, String chatRoomId) {
+        // 1、操作数据库
+        boolean bo = chatRoomService.closeChatRoom(client_id, chatRoomId);
+        if (!bo) return false;
+        // 2、删除缓存
+        return chatRoomRedisUtil.deleteChatRoomById(chatRoomId);
+    }
+
 
 
 
@@ -150,4 +200,7 @@ public class ChatRoomManage {
         return chatRoomByIdMap;
     }
 
+    public List<ChatRoom> selectChatRooms() {
+        return chatRoomService.selectChatRooms();
+    }
 }

@@ -1,6 +1,6 @@
 package cn.redcoral.messageplus.config;
 
-import cn.redcoral.messageplus.entity.Message;
+import cn.redcoral.messageplus.data.entity.Message;
 import com.alibaba.fastjson.JSON;
 
 import javax.websocket.EncodeException;

@@ -1,6 +1,6 @@
 package cn.redcoral.messageplus.utils;
 
-import cn.redcoral.messageplus.entity.Group;
+import cn.redcoral.messageplus.data.entity.Group;
 import cn.redcoral.messageplus.port.GroupInterface;
 import cn.redcoral.messageplus.exteriorUtils.SpringUtils;
 import com.alibaba.fastjson.JSON;

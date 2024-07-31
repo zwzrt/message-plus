@@ -1,5 +1,7 @@
 # 消息增强器（message-plus）
 
+<a href='https://gitee.com/modmb/message-plus/stargazers'><img src='https://gitee.com/modmb/message-plus/badge/star.svg?theme=dark' alt='star'></img></a><a href='https://gitee.com/modmb/message-plus/members'><img src='https://gitee.com/modmb/message-plus/badge/fork.svg?theme=dark' alt='fork'></img></a>![DingTalk](https://img.shields.io/static/v1?label=Github&message=message-plus&color=orange)
+
 ---
 
 #### [进入主页](https://zwzrt.github.io/)

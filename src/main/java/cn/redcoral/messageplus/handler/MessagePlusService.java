@@ -1,7 +1,6 @@
 package cn.redcoral.messageplus.handler;
 
 import cn.redcoral.messageplus.config.MessageEncoder;
-import cn.redcoral.messageplus.entity.Message;
 import cn.redcoral.messageplus.properties.MessagePlusProperties;
 import cn.redcoral.messageplus.utils.BeanUtil;
 import cn.redcoral.messageplus.utils.MessagePlusUtils;

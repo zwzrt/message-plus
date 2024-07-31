@@ -1,4 +1,4 @@
-package cn.redcoral.messageplus.entity;
+package cn.redcoral.messageplus.data.entity;
 
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;

@@ -1,22 +1,28 @@
-package cn.redcoral.messageplus.entity;
+package cn.redcoral.messageplus.data.entity.vo;
 
+import com.baomidou.mybatisplus.annotation.TableField;
+import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 
+import java.io.Serializable;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+
+import static cn.redcoral.messageplus.config.MessagePlusConfig.snowflake;
 
 /**
  * 聊天室
  * @author mo
  **/
 @Data
-public class ChatRoom {
+@TableName("chat_room")
+public class ChatRoom implements Serializable {
     /**
      * 聊天室ID
      */
-    private String id = UUID.randomUUID().toString();
+    private String id;
     /**
      * 创建者ID
      */
@@ -32,19 +38,28 @@ public class ChatRoom {
     /**
      * 用户ID列表
      */
+    @TableField(exist = false)
     private List<String> clientIdList = new ArrayList<>();
     /**
      * 点赞数量
      */
-    private long thumbsUpNum;
+    private long thumbsUpNum = 0;
     /**
      * 开播时间
      */
-    private Timestamp openingTime;
+    private Timestamp openingTime = new Timestamp(System.currentTimeMillis());
     /**
      * 停播时间
      */
     private Timestamp offTime;
+    /**
+     * 是否关闭
+     */
+    private boolean isClose = false;
+
+    {
+        this.id = snowflake.nextIdStr();
+    }
 
 
     /**

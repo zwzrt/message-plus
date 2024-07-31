@@ -1,7 +1,7 @@
 package cn.redcoral.messageplus.handler;
 
 import cn.redcoral.messageplus.config.RedisListenerConfig;
-import cn.redcoral.messageplus.entity.Message;
+import cn.redcoral.messageplus.data.entity.Message;
 import com.alibaba.fastjson.JSON;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.StringRedisTemplate;

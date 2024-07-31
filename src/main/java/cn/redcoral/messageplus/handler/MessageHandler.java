@@ -1,10 +1,10 @@
 package cn.redcoral.messageplus.handler;
 
 import cn.redcoral.messageplus.constant.CachePrefixConstant;
-import cn.redcoral.messageplus.entity.ChatRoom;
-import cn.redcoral.messageplus.entity.Group;
-import cn.redcoral.messageplus.entity.Message;
-import cn.redcoral.messageplus.entity.MessageType;
+import cn.redcoral.messageplus.data.entity.vo.ChatRoom;
+import cn.redcoral.messageplus.data.entity.Group;
+import cn.redcoral.messageplus.data.entity.Message;
+import cn.redcoral.messageplus.data.entity.MessageType;
 import cn.redcoral.messageplus.port.MessagePlusBase;
 import cn.redcoral.messageplus.properties.MessagePersistenceProperties;
 import cn.redcoral.messageplus.properties.MessagePlusProperties;

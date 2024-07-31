@@ -1,7 +1,7 @@
 package cn.redcoral.messageplus.config;
 
 import cn.redcoral.messageplus.constant.CachePrefixConstant;
-import cn.redcoral.messageplus.entity.Message;
+import cn.redcoral.messageplus.data.entity.Message;
 import cn.redcoral.messageplus.properties.MessagePlusProperties;
 import cn.redcoral.messageplus.receiver.RedisReceiver;
 import cn.redcoral.messageplus.utils.MessagePlusUtils;
