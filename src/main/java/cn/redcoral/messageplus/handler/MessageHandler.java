@@ -1,16 +1,12 @@
 package cn.redcoral.messageplus.handler;
 
-import cn.redcoral.messageplus.constant.CachePrefixConstant;
-import cn.redcoral.messageplus.entity.vo.ChatRoom;
+import cn.redcoral.messageplus.entity.ChatRoom;
 import cn.redcoral.messageplus.entity.Group;
-import cn.redcoral.messageplus.entity.Message;
-import cn.redcoral.messageplus.entity.MessageType;
+import cn.redcoral.messageplus.entity.message.Message;
+import cn.redcoral.messageplus.entity.message.MessageType;
+import cn.redcoral.messageplus.manage.ChatRoomManage;
+import cn.redcoral.messageplus.manage.MessagePlusUtils;
 import cn.redcoral.messageplus.port.MessagePlusBase;
-import cn.redcoral.messageplus.properties.MessagePersistenceProperties;
-import cn.redcoral.messageplus.properties.MessagePlusProperties;
-import cn.redcoral.messageplus.utils.ChatRoomManage;
-import cn.redcoral.messageplus.utils.MessagePlusUtils;
-import com.alibaba.fastjson.JSON;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
 

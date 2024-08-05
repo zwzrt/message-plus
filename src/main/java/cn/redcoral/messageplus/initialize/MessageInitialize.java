@@ -1,6 +1,6 @@
 package cn.redcoral.messageplus.initialize;
 
-import cn.redcoral.messageplus.utils.ChatRoomManage;
+import cn.redcoral.messageplus.manage.ChatRoomManage;
 import org.springframework.context.annotation.Import;
 
 /**

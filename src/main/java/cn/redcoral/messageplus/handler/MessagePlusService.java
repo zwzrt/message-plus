@@ -1,17 +1,14 @@
 package cn.redcoral.messageplus.handler;
 
 import cn.redcoral.messageplus.config.MessageEncoder;
+import cn.redcoral.messageplus.manage.MessagePlusUtils;
 import cn.redcoral.messageplus.properties.MessagePlusProperties;
 import cn.redcoral.messageplus.utils.BeanUtil;
-import cn.redcoral.messageplus.utils.MessagePlusUtils;
-import cn.redcoral.messageplus.constant.CachePrefixConstant;
 import lombok.extern.slf4j.Slf4j;
 
 import javax.websocket.*;
 import javax.websocket.server.PathParam;
 import javax.websocket.server.ServerEndpoint;
-
-import static cn.redcoral.messageplus.utils.BeanUtil.*;
 
 /**
  * 消息处理器

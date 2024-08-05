@@ -14,7 +14,7 @@
 注意：
 持久化基于Caffeine实现，服务关闭后就会消息。如果需要，可以自己去做持久化，或者使用消息增强器集群版
 
-[前往集群版](https://gitee.com/modmb/message-plus-cluster)
+[前往集群版(Gitee)](https://gitee.com/modmb/message-plus-cluster)
 
 #### 软件架构
 Maven + SpringBoot + WebSocket
