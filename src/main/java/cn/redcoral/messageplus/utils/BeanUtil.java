@@ -2,6 +2,7 @@ package cn.redcoral.messageplus.utils;
 
 import cn.redcoral.messageplus.config.CacheConfig;
 import cn.redcoral.messageplus.handler.MessageHandler;
+import cn.redcoral.messageplus.manage.ChatRoomManage;
 import cn.redcoral.messageplus.port.MessagePlusBase;
 import cn.redcoral.messageplus.properties.MessagePlusProperties;
 import cn.redcoral.messageplus.exteriorUtils.SpringUtils;
