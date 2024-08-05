@@ -1,3 +1,4 @@
+
 # 消息增强器（message-plus）
 
 <a href='https://gitee.com/modmb/message-plus/stargazers'><img src='https://gitee.com/modmb/message-plus/badge/star.svg?theme=dark' alt='star'></img></a><a href='https://gitee.com/modmb/message-plus/members'><img src='https://gitee.com/modmb/message-plus/badge/fork.svg?theme=dark' alt='fork'></img></a>![DingTalk](https://img.shields.io/static/v1?label=Github&message=message-plus&color=orange)
@@ -8,10 +9,40 @@
 
 #### 介绍
 
-基于WebSocket的消息增强器，支持单发、群发及系统功能；支持集群架构的服务架构，以及数据持久化（持久化基于Redis实现，使用中请开发者注意Redis的持久化配置或重新去数据库做持久化）；支持失败消息的持久化及重发功能。
+基于WebSocket的消息增强器，支持单发、群发、聊天室及系统功能;以及数据持久化；支持失败消息的持久化及重发功能。
+
+注意：
+持久化基于Caffeine实现，服务关闭后就会消息。如果需要，可以自己去做持久化，或者使用消息增强器集群版
+
+[前往集群版](https://gitee.com/modmb/message-plus-cluster)
 
 #### 软件架构
-Maven + SpringBoot + WebSocket + Redis
+Maven + SpringBoot + WebSocket
+
+#### 版本区别
+
+<table style="width: 100%; text-align: center">
+    <tr>
+        <th>区别</th>
+        <th>单机版</th>
+        <th>集群版</th>
+    </tr>
+    <tr>
+        <td>消息持久化</td>
+        <td>支持（前提是服务不会关闭）</td>
+        <td style="color: green">支持</td>
+    </tr>
+    <tr>
+        <td>消息重发</td>
+        <td style="color: green">支持</td>
+        <td style="color: green">支持</td>
+    </tr>
+    <tr>
+        <td>Redis</td>
+        <td style="color: green">不需要</td>
+        <td>需要</td>
+    </tr>
+</table>
 
 #### 使用教程
 
@@ -69,7 +100,7 @@ Maven + SpringBoot + WebSocket + Redis
        public void onMessageBySystem(String senderId, String message);
    }
    ```
-   
+
 5. 在当前版本即时没有开启持久化的情况下也不在需要去调用MessagePlusUtils.createGroup(createUserId,  name,  client_ids)来创建、导入群组，你只需要实现GroupInterface接口即可（需要被Bean容器管理）。
 
 6. 如果想要使用持久化功能（提前需要你的项目具有Redis），可以配置如下来打开：

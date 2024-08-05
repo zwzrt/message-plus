@@ -14,10 +14,6 @@ import org.springframework.stereotype.Component;
 @ConfigurationProperties(prefix = "messageplus")
 public class MessagePlusProperties {
     /**
-     * 是否开启持久化
-     */
-    public static boolean persistence = false;
-    /**
      * 服务ID
      */
     public static String serviceId = UUID.randomUUID().toString(true);
@@ -29,14 +25,6 @@ public class MessagePlusProperties {
      * 自动发送消息
      */
     public static boolean autoSend = false;
-
-
-    public static boolean isPersistence() {
-        return MessagePlusProperties.persistence;
-    }
-    public void setPersistence(boolean persistence) {
-        MessagePlusProperties.persistence = persistence;
-    }
 
     public static String getServiceId() {
         return MessagePlusProperties.serviceId;
