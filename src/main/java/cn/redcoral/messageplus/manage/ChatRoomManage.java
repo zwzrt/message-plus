@@ -1,10 +1,7 @@
-package cn.redcoral.messageplus.utils;
+package cn.redcoral.messageplus.manage;
 
-import cn.redcoral.messageplus.entity.vo.ChatRoom;
-import cn.redcoral.messageplus.exteriorUtils.SpringUtils;
+import cn.redcoral.messageplus.entity.ChatRoom;
 import cn.redcoral.messageplus.utils.cache.ChatRoomRedisUtil;
-import com.alibaba.fastjson.JSON;
-import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 

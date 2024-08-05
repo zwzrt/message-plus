@@ -1,15 +1,11 @@
-package cn.redcoral.messageplus.utils;
+package cn.redcoral.messageplus.manage;
 
-import cn.redcoral.messageplus.constant.CachePrefixConstant;
-import cn.redcoral.messageplus.entity.vo.ChatRoom;
+import cn.redcoral.messageplus.entity.ChatRoom;
 import cn.redcoral.messageplus.entity.Group;
-import cn.redcoral.messageplus.entity.Message;
-import cn.redcoral.messageplus.entity.MessageType;
+import cn.redcoral.messageplus.entity.message.Message;
 import cn.redcoral.messageplus.exteriorUtils.SpringUtils;
-import cn.redcoral.messageplus.properties.MessagePersistenceProperties;
 import cn.redcoral.messageplus.handler.MessagePlusService;
-import cn.redcoral.messageplus.properties.MessagePlusProperties;
-import com.alibaba.fastjson.JSON;
+import cn.redcoral.messageplus.utils.BeanUtil;
 
 import javax.websocket.*;
 import java.io.IOException;
@@ -18,9 +14,6 @@ import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
-import java.util.stream.Collectors;
-
-import static cn.redcoral.messageplus.utils.BeanUtil.*;
 
 /**
  * 消息增强器工具类

@@ -1,6 +1,6 @@
 package cn.redcoral.messageplus.entity;
 
-import cn.redcoral.messageplus.utils.MessagePlusUtils;
+import cn.redcoral.messageplus.manage.MessagePlusUtils;
 import lombok.Data;
 
 import java.util.ArrayList;

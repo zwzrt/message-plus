@@ -6,6 +6,9 @@ import org.springframework.web.servlet.ModelAndView;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+/**
+ * message-plus拦截器
+ */
 public class ControllerInterceptor implements HandlerInterceptor {
 
     @Override

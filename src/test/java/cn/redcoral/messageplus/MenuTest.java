@@ -1,6 +1,6 @@
 package cn.redcoral.messageplus;
 
-import cn.redcoral.messageplus.entity.MessageType;
+import cn.redcoral.messageplus.entity.message.MessageType;
 import org.junit.jupiter.api.Test;
 
 /**

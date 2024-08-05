@@ -1,7 +1,7 @@
 package cn.redcoral.messageplus;
 
 import cn.redcoral.messageplus.config.MessagePlusConfig;
-import cn.redcoral.messageplus.utils.MessagePlusUtils;
+import cn.redcoral.messageplus.manage.MessagePlusUtils;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;

@@ -1,9 +1,8 @@
-package cn.redcoral.messageplus.utils;
+package cn.redcoral.messageplus.manage;
 
 import cn.redcoral.messageplus.entity.Group;
 import cn.redcoral.messageplus.port.GroupInterface;
 import cn.redcoral.messageplus.exteriorUtils.SpringUtils;
-import com.alibaba.fastjson.JSON;
 import org.springframework.beans.BeansException;
 import org.springframework.context.annotation.Configuration;
 
