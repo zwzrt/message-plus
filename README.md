@@ -28,8 +28,13 @@ Maven + SpringBoot + WebSocket
         <th>集群版</th>
     </tr>
     <tr>
+        <td>集群部署</td>
+        <td style="color: red">不支持</td>
+        <td style="color: green">支持</td>
+    </tr>
+    <tr>
         <td>消息持久化</td>
-        <td>支持（前提是服务不会关闭）</td>
+        <td style="color: orange">支持（前提是服务不会关闭）</td>
         <td style="color: green">支持</td>
     </tr>
     <tr>
@@ -40,7 +45,7 @@ Maven + SpringBoot + WebSocket
     <tr>
         <td>Redis</td>
         <td style="color: green">不需要</td>
-        <td>需要</td>
+        <td style="color: red">需要</td>
     </tr>
 </table>
 
