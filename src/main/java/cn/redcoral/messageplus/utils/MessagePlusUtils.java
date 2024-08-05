@@ -258,13 +258,5 @@ public class MessagePlusUtils {
         Session session = userIdSessionMap.get(userId);
         return session != null ? "0" : "-1";
     }
-    /**
-     * 查询用户的服务ID
-     * @param userId 用户ID
-     * @return 服务器ID
-     */
-    public static String getUserServiceId(String userId) {
-        return BeanUtil.stringRedisUtil().getUserService(userId);
-    }
 
 }
