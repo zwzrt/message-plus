@@ -1,12 +1,10 @@
 package cn.redcoral.messageplus.controller;
 
 import cn.hutool.http.server.HttpServerRequest;
-import cn.redcoral.messageplus.data.entity.Message;
+import cn.redcoral.messageplus.entity.Message;
 import cn.redcoral.messageplus.handler.MessageHandler;
-import cn.redcoral.messageplus.handler.PublishService;
 import cn.redcoral.messageplus.port.MessagePlusBase;
 import cn.redcoral.messageplus.properties.MessagePersistenceProperties;
-import cn.redcoral.messageplus.properties.MessagePlusClusterProperties;
 import cn.redcoral.messageplus.utils.CounterIdentifierUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.handler.annotation.MessageMapping;
@@ -28,8 +26,6 @@ public class MessagePlusSendController {
     private MessageHandler messageHandler;
     @Autowired
     private SimpMessagingTemplate simpMessagingTemplate;
-    @Autowired
-    private PublishService publishService;
 
 
     /**
@@ -120,14 +116,8 @@ public class MessagePlusSendController {
         if (!bo) return;
 
         // 4.发送消息
-        // 开启集群化部署
-        if (MessagePlusClusterProperties.open) {
-            // 向其它服务器发送聊天室消息
-            publishService.publishByCharRoom(message);
-        }
         // 广播
         simpMessagingTemplate.convertAndSend("/topic/chat/"+chatRoomId, message);
-
 
         // 计数器减一
         CounterIdentifierUtil.numberOfSendsDecrease(senderId);
@@ -165,8 +155,7 @@ public class MessagePlusSendController {
 
     @MessageMapping("/hello") // @MessageMapping 和 @RequestMapping 功能类似，浏览器向服务器发起消息，映射到该地址。
     @SendTo("/messageplus/getResponse") // 如果服务器接受到了消息，就会对订阅了 @SendTo 括号中的地址的浏览器发送消息。
-    public String say(String message) throws Exception {
-//        Thread.sleep(3000);
+    public String say(String message) {
         return message;
     }
 

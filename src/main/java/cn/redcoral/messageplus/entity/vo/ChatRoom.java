@@ -1,14 +1,11 @@
-package cn.redcoral.messageplus.data.entity.vo;
+package cn.redcoral.messageplus.entity.vo;
 
-import com.baomidou.mybatisplus.annotation.TableField;
-import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 
 import java.io.Serializable;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 
 import static cn.redcoral.messageplus.config.MessagePlusConfig.snowflake;
 
@@ -17,7 +14,6 @@ import static cn.redcoral.messageplus.config.MessagePlusConfig.snowflake;
  * @author mo
  **/
 @Data
-@TableName("chat_room")
 public class ChatRoom implements Serializable {
     /**
      * 聊天室ID
@@ -38,7 +34,6 @@ public class ChatRoom implements Serializable {
     /**
      * 用户ID列表
      */
-    @TableField(exist = false)
     private List<String> clientIdList = new ArrayList<>();
     /**
      * 点赞数量

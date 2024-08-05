@@ -1,4 +1,4 @@
-package cn.redcoral.messageplus.data.entity;
+package cn.redcoral.messageplus.entity;
 
 /**
  * 消息类型

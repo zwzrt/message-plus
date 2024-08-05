@@ -1,9 +1,10 @@
-package cn.redcoral.messageplus.utils;
+package cn.redcoral.messageplus.utils.cache.impl;
 
 import cn.redcoral.messageplus.constant.CachePrefixConstant;
 import cn.redcoral.messageplus.properties.MessagePlusProperties;
+import cn.redcoral.messageplus.utils.cache.UserRedisUtil;
+import com.github.benmanes.caffeine.cache.Cache;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
 
 /**
@@ -11,23 +12,25 @@ import org.springframework.stereotype.Service;
  * @author mo
  **/
 @Service
-public class StringRedisUtil {
+public class UserRedisUtilImpl implements UserRedisUtil {
     @Autowired
-    private StringRedisTemplate stringRedisTemplate;
+    private Cache<String, String> stringCache;
 
     /**
      * 存储用户ID及所在服务ID
      * @param id 用户ID
      */
+    @Override
     public void setUserService(String id) {
-        stringRedisTemplate.opsForValue().set(CachePrefixConstant.USER_SERVICE_PREFIX + id, MessagePlusProperties.serviceId);
+        stringCache.put(CachePrefixConstant.USER_MESSAGES_PREFIX + id, MessagePlusProperties.serviceId);
     }
     /**
      * 获取用户ID及所在服务ID
      * @param id 用户ID
      */
+    @Override
     public String getUserService(String id) {
-        return stringRedisTemplate.opsForValue().get(CachePrefixConstant.USER_SERVICE_PREFIX + id);
+        return stringCache.get(CachePrefixConstant.USER_MESSAGES_PREFIX + id, (k)->null);
     }
 
 

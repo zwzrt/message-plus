@@ -14,6 +14,15 @@ import java.util.concurrent.TimeUnit;
 @Configuration
 public class CacheConfig {
 
+    public static Cache<String, String> stringCache = Caffeine.newBuilder()
+            //初始数量
+            .initialCapacity(10)
+            //最大条数
+            .maximumSize(100)
+            //最后一次写操作后经过指定时间过期
+            .expireAfterWrite(10, TimeUnit.SECONDS)
+            .build();
+
     public static Cache<String, Long> stringLongCache = Caffeine.newBuilder()
             //初始数量
             .initialCapacity(10)
@@ -38,6 +47,11 @@ public class CacheConfig {
             //最后一次写操作后经过指定时间过期
             .expireAfterWrite(MessagePersistenceProperties.cycleRestrictionsTime, TimeUnit.SECONDS)
             .build();
+
+    @Bean
+    public Cache<String, String> stringCache() {
+        return stringCache;
+    }
 
     @Bean
     public Cache<String, Integer> messageRestrictionsCache() {

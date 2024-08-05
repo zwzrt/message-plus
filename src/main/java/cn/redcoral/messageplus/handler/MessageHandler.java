@@ -1,10 +1,10 @@
 package cn.redcoral.messageplus.handler;
 
 import cn.redcoral.messageplus.constant.CachePrefixConstant;
-import cn.redcoral.messageplus.data.entity.vo.ChatRoom;
-import cn.redcoral.messageplus.data.entity.Group;
-import cn.redcoral.messageplus.data.entity.Message;
-import cn.redcoral.messageplus.data.entity.MessageType;
+import cn.redcoral.messageplus.entity.vo.ChatRoom;
+import cn.redcoral.messageplus.entity.Group;
+import cn.redcoral.messageplus.entity.Message;
+import cn.redcoral.messageplus.entity.MessageType;
 import cn.redcoral.messageplus.port.MessagePlusBase;
 import cn.redcoral.messageplus.properties.MessagePersistenceProperties;
 import cn.redcoral.messageplus.properties.MessagePlusProperties;
@@ -12,7 +12,6 @@ import cn.redcoral.messageplus.utils.ChatRoomManage;
 import cn.redcoral.messageplus.utils.MessagePlusUtils;
 import com.alibaba.fastjson.JSON;
 import lombok.AllArgsConstructor;
-import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -25,8 +24,6 @@ import java.util.List;
 @Component
 public class MessageHandler {
 
-    private StringRedisTemplate stringRedisTemplate;
-    private PublishService publishService;
     private MessagePlusBase messagePlusBase;
     private ChatRoomManage chatRoomManage;
 
@@ -64,8 +61,8 @@ public class MessageHandler {
         switch (onLineTag) {
             // 不在线
             case "-1": {
-                // 做持久化存储
-                stringRedisTemplate.opsForList().leftPush(CachePrefixConstant.USER_MESSAGES_PREFIX+ receiverId, JSON.toJSONString(message));
+                // 提示出现失败消息
+                messagePlusBase.onFailedMessage(message);
                 break;
             }
             // 本地在线
@@ -73,16 +70,6 @@ public class MessageHandler {
                 // 调用发送方法
                 MessagePlusUtils.sendMessage(receiverId, message);
                 break;
-            }
-            // 其它服务器在线
-            default: {
-                // 确保开启持久化以及消息持久化，并且消息发送失败
-                if (MessagePlusProperties.persistence && MessagePersistenceProperties.messagePersistence) {
-                    // 存储消息到对方会话的数组中
-                    stringRedisTemplate.opsForList().leftPush(CachePrefixConstant.USER_MESSAGES_PREFIX + receiverId, JSON.toJSONString(message));
-                    // 提示指定服务端该用户有新消息
-                    publishService.publishByServiceId(onLineTag, receiverId);
-                }
             }
         }
     }
@@ -100,8 +87,8 @@ public class MessageHandler {
             switch (onLineTag) {
                 // 不在线
                 case "-1": {
-                    // 做持久化存储
-                    stringRedisTemplate.opsForList().leftPush(CachePrefixConstant.USER_MESSAGES_PREFIX+receiverId, JSON.toJSONString(message));
+                    // 提示出现失败消息
+                    messagePlusBase.onFailedMessage(message);
                     break;
                 }
                 // 本地在线
@@ -109,16 +96,6 @@ public class MessageHandler {
                     // 调用接收方法
                     MessagePlusUtils.sendMessageToGroupBarringMe(senderId, groupId, message);
                     break;
-                }
-                // 其它服务器在线
-                default: {
-                    // 确保开启持久化以及消息持久化，并且消息发送失败
-                    if (MessagePlusProperties.persistence && MessagePersistenceProperties.messagePersistence) {
-                        // 存储消息到对方会话的数组中
-                        stringRedisTemplate.opsForList().leftPush(CachePrefixConstant.USER_MESSAGES_PREFIX + receiverId, JSON.toJSONString(message));
-                        // 提示指定服务端该用户有新消息
-                        publishService.publishByServiceId(onLineTag, receiverId);
-                    }
                 }
             }
         }
@@ -135,15 +112,8 @@ public class MessageHandler {
         List<String> offLineClientIdList = MessagePlusUtils.sendMessageToChatRoomBarringMe(senderId, chatRoomId, message);
         // 3.未发送成功，查询对应服务ID，通知对应服务进行再次发送
         for (String receiverId : offLineClientIdList) {
-            // 查看用户对应的服务ID
-            String serviceId = MessagePlusUtils.getUserServiceId(receiverId);
-            // 确保开启持久化以及消息持久化，并且消息发送失败
-            if (MessagePlusProperties.persistence && MessagePersistenceProperties.messagePersistence) {
-                // 存储消息到对方会话的数组中
-                stringRedisTemplate.opsForList().leftPush(CachePrefixConstant.USER_MESSAGES_PREFIX + receiverId, JSON.toJSONString(message));
-                // 提示指定服务端该用户有新消息
-                publishService.publishByServiceId(serviceId, receiverId);
-            }
+            // 提示出现失败消息
+            messagePlusBase.onFailedMessage(message);
         }
     }
 

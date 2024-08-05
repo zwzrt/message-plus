@@ -1,12 +1,11 @@
 package cn.redcoral.messageplus.utils;
 
-import cn.redcoral.messageplus.data.entity.Group;
+import cn.redcoral.messageplus.entity.Group;
 import cn.redcoral.messageplus.port.GroupInterface;
 import cn.redcoral.messageplus.exteriorUtils.SpringUtils;
 import com.alibaba.fastjson.JSON;
 import org.springframework.beans.BeansException;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.data.redis.core.StringRedisTemplate;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,7 +28,6 @@ public class GroupManage {
      */
     private ConcurrentHashMap<String, Group> idGroupMap = new ConcurrentHashMap<>();
 
-    private StringRedisTemplate stringRedisTemplate;
     private GroupInterface groupInterface;
 
     /**
@@ -52,38 +50,17 @@ public class GroupManage {
      * @return 群组
      */
     protected Group getGroupByIdInCache(String groupId) {
-        // 尝试注入stringRedisTemplate
-        if (stringRedisTemplate == null) {
-            try {
-                stringRedisTemplate = SpringUtils.getBean(StringRedisTemplate.class);
-            } catch (BeansException be) {}
-        }
         // 尝试注入groupInterface
         if (groupInterface == null) {
             try {
                 groupInterface = SpringUtils.getBean(GroupInterface.class);
             } catch (BeansException be) {}
         }
-        // 若stringRedisTemplate为空，调用二级接口去查询，若二级接口也为空，则返回null
-        if (stringRedisTemplate==null) {
-            if (groupInterface==null) return null;
-            else return groupInterface.getGroupInCustom(groupId);
-        }
-        // 缓存查询群组
-        String groupJson = stringRedisTemplate.opsForValue().get(GROUP_KEY+groupId);
         // 调用二级接口
-        if (groupJson==null) {
-            if (groupInterface==null) return null;
-            else {
-                return groupInterface.getGroupInCustom(groupId);
-            }
+        if (groupInterface==null) return null;
+        else {
+            return groupInterface.getGroupInCustom(groupId);
         }
-        // 反序列化为对象
-        Group group = JSON.parseObject(groupJson, Group.class);
-        // 加入到本地数据
-        idGroupMap.put(group.getId(), group);
-        // 返回
-        return group;
     }
 
     /**

@@ -1,10 +1,10 @@
 package cn.redcoral.messageplus.utils;
 
 import cn.redcoral.messageplus.constant.CachePrefixConstant;
-import cn.redcoral.messageplus.data.entity.vo.ChatRoom;
-import cn.redcoral.messageplus.data.entity.Group;
-import cn.redcoral.messageplus.data.entity.Message;
-import cn.redcoral.messageplus.data.entity.MessageType;
+import cn.redcoral.messageplus.entity.vo.ChatRoom;
+import cn.redcoral.messageplus.entity.Group;
+import cn.redcoral.messageplus.entity.Message;
+import cn.redcoral.messageplus.entity.MessageType;
 import cn.redcoral.messageplus.exteriorUtils.SpringUtils;
 import cn.redcoral.messageplus.properties.MessagePersistenceProperties;
 import cn.redcoral.messageplus.handler.MessagePlusService;
@@ -71,8 +71,6 @@ public class MessagePlusUtils {
         userIdBaseMap.put(id, base);
         // 录入session库
         userIdSessionMap.put(id, session);
-        // 在Redis中存储
-        recordConnect(id, base, session);
         return onLinePeopleNum;
     }
     /**
@@ -92,41 +90,6 @@ public class MessagePlusUtils {
         return onLinePeopleNum;
     }
 
-    /**s
-     * 记录连接（持久化）
-     */
-    protected static void recordConnect(String id, MessagePlusService base, Session session) {
-        // 持久化标识
-        boolean persistence = messagePlusProperties().isPersistence();
-        // 消息持久化标识
-        boolean messagePersistence = MessagePersistenceProperties.messagePersistence;
-        // 服务ID
-        String serviceId = messagePlusProperties().getServiceId();
-        // 确保开启了持久化
-        if (persistence) {
-            // 记录该用户所在的服务ID
-            stringRedisUtil().setUserService(id);
-            // 开启了消息持久化
-            if (messagePersistence) {
-                // 判断有没有未接收到的消息并获取全部发送失败的消息
-                List<String> msgs = new ArrayList<>();
-                String msg = stringRedisTemplate().opsForList().rightPop(CachePrefixConstant.USER_MESSAGES_PREFIX+id);
-                while (msg!=null) {
-                    msgs.add(msg);
-                    msg = stringRedisTemplate().opsForList().rightPop(CachePrefixConstant.USER_MESSAGES_PREFIX+id);
-                }
-                // 发送消息
-                msgs.stream().filter(Objects::nonNull).map(s -> {
-                    return JSON.parseObject(s, Message.class);
-                }).forEach(m -> {
-                    // 聊天室消息不发送
-                    if (m.getType().equals(MessageType.CHAT_ROOM_SHOT.name())) return;
-                    sendMessage(id, m);
-//                    messageHandler().handlerMessage(m);
-                });
-            }
-        }
-    }
 
     /**
      * 给指定用户发送消息
@@ -269,21 +232,7 @@ public class MessagePlusUtils {
      * 获取总在线人数
      */
     public static Long getOnLinePeopleNum() {
-        // 开启了持久化
-        if (MessagePlusProperties.persistence) {
-            // 从本地缓存获取
-            Long num = BeanUtil.stringLongCache().get(CachePrefixConstant.ON_LINE_PEOPLE_NUM, k -> 0L);
-            // 不存在，从Redis获取
-            if (num == 0) {
-                Set<String> keys = stringRedisTemplate().keys(CachePrefixConstant.USER_SERVICE_PREFIX.concat("*"));
-                BeanUtil.stringLongCache().put(CachePrefixConstant.ON_LINE_PEOPLE_NUM, keys == null ? 0L : keys.size());
-                return keys == null ? 0L : keys.size();
-            } else {
-                return num;
-            }
-        } else {
-            return onLinePeopleNum;
-        }
+        return onLinePeopleNum;
     }
     /**
      * 获取对应ID群组
@@ -296,8 +245,7 @@ public class MessagePlusUtils {
      * 获取指定ID的session
      */
     public static Session getSessionByClientId(String clientId) {
-        Session session = userIdSessionMap.get(clientId);
-        return session;
+        return userIdSessionMap.get(clientId);
     }
 
 
@@ -308,9 +256,7 @@ public class MessagePlusUtils {
      */
     public static String isOnLine(String userId) {
         Session session = userIdSessionMap.get(userId);
-        if (session != null) return "0";
-        String serviceId = BeanUtil.stringRedisUtil().getUserService(userId);
-        return serviceId == null ? "-1" : serviceId;
+        return session != null ? "0" : "-1";
     }
     /**
      * 查询用户的服务ID
@@ -319,53 +265,6 @@ public class MessagePlusUtils {
      */
     public static String getUserServiceId(String userId) {
         return BeanUtil.stringRedisUtil().getUserService(userId);
-    }
-
-    /**
-     * 查询指定用户的未接收消息（该方法主要用于集群架构中跨服务使用，框架自己调用，开发者一般不需要）
-     * @param userId 用户ID
-     */
-    public static List<Message> getNewMessage(String userId) {
-        List<String> msgs = new ArrayList<>();
-        // 查询全部消息
-        String msg = stringRedisTemplate().opsForList().rightPop(CachePrefixConstant.USER_MESSAGES_PREFIX+userId);
-        while (msg!=null) {
-            msgs.add(msg);
-            msg = stringRedisTemplate().opsForList().rightPop(CachePrefixConstant.USER_MESSAGES_PREFIX+userId);
-        }
-        // 转换并返回
-        return msgs.stream()
-                .filter(Objects::nonNull)
-                .map(s -> JSON.parseObject(s, Message.class))
-                .collect(Collectors.toList());
-    }
-
-    /**
-     * 提示指定用户存在新消息（该方法主要用于集群架构中跨服务使用，框架自己调用，开发者一般不需要）
-     * @param userId 用户ID
-     */
-    public static void hasNewMessage(String userId) {
-        Session session = userIdSessionMap.get(userId);
-        // 不在线，不进行新消息处理
-        if (session==null) return;
-        // 获取该用户的消息
-        List<Message> newMessageList = getNewMessage(userId);
-        if (newMessageList.isEmpty()) return;
-        // 发送消息
-        MessagePlusService base = userIdBaseMap.get(userId);
-        for (Message m : newMessageList) {
-            messageHandler().handlerMessage(m);
-        }
-    }
-    /**
-     * 提示指定聊天室存在新消息（该方法主要用于集群架构中跨服务使用，框架自己调用，开发者一般不需要）
-     * @param message 聊天室消息
-     */
-    public static void hasNewMessageByChatRoom(Message message) {
-        if (message == null) return;
-        if (!message.getType().equals(MessageType.CHAT_ROOM_SHOT.name())) return;
-        // 广播消息
-        BeanUtil.simpMessagingTemplate().convertAndSend("/topic/chat/"+message.getChatRoomId(), message.getData());
     }
 
 }

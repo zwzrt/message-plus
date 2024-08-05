@@ -46,11 +46,6 @@ public class MessagePlusService {
     public void baseOnClose() {
         // 删除用户的会话
         MessagePlusUtils.quitChat(this.client_id);
-        // 确保开启了持久化
-        if (MessagePlusProperties.persistence) {
-            // 删除用户所在的服务ID
-            stringRedisTemplate().delete(CachePrefixConstant.USER_SERVICE_PREFIX+client_id);
-        }
         BeanUtil.messagePlusBase().onClose(this.client_id);
     }
 

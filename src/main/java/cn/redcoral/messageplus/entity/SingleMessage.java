@@ -1,6 +1,5 @@
-package cn.redcoral.messageplus.data.entity;
+package cn.redcoral.messageplus.entity;
 
-import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 
 import java.io.Serializable;
@@ -11,7 +10,6 @@ import java.sql.Timestamp;
  * @author mo
  **/
 @Data
-@TableName("mp_single_message")
 public class SingleMessage implements Serializable {
     private String id;
     private String senderId; // 发送者ID

@@ -1,6 +1,5 @@
-package cn.redcoral.messageplus.data.entity;
+package cn.redcoral.messageplus.entity;
 
-import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 
 import java.sql.Timestamp;
@@ -10,7 +9,6 @@ import java.sql.Timestamp;
  * @author mo
  **/
 @Data
-@TableName("mp_relation")
 public class Relation {
     private String id1;
     private String id2;

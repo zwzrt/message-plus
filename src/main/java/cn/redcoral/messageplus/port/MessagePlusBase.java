@@ -1,7 +1,7 @@
 package cn.redcoral.messageplus.port;
 
 import cn.hutool.http.server.HttpServerRequest;
-import cn.redcoral.messageplus.data.entity.Message;
+import cn.redcoral.messageplus.entity.Message;
 
 import javax.websocket.*;
 
@@ -20,12 +20,17 @@ public interface MessagePlusBase {
      */
     public void onClose(String sid);
     /**
-     * 收到消息时的权限校验
+     * 发送消息时的权限校验
      * @param request HTTP请求信息
      * @param message 消息对象
      * @return 是否允许发送消息
      */
     public boolean onMessageCheck(HttpServerRequest request, Message message) throws Exception;
+    /**
+     * 失败消息的方法调用
+     * @param message 失败消息
+     */
+    public void onFailedMessage(Message message);
     /**
      * 收到系统消息
      * @param senderId 发送者ID

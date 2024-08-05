@@ -1,13 +1,13 @@
 package cn.redcoral.messageplus.config;
 
 import cn.hutool.core.lang.Snowflake;
-import cn.redcoral.messageplus.controller.MPChatRoomController;
+import cn.redcoral.messageplus.controller.MessagePlusChatRoomController;
 import cn.redcoral.messageplus.controller.MessagePlusSendController;
-import cn.redcoral.messageplus.data.mapper.ChatRoomMapper;
 import cn.redcoral.messageplus.initialize.MessageInitialize;
 import cn.redcoral.messageplus.properties.MessagePlusProperties;
 import lombok.extern.slf4j.Slf4j;
-import org.mybatis.spring.annotation.MapperScan;
+import org.springframework.boot.web.servlet.ServletComponentScan;
+import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.EnableAspectJAutoProxy;
@@ -20,12 +20,11 @@ import org.springframework.web.socket.server.standard.ServerEndpointExporter;
  **/
 @Slf4j
 @EnableAspectJAutoProxy // 声明有注解AOP开发
-@ComponentScan({
-        "cn.redcoral.messageplus.data"
-})
-@MapperScan({"cn.redcoral.messageplus.data.mapper"})
+@EnableCaching
+@ComponentScan({"cn.redcoral.messageplus.utils.cache.impl"})
+//@ServletComponentScan({"cn.redcoral.messageplus.utils.cache"})
 @Import({MessageInitialize.class,
-        MessagePlusSendController.class, MPChatRoomController.class})
+        MessagePlusSendController.class, MessagePlusChatRoomController.class, CacheConfig.class})
 public class MessagePlusConfig {
     public static Snowflake snowflake = new Snowflake(3, 11);
 
