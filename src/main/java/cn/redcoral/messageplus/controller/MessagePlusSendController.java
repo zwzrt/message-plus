@@ -36,18 +36,18 @@ public class MessagePlusSendController {
     @PostMapping("/send/single")
     public void sendSingleMessage(HttpServerRequest request, @RequestParam("id1") String senderId, @RequestParam("id2") String receiverId, @RequestBody String msg) throws Exception {
         // 1.并发限流
-        // 短时间发送消息达到上限，禁止发送消息
+        // 短时间发送消息达到上限，禁止发送消息(默认为1)
         if (CounterIdentifierUtil.isLessThanOrEqual(senderId, MessagePersistenceProperties.concurrentNumber)) {
             return;
         }
         // 计数器加一
         CounterIdentifierUtil.numberOfSendsIncrease(senderId);
 
-        // 2.查询是否禁言
+        // TODO 2.查询是否禁言
 
         // 3.权限校验
         Message message = Message.buildSingle(senderId, receiverId, msg);
-        // 进行权限校验
+        // 进行权限校验(用户自己实现)
         boolean bo = messagePlusBase.onMessageCheck(request, message);
         // 权限校验不通过
         if (!bo) return;
@@ -74,7 +74,7 @@ public class MessagePlusSendController {
         // 计数器加一
         CounterIdentifierUtil.numberOfSendsIncrease(senderId);
 
-        // 2.查询是否禁言
+        // TODO 2.查询是否禁言
 
         // 3.权限校验
         Message message = Message.buildMass(senderId, groupId, msg);
@@ -83,7 +83,7 @@ public class MessagePlusSendController {
         // 权限校验不通过
         if (!bo) return;
 
-        // 4.发送消息
+        // 4.发送群发消息
         messageHandler.handleMassMessage(senderId, groupId, message);
 
         // 计数器减一
@@ -106,7 +106,7 @@ public class MessagePlusSendController {
         // 计数器加一
         CounterIdentifierUtil.numberOfSendsIncrease(senderId);
 
-        // 2.查询是否禁言
+        // TODO 2.查询是否禁言
 
         // 3.权限校验
         Message message = Message.buildChatRoom(senderId, chatRoomId, msg);
@@ -137,7 +137,7 @@ public class MessagePlusSendController {
         // 计数器加一
         CounterIdentifierUtil.numberOfSendsIncrease(senderId);
 
-        // 2.查询是否禁言
+        // TODO 2.查询是否禁言
 
         // 3.权限校验
         Message message = Message.buildSystem(senderId, msg);
@@ -152,7 +152,12 @@ public class MessagePlusSendController {
         // 计数器减一
         CounterIdentifierUtil.numberOfSendsDecrease(senderId);
     }
-
+    
+    /**
+     * 当浏览器向服务端发送消息会走这个方法，然后将返回值广播到订阅了/messageplus/getResponse的浏览器实现群聊的功能
+     * @param message
+     * @return
+     */
     @MessageMapping("/hello") // @MessageMapping 和 @RequestMapping 功能类似，浏览器向服务器发起消息，映射到该地址。
     @SendTo("/messageplus/getResponse") // 如果服务器接受到了消息，就会对订阅了 @SendTo 括号中的地址的浏览器发送消息。
     public String say(String message) {

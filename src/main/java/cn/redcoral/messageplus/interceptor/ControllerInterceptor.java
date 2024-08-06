@@ -7,7 +7,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 /**
- * message-plus拦截器
+ * message-plus拦截器，全部放行
  */
 public class ControllerInterceptor implements HandlerInterceptor {
 

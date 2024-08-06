@@ -19,11 +19,11 @@ public class GroupManage {
     public static final String GROUP_KEY = "MESSAGEPLUS:GROUP:";
 
     /**
-     * 每个用户ID对应的群组ID（用户ID，群组ID数组）
+     * 每个用户ID对应的群组ID（用户ID，群组ID数组），用户加入的群组
      */
     private ConcurrentHashMap<String, List<String>> userByGroupIdMap = new ConcurrentHashMap<>();
     /**
-     * 群组数组（群组ID，群组）
+     * 群组数组（群组ID，群组），当前有的群组
      */
     private ConcurrentHashMap<String, Group> idGroupMap = new ConcurrentHashMap<>();
 

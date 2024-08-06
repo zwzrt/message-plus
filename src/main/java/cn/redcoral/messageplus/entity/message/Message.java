@@ -4,6 +4,7 @@ import lombok.Data;
 
 /**
  * 消息类
+ * 用于封装不同类型的即时通讯消息
  * @author mo
  **/
 @Data
@@ -15,15 +16,32 @@ public class Message {
     private String chatRoomId; // 聊天室ID
     private long thumbsUpNum; // 点赞数量
     private String receiverId; // 接收者ID
-    private Object data;
+    private Object data; // 消息数据
 
+    // 默认构造函数
     public Message() {
     }
+
+    /**
+     * 构造单发消息对象
+     * @param code 消息编码
+     * @param type 消息类型
+     * @param data 消息数据
+     */
     public Message(Integer code, String type, Object data) {
         this.code = code;
         this.type = type;
         this.data = data;
     }
+
+    /**
+     * 构造点对点消息对象
+     * @param code 消息编码
+     * @param type 消息类型
+     * @param senderId 发送者ID
+     * @param receiverId 接收者ID
+     * @param data 消息数据
+     */
     public Message(Integer code, String type, String senderId, String receiverId, Object data) {
         this.code = code;
         this.type = type;
@@ -31,17 +49,51 @@ public class Message {
         this.receiverId = receiverId;
         this.data = data;
     }
+
+    /**
+     * 创建单发消息
+     * @param senderId 发送者ID
+     * @param receiverId 接收者ID
+     * @param data 消息数据
+     * @return 创建的消息对象
+     */
     public static Message buildSingle(String senderId, String receiverId, Object data) {
         return new Message(200, MessageType.SINGLE_SHOT.name(), senderId, receiverId, data);
     }
+
+    /**
+     * 创建群发消息（不指定接收者）
+     * 实际上是广播消息到指定群组
+     * @param senderId 发送者ID
+     * @param groupId 群组ID
+     * @param data 消息数据
+     * @return 创建的消息对象
+     */
     public static Message buildMass(String senderId, String groupId, Object data) {
         return buildMass(senderId, groupId, null, data);
     }
+
+    /**
+     * 创建群发消息（可选接收者）
+     * @param senderId 发送者ID
+     * @param groupId 群组ID
+     * @param receiverId 接收者ID 可为null，表示广播到整个群组
+     * @param data 消息数据
+     * @return 创建的消息对象
+     */
     public static Message buildMass(String senderId, String groupId, String receiverId, Object data) {
         Message message = new Message(200, MessageType.MASS_SHOT.name(), senderId, receiverId, data);
         message.setGroupId(groupId);
         return message;
     }
+
+    /**
+     * 创建聊天室消息
+     * @param senderId 发送者ID
+     * @param chatRoomId 聊天室ID
+     * @param data 消息数据
+     * @return 创建的消息对象
+     */
     public static Message buildChatRoom(String senderId, String chatRoomId, Object data) {
         Message message = new Message();
         message.setCode(2000);
@@ -51,6 +103,13 @@ public class Message {
         message.setData(data);
         return message;
     }
+
+    /**
+     * 创建系统消息
+     * @param senderId 发送者ID
+     * @param data 消息数据
+     * @return 创建的消息对象
+     */
     public static Message buildSystem(String senderId, Object data) {
         Message message = new Message();
         message.setType(MessageType.SYSTEM_SHOT.name());

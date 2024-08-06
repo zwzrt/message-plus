@@ -63,8 +63,9 @@ public class Group {
         group.id = id;
         group.createUserId = createUserId;
         group.name = groupName;
-        // 加入群组
+        // 创建的用户加入群组
         group.joinGroup(createUserId);
+        //让每个在群组里的用户加入该群组
         clientIdList.forEach(group::joinGroup);
         return group;
     }
@@ -80,12 +81,14 @@ public class Group {
         int index = clientIdList.indexOf(userId);
         // 在线且已经加入
         if (MessagePlusUtils.userIdSessionMap.get(userId)!=null&&index!=-1) {
+            //聊天室在线人数加一
             userNumLock.lock();
             this.onlineUserNum++;
             userNumLock.unlock();
         }
-        // 不在线但是没有加入
+        // 在线但是没有加入
         else if (MessagePlusUtils.userIdSessionMap.get(userId)==null&&index==-1) {
+            //加入的人数，和聊天室在线人数加一
             userNumLock.lock();
             userNum++;
             this.onlineUserNum++;
@@ -124,27 +127,47 @@ public class Group {
         this.onlineUserNum--;
         userNumLock.unlock();
     }
-
+    /**
+     * 获取群组的简化字符串表示
+     * 此方法用于生成一个包含创建者ID和群组名称的字符串，用于快速比较两个群组是否相同
+     * @return 群组的简化字符串表示
+     */
     private String getEasyStr() {
         return this.getCreateUserId()+":"+this.getName();
     }
+    
+    /**
+     * 获取群组的简化字符串表示
+     * 这是一个静态方法，用于外部调用生成群组的简化字符串表示
+     * @param createUserId 群组的创建者ID
+     * @param name 群组的名称
+     * @return 群组的简化字符串表示
+     */
     private static String getEasyStr(String createUserId, String name) {
         return createUserId+":"+name;
     }
 
     /**
      * 判断两个群组是否相同
-     * @param group1 群组ID
-     * @param group2 群组ID
+     * 此方法使用群组的简化字符串表示来比较两个群组是否相同
+     * @param group1 第一个群组对象
+     * @param group2 第二个群组对象
+     * @return 如果两个群组相同返回true，否则返回false
      */
     public static boolean isSame(Group group1, Group group2) {
         return group1.getEasyStr().equals(group2.getEasyStr());
     }
+    
     /**
-     * 判断两个群组是否相同
-     * @param group2 群组ID
+     * 判断给定的群组信息与一个群组对象是否相同
+     * 此方法用于在已知群组创建者ID和群组名称的情况下，判断该群组与另一个群组对象是否相同
+     * @param createUserId 群组的创建者ID
+     * @param name 群组的名称
+     * @param group2 待比较的群组对象
+     * @return 如果两个群组相同返回true，否则返回false
      */
     public static boolean isSame(String createUserId, String name, Group group2) {
         return getEasyStr(createUserId, name).equals(group2.getEasyStr());
     }
+
 }

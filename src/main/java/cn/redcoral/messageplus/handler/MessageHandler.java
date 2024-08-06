@@ -57,14 +57,18 @@ public class MessageHandler {
         switch (onLineTag) {
             // 不在线
             case "-1": {
-                // 提示出现失败消息
+                // 提示出现失败消息(用户实现)
                 messagePlusBase.onFailedMessage(message);
+                // TODO 缓存
                 break;
             }
             // 本地在线
             case "0": {
                 // 调用发送方法
-                MessagePlusUtils.sendMessage(receiverId, message);
+                boolean sended = MessagePlusUtils.sendMessage(receiverId, message);
+                if(!sended){
+                    // TODO 缓存
+                }
                 break;
             }
         }
@@ -85,12 +89,14 @@ public class MessageHandler {
                 case "-1": {
                     // 提示出现失败消息
                     messagePlusBase.onFailedMessage(message);
+                    // TODO 缓存
                     break;
                 }
                 // 本地在线
                 case "0": {
                     // 调用接收方法
-                    MessagePlusUtils.sendMessageToGroupBarringMe(senderId, groupId, message);
+                    List<String> list = MessagePlusUtils.sendMessageToGroupBarringMe(senderId, groupId, message);
+                    // TODO 失败用户存储等待重发
                     break;
                 }
             }

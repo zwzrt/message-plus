@@ -8,7 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 /**
- * 操作Redis工具类
+ * 操作cache工具类
  * @author mo
  **/
 @Service
@@ -32,6 +32,4 @@ public class UserCacheUtilImpl implements UserCacheUtil {
     public String getUserService(String id) {
         return stringCache.get(CachePrefixConstant.USER_MESSAGES_PREFIX + id, (k)->null);
     }
-
-
 }

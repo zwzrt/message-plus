@@ -248,6 +248,7 @@ public class MessagePlusUtils {
      * @return "0"-本地在线 "-1"-不在线 "服务器ID"-其它服务器在线
      */
     public static String isOnLine(String userId) {
+        //从会话map中获取对应userid的会话
         Session session = userIdSessionMap.get(userId);
         return session != null ? "0" : "-1";
     }

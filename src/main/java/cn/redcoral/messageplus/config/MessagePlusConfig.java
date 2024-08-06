@@ -20,12 +20,15 @@ import org.springframework.web.socket.server.standard.ServerEndpointExporter;
  **/
 @Slf4j
 @EnableAspectJAutoProxy // 声明有注解AOP开发
-@EnableCaching
+@EnableCaching//开启基于注解的缓存支持
 @ComponentScan({"cn.redcoral.messageplus.utils.cache.impl"})
 //@ServletComponentScan({"cn.redcoral.messageplus.utils.cache"})
 @Import({MessageInitialize.class,
         MessagePlusSendController.class, MessagePlusChatRoomController.class, CacheConfig.class})
 public class MessagePlusConfig {
+    /**
+     * 用于生成全局唯一ID的雪花算法实例
+     */
     public static Snowflake snowflake = new Snowflake(3, 11);
 
     /**
@@ -37,6 +40,10 @@ public class MessagePlusConfig {
         return new ServerEndpointExporter();
     }
 
+    /**
+     * 初始化消息服务
+     * @return MessageInitialize的实例
+     */
     @Bean
     public MessageInitialize messageInitialize() {
         log.info("MessagePlus is enabled...");

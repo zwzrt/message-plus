@@ -31,7 +31,7 @@ public class ChatRoomCacheUtilImpl implements ChatRoomCacheUtil {
     }
 
     /**
-     * 是否存在
+     * 是否存在(聊天室)
      * @param chatRoomId 聊天室ID
      */
     @Override
@@ -49,6 +49,4 @@ public class ChatRoomCacheUtilImpl implements ChatRoomCacheUtil {
         CounterIdentifierUtil.numberOfSendsIncrease(CachePrefixConstant.CHAT_ROOM_THUMBS_UP + chatRoomId);
         return true;
     }
-
-
 }
