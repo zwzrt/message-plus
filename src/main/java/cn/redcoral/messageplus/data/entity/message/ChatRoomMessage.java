@@ -1,4 +1,4 @@
-package cn.redcoral.messageplus.entity.message;
+package cn.redcoral.messageplus.data.entity.message;
 
 import java.util.UUID;
 

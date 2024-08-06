@@ -1,9 +1,9 @@
 package cn.redcoral.messageplus.handler;
 
-import cn.redcoral.messageplus.entity.ChatRoom;
-import cn.redcoral.messageplus.entity.Group;
-import cn.redcoral.messageplus.entity.message.Message;
-import cn.redcoral.messageplus.entity.message.MessageType;
+import cn.redcoral.messageplus.data.entity.ChatRoom;
+import cn.redcoral.messageplus.data.entity.Group;
+import cn.redcoral.messageplus.data.entity.message.Message;
+import cn.redcoral.messageplus.data.entity.message.MessageType;
 import cn.redcoral.messageplus.manage.ChatRoomManage;
 import cn.redcoral.messageplus.manage.MessagePlusUtils;
 import cn.redcoral.messageplus.port.MessagePlusBase;

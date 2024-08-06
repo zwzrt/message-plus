@@ -1,4 +1,4 @@
-package cn.redcoral.messageplus.entity;
+package cn.redcoral.messageplus.data.entity;
 
 import cn.redcoral.messageplus.manage.MessagePlusUtils;
 import lombok.Data;

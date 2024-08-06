@@ -31,10 +31,10 @@ public class WebConfig implements WebMvcConfigurer {
     public void addInterceptors(InterceptorRegistry registry) {
         // 注册controllerInterceptor拦截器，并指定其拦截的路径
         registry.addInterceptor(controllerInterceptor()).addPathPatterns(
-                "/messageplus/send/single",  // 单个消息发送
-                "/messageplus/send/mass",    // 批量消息发送
-                "/messageplus/send/system",  // 系统消息发送
-                "/messageplus/send/chatroom" // 群组消息发送
+                "/cn/redcoral/messageplus/send/single",  // 单个消息发送
+                "/cn/redcoral/messageplus/send/mass",    // 批量消息发送
+                "/cn/redcoral/messageplus/send/system",  // 系统消息发送
+                "/cn/redcoral/messageplus/send/chatroom" // 群组消息发送
         );
     }
 }

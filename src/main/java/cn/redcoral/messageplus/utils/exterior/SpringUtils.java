@@ -1,4 +1,4 @@
-package cn.redcoral.messageplus.exteriorUtils;
+package cn.redcoral.messageplus.utils.exterior;
 
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.config.BeanFactoryPostProcessor;

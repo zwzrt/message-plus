@@ -1,7 +1,7 @@
 package cn.redcoral.messageplus.controller;
 
 import cn.hutool.http.server.HttpServerRequest;
-import cn.redcoral.messageplus.entity.message.Message;
+import cn.redcoral.messageplus.data.entity.message.Message;
 import cn.redcoral.messageplus.handler.MessageHandler;
 import cn.redcoral.messageplus.port.MessagePlusBase;
 import cn.redcoral.messageplus.properties.MessagePersistenceProperties;
@@ -159,7 +159,7 @@ public class MessagePlusSendController {
      * @return
      */
     @MessageMapping("/hello") // @MessageMapping 和 @RequestMapping 功能类似，浏览器向服务器发起消息，映射到该地址。
-    @SendTo("/messageplus/getResponse") // 如果服务器接受到了消息，就会对订阅了 @SendTo 括号中的地址的浏览器发送消息。
+    @SendTo("/cn/redcoral/messageplus/getResponse") // 如果服务器接受到了消息，就会对订阅了 @SendTo 括号中的地址的浏览器发送消息。
     public String say(String message) {
         return message;
     }

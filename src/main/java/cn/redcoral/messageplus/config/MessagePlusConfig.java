@@ -6,6 +6,8 @@ import cn.redcoral.messageplus.controller.MessagePlusSendController;
 import cn.redcoral.messageplus.initialize.MessageInitialize;
 import cn.redcoral.messageplus.properties.MessagePlusProperties;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.ibatis.annotations.Mapper;
+import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.web.servlet.ServletComponentScan;
 import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.annotation.Bean;
@@ -21,10 +23,8 @@ import org.springframework.web.socket.server.standard.ServerEndpointExporter;
 @Slf4j
 @EnableAspectJAutoProxy // 声明有注解AOP开发
 @EnableCaching//开启基于注解的缓存支持
-@ComponentScan({"cn.redcoral.messageplus.utils.cache.impl"})
-//@ServletComponentScan({"cn.redcoral.messageplus.utils.cache"})
-@Import({MessageInitialize.class,
-        MessagePlusSendController.class, MessagePlusChatRoomController.class, CacheConfig.class})
+@ComponentScan({"cn.redcoral.messageplus"})
+@MapperScan("cn.redcoral.messageplus.data.mapper")
 public class MessagePlusConfig {
     /**
      * 用于生成全局唯一ID的雪花算法实例
@@ -47,7 +47,7 @@ public class MessagePlusConfig {
     @Bean
     public MessageInitialize messageInitialize() {
         log.info("MessagePlus is enabled...");
-        log.info("ServiceId: {}", MessagePlusProperties.getServiceId());
+        log.info("MessagePlus ServiceId: {}", MessagePlusProperties.getServiceId());
         return new MessageInitialize();
     }
 

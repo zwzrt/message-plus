@@ -1,6 +1,6 @@
 package cn.redcoral.messageplus.manage;
 
-import cn.redcoral.messageplus.entity.ChatRoom;
+import cn.redcoral.messageplus.data.entity.ChatRoom;
 import cn.redcoral.messageplus.utils.cache.ChatRoomCacheUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;

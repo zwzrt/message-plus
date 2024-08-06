@@ -1,6 +1,8 @@
-package cn.redcoral.messageplus.entity.message;
+package cn.redcoral.messageplus.data.entity.message;
 
 import lombok.Data;
+
+import java.sql.Timestamp;
 
 /**
  * 消息类
@@ -17,6 +19,7 @@ public class Message {
     private long thumbsUpNum; // 点赞数量
     private String receiverId; // 接收者ID
     private Object data; // 消息数据
+    private Timestamp createTime = new Timestamp(System.currentTimeMillis()); // 创建时间
 
     // 默认构造函数
     public Message() {

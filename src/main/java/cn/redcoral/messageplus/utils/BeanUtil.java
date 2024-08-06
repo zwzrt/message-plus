@@ -1,11 +1,12 @@
 package cn.redcoral.messageplus.utils;
 
 import cn.redcoral.messageplus.config.CacheConfig;
+import cn.redcoral.messageplus.data.mapper.MessagePlusInitializeMapper;
 import cn.redcoral.messageplus.handler.MessageHandler;
 import cn.redcoral.messageplus.manage.ChatRoomManage;
 import cn.redcoral.messageplus.port.MessagePlusBase;
 import cn.redcoral.messageplus.properties.MessagePlusProperties;
-import cn.redcoral.messageplus.exteriorUtils.SpringUtils;
+import cn.redcoral.messageplus.utils.exterior.SpringUtils;
 import com.github.benmanes.caffeine.cache.Cache;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 
@@ -26,6 +27,7 @@ public class BeanUtil {
     private static ChatRoomManage chatRoomManage1;
     // 消息模板对象，用于发送简单消息
     private static SimpMessagingTemplate simpMessagingTemplate1;
+    private static MessagePlusInitializeMapper messagePlusInitializeMapper1;
 
     /**
      * 获取MessagePlusProperties对象
@@ -84,5 +86,10 @@ public class BeanUtil {
     public static SimpMessagingTemplate simpMessagingTemplate() {
         if (simpMessagingTemplate1 == null) simpMessagingTemplate1 = SpringUtils.getBean(SimpMessagingTemplate.class);
         return simpMessagingTemplate1;
+    }
+
+    public static MessagePlusInitializeMapper messagePlusInitializeMapper() {
+        if (messagePlusInitializeMapper1 == null) messagePlusInitializeMapper1 = SpringUtils.getBean(MessagePlusInitializeMapper.class);
+        return messagePlusInitializeMapper1;
     }
 }

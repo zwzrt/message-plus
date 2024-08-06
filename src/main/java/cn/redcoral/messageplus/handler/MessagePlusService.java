@@ -15,7 +15,7 @@ import javax.websocket.server.ServerEndpoint;
  * @author mo
  **/
 @Slf4j
-@ServerEndpoint(value = "/messageplus/ws/{sid}", encoders = { MessageEncoder.class })
+@ServerEndpoint(value = "/cn/redcoral/messageplus/ws/{sid}", encoders = { MessageEncoder.class })
 public class MessagePlusService {
     /**
      * 客户端唯一标识

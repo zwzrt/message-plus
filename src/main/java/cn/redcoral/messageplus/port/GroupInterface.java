@@ -1,6 +1,6 @@
 package cn.redcoral.messageplus.port;
 
-import cn.redcoral.messageplus.entity.Group;
+import cn.redcoral.messageplus.data.entity.Group;
 
 /**
  * 查询群组二级接口类

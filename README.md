@@ -5,19 +5,16 @@
 
 ---
 
-#### [进入主页](https://zwzrt.github.io/)
+#### [前往主页](https://zwzrt.github.io/)
 
 #### 介绍
 
 基于WebSocket的消息增强器，支持单发、群发、聊天室及系统功能;以及数据持久化；支持失败消息的持久化及重发功能。
 
-注意：
-持久化基于Caffeine实现，服务关闭后就会消息。如果需要，可以自己去做持久化，或者使用消息增强器集群版
-
 [前往集群版(Gitee)](https://gitee.com/modmb/message-plus-cluster)
 
 #### 软件架构
-Maven + SpringBoot + WebSocket
+Maven + SpringBoot + WebSocket + MyBatis
 
 #### 版本区别
 
@@ -34,13 +31,18 @@ Maven + SpringBoot + WebSocket
     </tr>
     <tr>
         <td>消息持久化</td>
-        <td style="color: orange">支持（前提是服务不会关闭）</td>
+        <td style="color: green">支持</td>
         <td style="color: green">支持</td>
     </tr>
     <tr>
         <td>消息重发</td>
         <td style="color: green">支持</td>
         <td style="color: green">支持</td>
+    </tr>
+    <tr>
+        <td>数据库</td>
+        <td style="color: red">需要</td>
+        <td style="color: red">需要</td>
     </tr>
     <tr>
         <td>Redis</td>

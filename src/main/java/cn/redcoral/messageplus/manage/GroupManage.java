@@ -1,8 +1,8 @@
 package cn.redcoral.messageplus.manage;
 
-import cn.redcoral.messageplus.entity.Group;
+import cn.redcoral.messageplus.data.entity.Group;
 import cn.redcoral.messageplus.port.GroupInterface;
-import cn.redcoral.messageplus.exteriorUtils.SpringUtils;
+import cn.redcoral.messageplus.utils.exterior.SpringUtils;
 import org.springframework.beans.BeansException;
 import org.springframework.context.annotation.Configuration;
 
