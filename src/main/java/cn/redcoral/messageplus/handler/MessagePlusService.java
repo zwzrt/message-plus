@@ -32,6 +32,7 @@ public class MessagePlusService {
         this.client_id = sid;
         // 加入聊天
         MessagePlusUtils.joinChat(sid, this, session);
+        // TODO 消息重发
         // 调用下游方法
         BeanUtil.messagePlusBase().onOpen(session, sid);
     }
