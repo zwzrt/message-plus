@@ -2,10 +2,9 @@ package cn.redcoral.messageplus.utils.cache.impl;
 
 import cn.redcoral.messageplus.constant.CachePrefixConstant;
 import cn.redcoral.messageplus.utils.CounterIdentifierUtil;
-import cn.redcoral.messageplus.utils.cache.ChatRoomRedisUtil;
+import cn.redcoral.messageplus.utils.cache.ChatRoomCacheUtil;
 import com.github.benmanes.caffeine.cache.Cache;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 /**
@@ -13,7 +12,7 @@ import org.springframework.stereotype.Service;
  * @author mo
  **/
 @Service
-public class ChatRoomRedisUtilImpl implements ChatRoomRedisUtil {
+public class ChatRoomCacheUtilImpl implements ChatRoomCacheUtil {
 
     @Autowired
     private Cache<String, String> stringCache;

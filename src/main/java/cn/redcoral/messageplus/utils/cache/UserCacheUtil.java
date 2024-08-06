@@ -4,7 +4,7 @@ package cn.redcoral.messageplus.utils.cache;
  * 操作Redis工具类
  * @author mo
  **/
-public interface UserRedisUtil {
+public interface UserCacheUtil {
 
     /**
      * 存储用户ID及所在服务ID

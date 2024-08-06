@@ -2,7 +2,7 @@ package cn.redcoral.messageplus.utils.cache.impl;
 
 import cn.redcoral.messageplus.constant.CachePrefixConstant;
 import cn.redcoral.messageplus.properties.MessagePlusProperties;
-import cn.redcoral.messageplus.utils.cache.UserRedisUtil;
+import cn.redcoral.messageplus.utils.cache.UserCacheUtil;
 import com.github.benmanes.caffeine.cache.Cache;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -12,7 +12,7 @@ import org.springframework.stereotype.Service;
  * @author mo
  **/
 @Service
-public class UserRedisUtilImpl implements UserRedisUtil {
+public class UserCacheUtilImpl implements UserCacheUtil {
     @Autowired
     private Cache<String, String> stringCache;
 

@@ -1,7 +1,7 @@
 package cn.redcoral.messageplus.manage;
 
 import cn.redcoral.messageplus.entity.ChatRoom;
-import cn.redcoral.messageplus.utils.cache.ChatRoomRedisUtil;
+import cn.redcoral.messageplus.utils.cache.ChatRoomCacheUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 
@@ -27,7 +27,7 @@ public class ChatRoomManage {
     private ConcurrentHashMap<String, ChatRoom> chatRoomByIdMap = new ConcurrentHashMap<>();
     private List<String> chatRoomIdList = new ArrayList<>();
     @Autowired
-    private ChatRoomRedisUtil chatRoomRedisUtil;
+    private ChatRoomCacheUtil chatRoomCacheUtil;
 
 
 
@@ -77,7 +77,7 @@ public class ChatRoomManage {
      */
     public boolean closeChatRoomById(String client_id, String chatRoomId) {
         // 删除缓存
-        return chatRoomRedisUtil.deleteChatRoomById(chatRoomId);
+        return chatRoomCacheUtil.deleteChatRoomById(chatRoomId);
     }
 
 
