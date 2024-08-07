@@ -1,10 +1,10 @@
 package cn.redcoral.messageplus.data.entity.po;
 
+import cn.hutool.core.bean.BeanUtil;
+import cn.redcoral.messageplus.data.entity.message.Message;
 import com.alibaba.fastjson.JSON;
 import com.baomidou.mybatisplus.annotation.TableName;
-import lombok.Data;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import java.sql.Timestamp;
 
@@ -14,6 +14,8 @@ import java.sql.Timestamp;
  * @author mo
  **/
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
 @Setter
 @Getter
 @TableName("mp_message")
@@ -54,6 +56,14 @@ public class MessagePo {
         this.senderId = senderId;
         this.receiverId = receiverId;
         this.data = JSON.toJSONString(data);
+    }
+
+    /**
+     * 构造点对点消息对象
+     */
+    public MessagePo(Message message) {
+        BeanUtil.copyProperties(message, this);
+        this.data = JSON.toJSONString(message.getData());
     }
 
 

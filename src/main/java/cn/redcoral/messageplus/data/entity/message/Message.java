@@ -1,8 +1,13 @@
 package cn.redcoral.messageplus.data.entity.message;
 
+import cn.hutool.core.bean.BeanUtil;
+import cn.redcoral.messageplus.data.entity.po.MessagePo;
+import com.alibaba.fastjson.JSON;
 import lombok.Data;
 
 import java.sql.Timestamp;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * 消息类
@@ -119,6 +124,21 @@ public class Message {
         message.setSenderId(senderId);
         message.setData(data);
         return message;
+    }
+
+    public static Message BuildMessage(MessagePo messagePo) {
+        Message message = new Message();
+        BeanUtil.copyProperties(messagePo, message);
+        message.setData(JSON.parse(messagePo.getData()));
+        return message;
+    }
+
+    public static List<Message> BuildMessageList(List<MessagePo> messagePoList) {
+        List<Message> messageList = new ArrayList<>();
+        for (MessagePo po : messagePoList) {
+            messageList.add(BuildMessage(po));
+        }
+        return messageList;
     }
 
 }
