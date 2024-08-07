@@ -1,9 +1,10 @@
-package cn.redcoral.messageplus.data.entity;
+package cn.redcoral.messageplus.data.entity.po;
 
 import cn.hutool.core.bean.BeanUtil;
-import cn.redcoral.messageplus.data.entity.po.ChatRoomPo;
+import cn.redcoral.messageplus.data.entity.ChatRoom;
+import com.baomidou.mybatisplus.annotation.TableField;
+import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
-import org.checkerframework.checker.units.qual.C;
 
 import java.io.Serializable;
 import java.sql.Timestamp;
@@ -17,7 +18,8 @@ import static cn.redcoral.messageplus.config.MessagePlusConfig.snowflake;
  * @author mo
  **/
 @Data
-public class ChatRoom implements Serializable {
+@TableName("mp_chat_room")
+public class ChatRoomPo implements Serializable {
     /**
      * 聊天室ID
      */
@@ -37,6 +39,7 @@ public class ChatRoom implements Serializable {
     /**
      * 用户ID列表
      */
+    @TableField(exist = false)
     private List<String> clientIdList = new ArrayList<>();
     /**
      * 点赞数量
@@ -67,26 +70,22 @@ public class ChatRoom implements Serializable {
      * @param chatRoomName 聊天室名称
      * @return 聊天室
      */
-    public static ChatRoom BuildChatRoom(String id, String createUserId, String chatRoomName) {
-        ChatRoom chatRoom = new ChatRoom();
-        chatRoom.id = id;
-        chatRoom.createUserId = createUserId;
-        chatRoom.name = chatRoomName;
-        return chatRoom;
+    public static ChatRoomPo BuildChatRoom(String id, String createUserId, String chatRoomName) {
+        ChatRoomPo chatRoomPo = new ChatRoomPo();
+        chatRoomPo.id = id;
+        chatRoomPo.createUserId = createUserId;
+        chatRoomPo.name = chatRoomName;
+        return chatRoomPo;
     }
 
-    public static ChatRoom BuildChatRoom(ChatRoomPo chatRoomPo) {
-        ChatRoom chatRoom = new ChatRoom();
+    /**
+     * 创建聊天室
+     * @return 聊天室
+     */
+    public static ChatRoomPo BuildChatRoom(ChatRoom chatRoom) {
+        ChatRoomPo chatRoomPo = new ChatRoomPo();
         BeanUtil.copyProperties(chatRoomPo, chatRoomPo);
-        return chatRoom;
-    }
-
-    public static List<ChatRoom> BuildChatRoomList(List<ChatRoomPo> chatRoomPo) {
-        List<ChatRoom> chatRoomList = new ArrayList<>();
-        for (ChatRoomPo po : chatRoomPo) {
-            chatRoomList.add(BuildChatRoom(po));
-        }
-        return chatRoomList;
+        return chatRoomPo;
     }
 
     /**

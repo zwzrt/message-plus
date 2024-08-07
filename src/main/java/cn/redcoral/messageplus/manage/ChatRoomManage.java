@@ -1,6 +1,7 @@
 package cn.redcoral.messageplus.manage;
 
 import cn.redcoral.messageplus.data.entity.ChatRoom;
+import cn.redcoral.messageplus.data.service.ChatRoomService;
 import cn.redcoral.messageplus.utils.cache.ChatRoomCacheUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
@@ -28,7 +29,47 @@ public class ChatRoomManage {
     private List<String> chatRoomIdList = new ArrayList<>();
     @Autowired
     private ChatRoomCacheUtil chatRoomCacheUtil;
+    @Autowired
+    private ChatRoomService chatRoomService;
 
+
+
+    /**
+     * 创建聊天室
+     * @param createUserId 创建者ID
+     * @param name 聊天室名称
+     * @return 聊天室ID
+     */
+    public ChatRoom createChatRoom(String createUserId, String name) {
+        // 查询该聊天室是否存在
+        String value = chatRoomCacheUtil.existence(createUserId, name);
+        ChatRoom chatRoom = null;
+        // 该群组不存在，进行创建
+        if (value == null) {
+            // 调用原始方法
+            chatRoom = new ChatRoom();
+            chatRoom.setCreateUserId(createUserId);
+            chatRoom.setName(name);
+
+            // 数据库创建
+            chatRoom = chatRoomService.insertChatRoom(chatRoom);
+            if (chatRoom == null) {
+                return null;
+            }
+
+            chatRoomByIdMap.put(chatRoom.getId(), chatRoom);
+
+            // 添加群组缓存（用于判断是否存在）
+            chatRoomCacheUtil.createChatRoomIdentification(createUserId, name, chatRoom.getId());
+            // 添加群组信息缓存
+            chatRoomCacheUtil.addChatRoom(chatRoom);
+            // 返回群组信息
+            return chatRoom;
+        }
+        chatRoom = new ChatRoom();
+        chatRoom.setId(value);
+        return chatRoom;
+    }
 
 
     /**
@@ -86,7 +127,10 @@ public class ChatRoomManage {
      * @param chatRoomId 聊天室ID
      */
     public boolean closeChatRoomById(String client_id, String chatRoomId) {
-        // 删除缓存
+        // 1、操作数据库
+        boolean bo = chatRoomService.closeChatRoom(client_id, chatRoomId);
+        if (!bo) return false;
+        // 2、删除缓存
         return chatRoomCacheUtil.deleteChatRoomById(chatRoomId);
     }
     
