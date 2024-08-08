@@ -13,4 +13,11 @@ public interface ChatRoomService {
     boolean closeChatRoom(String stopUserId, String chatRoomId);
 
     List<ChatRoom> selectChatRooms();
+
+    /**
+     * 查询聊天室分页
+     * @param page 当前页数
+     * @param size 每页大小
+     */
+    List<ChatRoom> selectChatRoomList(int page, int size);
 }

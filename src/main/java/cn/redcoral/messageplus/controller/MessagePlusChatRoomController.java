@@ -4,7 +4,6 @@ import cn.hutool.http.server.HttpServerRequest;
 import cn.redcoral.messageplus.data.entity.ChatRoom;
 import cn.redcoral.messageplus.manage.ChatRoomManage;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -19,8 +18,6 @@ public class MessagePlusChatRoomController {
 
     @Autowired
     private ChatRoomManage chatRoomManage;
-    @Autowired
-    private SimpMessagingTemplate simpMessagingTemplate;
 
 
     /**
@@ -54,5 +51,16 @@ public class MessagePlusChatRoomController {
         chatRoomManage.thumbsUpNum(senderId, chatRoomId);
     }
 
+
+
+    /**
+     * 查询聊天室分页
+     * @param page 当前页码
+     * @param size 每页大小
+     * @return 聊天室数组
+     */
+    public List<ChatRoom> selectChatRoomList(HttpServerRequest request, @RequestParam("page") int page, @RequestParam("size") int size) {
+        return chatRoomManage.selectChatRoomList(page, size);
+    }
 
 }
