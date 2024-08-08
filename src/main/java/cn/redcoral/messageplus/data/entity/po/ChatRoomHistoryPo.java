@@ -11,15 +11,13 @@ import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
-import static cn.redcoral.messageplus.config.MessagePlusConfig.snowflake;
-
 /**
- * 聊天室
+ * 聊天室（和聊天室字段一致，多个停播时间）
  * @author mo
  **/
 @Data
-@TableName(value = "mp_chat_room", keepGlobalPrefix = false)
-public class ChatRoomPo implements Serializable {
+@TableName(value = "mp_chat_room_history", keepGlobalPrefix = false)
+public class ChatRoomHistoryPo implements Serializable {
     /**
      * 聊天室ID
      */
@@ -48,11 +46,11 @@ public class ChatRoomPo implements Serializable {
     /**
      * 开播时间
      */
-    private Timestamp openingTime = new Timestamp(System.currentTimeMillis());
-
-    {
-        this.id = snowflake.nextIdStr();
-    }
+    private Timestamp openingTime;
+    /**
+     * 停播时间
+     */
+    private Timestamp offTime;
 
 
     /**
@@ -62,8 +60,8 @@ public class ChatRoomPo implements Serializable {
      * @param chatRoomName 聊天室名称
      * @return 聊天室
      */
-    public static ChatRoomPo BuildChatRoom(String id, String createUserId, String chatRoomName) {
-        ChatRoomPo chatRoomPo = new ChatRoomPo();
+    public static ChatRoomHistoryPo BuildChatRoom(String id, String createUserId, String chatRoomName) {
+        ChatRoomHistoryPo chatRoomPo = new ChatRoomHistoryPo();
         chatRoomPo.id = id;
         chatRoomPo.createUserId = createUserId;
         chatRoomPo.name = chatRoomName;
@@ -74,9 +72,9 @@ public class ChatRoomPo implements Serializable {
      * 创建聊天室
      * @return 聊天室
      */
-    public static ChatRoomPo BuildChatRoom(ChatRoom chatRoom) {
-        ChatRoomPo chatRoomPo = new ChatRoomPo();
-        BeanUtil.copyProperties(chatRoom, chatRoomPo);
+    public static ChatRoomHistoryPo BuildChatRoom(ChatRoom chatRoom) {
+        ChatRoomHistoryPo chatRoomPo = new ChatRoomHistoryPo();
+        BeanUtil.copyProperties(chatRoomPo, chatRoomPo);
         return chatRoomPo;
     }
 

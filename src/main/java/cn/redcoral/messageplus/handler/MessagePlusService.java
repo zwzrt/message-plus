@@ -23,6 +23,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
  * @author mo
  **/
 @Slf4j
+@Component
 @ServerEndpoint(value = "/messageplus/ws/{sid}", encoders = {MessageEncoder.class})
 public class MessagePlusService {
     /**

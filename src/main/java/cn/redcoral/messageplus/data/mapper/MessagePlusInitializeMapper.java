@@ -14,6 +14,18 @@ public interface MessagePlusInitializeMapper {
     /**
      * 创建群组黑名单表
      */
-    void createChatroomBlacklistTable();
+    void createMassBlacklistTable();
+
+    /**
+     * 创建聊天室表
+     */
+    void createChatRoomTable();
+
+    /**
+     * 创建历史聊天室表
+     */
+    void createChatRoomHistoryTable();
+
+
 
 }

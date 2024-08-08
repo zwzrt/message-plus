@@ -1,14 +1,20 @@
 package cn.redcoral.messageplus.data.service.impl;
 
+import cn.hutool.core.bean.BeanUtil;
 import cn.redcoral.messageplus.data.entity.ChatRoom;
+import cn.redcoral.messageplus.data.entity.po.ChatRoomHistoryPo;
 import cn.redcoral.messageplus.data.entity.po.ChatRoomPo;
+import cn.redcoral.messageplus.data.mapper.MessagePlusChatRoomCloseMapper;
 import cn.redcoral.messageplus.data.mapper.MessagePlusChatRoomMapper;
 import cn.redcoral.messageplus.data.service.ChatRoomService;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.ibatis.exceptions.TooManyResultsException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.sql.Timestamp;
 import java.util.List;
@@ -21,6 +27,8 @@ import java.util.List;
 public class ChatRoomServiceImpl implements ChatRoomService {
     @Autowired
     private MessagePlusChatRoomMapper chatRoomMapper;
+    @Autowired
+    private MessagePlusChatRoomCloseMapper chatRoomCloseMapper;
 
     @Override
     public ChatRoom insertChatRoom(ChatRoom chatRoom) {
@@ -45,20 +53,25 @@ public class ChatRoomServiceImpl implements ChatRoomService {
         }
     }
 
+    @Transactional
     @Override
     public boolean closeChatRoom(String stopUserId, String chatRoomId) {
         LambdaQueryWrapper<ChatRoomPo> lqw = new LambdaQueryWrapper<>();
         lqw.eq(ChatRoomPo::getId, chatRoomId);
         lqw.eq(ChatRoomPo::getCreateUserId, stopUserId);
-        lqw.eq(ChatRoomPo::isClose, false);
         ChatRoomPo chatRoomPo = chatRoomMapper.selectOne(lqw);
         // 该聊天室不存在 或者 关闭者不是创建者 或 已经关闭
         if (chatRoomPo == null) return false;
+        ChatRoomHistoryPo chatRoomHistoryPo = new ChatRoomHistoryPo();
+        BeanUtil.copyProperties(chatRoomPo, chatRoomHistoryPo);
         // 添加关闭时间
-        chatRoomPo.setOffTime(new Timestamp(System.currentTimeMillis()));
-        // 设置关闭
-        chatRoomPo.setClose(true);
-        return chatRoomMapper.updateById(chatRoomPo)==1;
+        chatRoomHistoryPo.setOffTime(new Timestamp(System.currentTimeMillis()));
+        // 添加关闭的聊天室到表中
+        boolean bo = chatRoomCloseMapper.insert(chatRoomHistoryPo)==1;
+        if (!bo) return false;
+        // 删除之前的表
+        bo = chatRoomMapper.deleteById(chatRoomPo.getId()) == 1;
+        return bo;
     }
 
     @Override
@@ -66,11 +79,23 @@ public class ChatRoomServiceImpl implements ChatRoomService {
         LambdaQueryWrapper<ChatRoomPo> lqw = new LambdaQueryWrapper<>();
         // 保证开始时间已经开始
         lqw.le(ChatRoomPo::getOpeningTime, new Timestamp(System.currentTimeMillis()));
-        // 保证关闭时间还没有到
-        lqw.ge(ChatRoomPo::getOffTime, new Timestamp(System.currentTimeMillis()))
-                .or()
-                .eq(ChatRoomPo::getOffTime, null);
         // 查询
         return ChatRoom.BuildChatRoomList(chatRoomMapper.selectList(lqw));
+    }
+
+    @Override
+    public List<ChatRoom> selectChatRoomList(int page, int size) {
+        // 设置查询条件
+        Page<ChatRoomPo> p = new Page<>(page, size, false);
+        LambdaQueryWrapper<ChatRoomPo> lqw = new LambdaQueryWrapper<>();
+        // 保证开始时间已经开始
+        lqw.le(ChatRoomPo::getOpeningTime, new Timestamp(System.currentTimeMillis()));
+        // 查询
+        IPage<ChatRoomPo> ipage = chatRoomMapper.selectPage(p, lqw);
+        // 获取列表
+        List<ChatRoomPo> chatRoomPoList = ipage.getRecords();
+        // 封装为ChatRoom
+        List<ChatRoom> chatRoomList = ChatRoom.BuildChatRoomList(chatRoomPoList);
+        return chatRoomList;
     }
 }
