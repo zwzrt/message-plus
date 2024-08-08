@@ -6,6 +6,7 @@ import cn.redcoral.messageplus.handler.MessageHandler;
 import cn.redcoral.messageplus.port.MessagePlusBase;
 import cn.redcoral.messageplus.properties.MessagePersistenceProperties;
 import cn.redcoral.messageplus.utils.CounterIdentifierUtil;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.SendTo;
@@ -18,6 +19,7 @@ import org.springframework.web.bind.annotation.*;
  **/
 @RestController
 @RequestMapping("/messageplus")
+@Slf4j
 public class MessagePlusSendController {
 
     @Autowired
@@ -35,6 +37,7 @@ public class MessagePlusSendController {
      */
     @PostMapping("/send/single")
     public void sendSingleMessage(HttpServerRequest request, @RequestParam("id1") String senderId, @RequestParam("id2") String receiverId, @RequestBody String msg) throws Exception {
+        log.info("接收到消息"+msg);
         // 1.并发限流
         // 短时间发送消息达到上限，禁止发送消息(默认为1)
         if (CounterIdentifierUtil.isLessThanOrEqual(senderId, MessagePersistenceProperties.concurrentNumber)) {

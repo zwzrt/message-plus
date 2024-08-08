@@ -163,6 +163,7 @@
                 <artifactId>maven-gpg-plugin</artifactId>
                 <version>1.5</version>
                 <configuration>
+                    <skip>true</skip>
                     <executable>D:\Program Files (x86)\GnuPG\bin\gpg.exe</executable>
                     <keyname>zwzrt</keyname>
                 </configuration>

@@ -7,7 +7,10 @@ import cn.redcoral.messageplus.data.entity.message.MessageType;
 import cn.redcoral.messageplus.manage.ChatRoomManage;
 import cn.redcoral.messageplus.manage.MessagePlusUtils;
 import cn.redcoral.messageplus.port.MessagePlusBase;
+import cn.redcoral.messageplus.utils.cache.ChatSingleCacheUtil;
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -18,10 +21,15 @@ import java.util.List;
  **/
 @AllArgsConstructor
 @Component
+@Slf4j
 public class MessageHandler {
 
     private MessagePlusBase messagePlusBase;
     private ChatRoomManage chatRoomManage;
+    
+    
+    @Autowired
+    private ChatSingleCacheUtil chatSingleCacheUtil;
 
     /**
      * 处理消息（自动判断类型分发）
@@ -58,16 +66,22 @@ public class MessageHandler {
             // 不在线
             case "-1": {
                 // 提示出现失败消息(用户实现)
+                log.info("用户不在线");
                 messagePlusBase.onFailedMessage(message);
-                // TODO 缓存
+                new Thread(()->{
+                    chatSingleCacheUtil.addChatSingleContent(senderId,receiverId,message);
+                }).start();
                 break;
             }
             // 本地在线
             case "0": {
                 // 调用发送方法
                 boolean sended = MessagePlusUtils.sendMessage(receiverId, message);
+                log.info("用户在线");
                 if(!sended){
-                    // TODO 缓存
+                    new Thread(()->{
+                        chatSingleCacheUtil.addChatSingleContent(senderId,receiverId,message);
+                    }).start();
                 }
                 break;
             }

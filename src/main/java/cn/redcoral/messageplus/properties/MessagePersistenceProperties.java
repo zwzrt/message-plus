@@ -27,10 +27,17 @@ public class MessagePersistenceProperties {
      * 限制消息周期的时间（单位：s）
      */
     public static int cycleRestrictionsTime = 1;
+    
+    /**
+     * 消息超时时间（单位：day）
+     */
+    public static int messageTimeOut = 3;
     /**
      * 限制消息周期内的次数
      */
     public static int cycleRestrictionsNum = 10;
+    
+    
 
     public static boolean isMessagePersistence() {
         return MessagePersistenceProperties.messagePersistence;
@@ -56,6 +63,15 @@ public class MessagePersistenceProperties {
     public void setCycleRestrictionsTime(int cycleRestrictionsTime) {
         MessagePersistenceProperties.cycleRestrictionsTime = cycleRestrictionsTime;
     }
+    
+    public static int getMessageTimeOut() {
+        return messageTimeOut;
+    }
+    
+    public void setMessageTimeOut(int messageTimeOut) {
+        MessagePersistenceProperties.messageTimeOut = messageTimeOut;
+    }
+    
     public static int getCycleRestrictionsNum() {
         return cycleRestrictionsNum;
     }

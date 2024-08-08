@@ -6,6 +6,7 @@ import cn.redcoral.messageplus.handler.MessageHandler;
 import cn.redcoral.messageplus.manage.ChatRoomManage;
 import cn.redcoral.messageplus.port.MessagePlusBase;
 import cn.redcoral.messageplus.properties.MessagePlusProperties;
+import cn.redcoral.messageplus.utils.cache.ChatSingleCacheUtil;
 import cn.redcoral.messageplus.utils.exterior.SpringUtils;
 import com.github.benmanes.caffeine.cache.Cache;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
@@ -28,7 +29,14 @@ public class BeanUtil {
     // 消息模板对象，用于发送简单消息
     private static SimpMessagingTemplate simpMessagingTemplate1;
     private static MessagePlusInitializeMapper messagePlusInitializeMapper1;
+    
+    private static ChatSingleCacheUtil chatSingleCache;
 
+    
+    public static ChatSingleCacheUtil chatSingleCache(){
+        if (chatSingleCache == null) chatSingleCache = SpringUtils.getBean(ChatSingleCacheUtil.class);
+        return chatSingleCache;
+    }
     /**
      * 获取MessagePlusProperties对象
      * 如果对象尚未初始化，则从Spring上下文中获取
