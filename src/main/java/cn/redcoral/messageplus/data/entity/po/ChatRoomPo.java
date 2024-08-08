@@ -18,7 +18,7 @@ import static cn.redcoral.messageplus.config.MessagePlusConfig.snowflake;
  * @author mo
  **/
 @Data
-@TableName(value = "mp_chat_room", keepGlobalPrefix = false)
+@TableName("mp_chat_room")
 public class ChatRoomPo implements Serializable {
     /**
      * 聊天室ID
@@ -49,6 +49,14 @@ public class ChatRoomPo implements Serializable {
      * 开播时间
      */
     private Timestamp openingTime = new Timestamp(System.currentTimeMillis());
+    /**
+     * 停播时间
+     */
+    private Timestamp offTime;
+    /**
+     * 是否关闭
+     */
+    private boolean isClose = false;
 
     {
         this.id = snowflake.nextIdStr();
@@ -76,7 +84,7 @@ public class ChatRoomPo implements Serializable {
      */
     public static ChatRoomPo BuildChatRoom(ChatRoom chatRoom) {
         ChatRoomPo chatRoomPo = new ChatRoomPo();
-        BeanUtil.copyProperties(chatRoom, chatRoomPo);
+        BeanUtil.copyProperties(chatRoomPo, chatRoomPo);
         return chatRoomPo;
     }
 

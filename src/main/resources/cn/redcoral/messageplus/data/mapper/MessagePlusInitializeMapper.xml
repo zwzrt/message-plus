@@ -5,7 +5,7 @@
 <mapper namespace="cn.redcoral.messageplus.data.mapper.MessagePlusInitializeMapper">
     <update id="createMessage">
         CREATE TABLE IF NOT EXISTS `mp_message` (
-            `id` bigint(30) PRIMARY KEY AUTO_INCREMENT COMMENT '主键id',
+            `id` bigint(30) unsigned NOT NULL AUTO_INCREMENT KEY COMMENT '主键id',
             `code` int(8) NOT NULL COMMENT '消息编码',
             `type` varchar(30) NOT NULL COMMENT '消息类型',
             `sender_id` varchar(30) NOT NULL COMMENT '发送者ID',
@@ -13,36 +13,14 @@
             `chat_room_id` varchar(30) COMMENT '聊天室ID',
             `receiver_id` varchar(30) COMMENT '接收者ID',
             `data` varchar(30) NOT NULL COMMENT '消息数据',
-            `create_time` timestamp not null comment '创建时间'
+            `create_time` timestamp not null comment ' 创建时间'
         ) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT comment '消息记录';
     </update>
-    <update id="createMassBlacklistTable">
-        CREATE TABLE IF NOT EXISTS `mp_mass_blacklist` (
-            `id` bigint(30) PRIMARY KEY AUTO_INCREMENT COMMENT '主键id',
+    <update id="createChatroomBlacklistTable">
+        CREATE TABLE IF NOT EXISTS `mp_chatroom_blacklist` (
+            `id` bigint(30) unsigned NOT NULL AUTO_INCREMENT KEY COMMENT '主键id',
             `chatroom_id` varchar(30) NOT NULL COMMENT '群组id',
             `user_id` varchar(30) NOT NULL COMMENT '用户id'
         ) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT comment '群组黑名单';
     </update>
-    <update id="createChatRoomTable">
-        CREATE TABLE IF NOT EXISTS `mp_chat_room` (
-            `id` varchar(30) PRIMARY KEY COMMENT '主键id',
-            `create_user_id` varchar(30) NOT NULL COMMENT '创建者id',
-            `name` varchar(30) NOT NULL COMMENT '聊天室名称',
-            `max_user_num` int NOT NULL COMMENT '最大人数',
-            `thumbs_up_num` bigint(30) NOT NULL COMMENT '点赞数量',
-            `opening_time` timestamp not null comment '开播时间'
-        ) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT comment '聊天室';
-    </update>
-    <update id="createChatRoomHistoryTable">
-        CREATE TABLE IF NOT EXISTS `mp_chat_room_history` (
-            `id` varchar(30) PRIMARY KEY COMMENT '主键id',
-            `create_user_id` varchar(30) NOT NULL COMMENT '创建者id',
-            `name` varchar(30) NOT NULL COMMENT '聊天室名称',
-            `max_user_num` int NOT NULL COMMENT '最大人数',
-            `thumbs_up_num` bigint(30) NOT NULL COMMENT '点赞数量',
-            `opening_time` timestamp not null comment '开播时间',
-            `off_time` timestamp not null comment '停播时间'
-        ) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT comment '聊天室历史表';
-    </update>
-
 </mapper>

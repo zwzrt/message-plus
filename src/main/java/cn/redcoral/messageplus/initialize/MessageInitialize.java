@@ -27,11 +27,7 @@ public class MessageInitialize {
         MessagePlusInitializeMapper initializeMapper = BeanUtil.messagePlusInitializeMapper();
         // 1.2、执行语句
         initializeMapper.createMessage();
-        initializeMapper.createMassBlacklistTable();
-        // 创建聊天室表
-        initializeMapper.createChatRoomTable();
-        // 创建聊天室历史表
-        initializeMapper.createChatRoomHistoryTable();
+        initializeMapper.createChatroomBlacklistTable();
 
         log.info("消息增强器初始化完成！");
 
