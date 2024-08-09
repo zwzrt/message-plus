@@ -20,4 +20,11 @@ public interface ChatRoomService {
      * @param size 每页大小
      */
     List<ChatRoom> selectChatRoomList(int page, int size);
+
+    /**
+     * 判断是否存在
+     * @param createUserId 创建者ID
+     * @param name 聊天室ID
+     */
+    String existence(String createUserId, String name);
 }
