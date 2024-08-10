@@ -7,6 +7,7 @@ import cn.redcoral.messageplus.data.entity.po.ChatRoomPo;
 import cn.redcoral.messageplus.data.mapper.MessagePlusChatRoomCloseMapper;
 import cn.redcoral.messageplus.data.mapper.MessagePlusChatRoomMapper;
 import cn.redcoral.messageplus.data.service.ChatRoomService;
+import cn.redcoral.messageplus.utils.cache.ChatRoomCacheUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
@@ -29,6 +30,8 @@ public class ChatRoomServiceImpl implements ChatRoomService {
     private MessagePlusChatRoomMapper chatRoomMapper;
     @Autowired
     private MessagePlusChatRoomCloseMapper chatRoomCloseMapper;
+    @Autowired
+    private ChatRoomCacheUtil chatRoomCacheUtil;
 
     @Override
     public ChatRoom insertChatRoom(ChatRoom chatRoom) {
@@ -97,5 +100,23 @@ public class ChatRoomServiceImpl implements ChatRoomService {
         // 封装为ChatRoom
         List<ChatRoom> chatRoomList = ChatRoom.BuildChatRoomList(chatRoomPoList);
         return chatRoomList;
+    }
+
+    @Override
+    public String existence(String createUserId, String name) {
+        // 在缓存中查询是否存在
+        String chatRoomId = chatRoomCacheUtil.existence(createUserId, name);
+        // 不存在，在数据库查询
+        if (chatRoomId == null) {
+            LambdaQueryWrapper<ChatRoomPo> lqw = new LambdaQueryWrapper<>();
+            lqw.eq(ChatRoomPo::getCreateUserId, createUserId).eq(ChatRoomPo::getName, name);
+            ChatRoomPo chatRoomPo = chatRoomMapper.selectOne(lqw);
+            // 若存在，则插入缓存中
+            if (chatRoomPo != null) {
+                // 存储到缓存中
+                chatRoomCacheUtil.createChatRoomIdentification(createUserId, name, chatRoomPo.getId());
+            }
+        }
+        return chatRoomId;
     }
 }

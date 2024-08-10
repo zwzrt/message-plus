@@ -42,8 +42,7 @@ public class ChatRoomManage {
      */
     public ChatRoom createChatRoom(String createUserId, String name) {
         // 查询该聊天室是否存在
-        // TODO 判断是否存在应该使用Service层（缓存有过期时间）
-        String value = chatRoomCacheUtil.existence(createUserId, name);
+        String value = chatRoomService.existence(createUserId, name);
         ChatRoom chatRoom = null;
         // 该群组不存在，进行创建
         if (value == null) {
