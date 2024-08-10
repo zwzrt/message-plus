@@ -4,6 +4,8 @@ import cn.redcoral.messageplus.constant.CachePrefixConstant;
 import cn.redcoral.messageplus.data.entity.message.Message;
 import cn.redcoral.messageplus.utils.cache.ChatSingleCacheUtil;
 import com.github.benmanes.caffeine.cache.Cache;
+import jdk.internal.net.http.common.Log;
+import lombok.extern.slf4j.Slf4j;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -23,6 +25,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
  * time 2024/8/6
  */
 @Service
+@Slf4j
 public class ChatSingleCacheUtilImpl implements ChatSingleCacheUtil {
     
     @Autowired
@@ -36,6 +39,7 @@ public class ChatSingleCacheUtilImpl implements ChatSingleCacheUtil {
      */
     @Override
     public void addChatSingleContent(String senderId, String receiverId, Message message) {
+        log.info("准备缓存");
         BlockingQueue messagequeue = messageQueueCache.getIfPresent(CachePrefixConstant.USER_MESSAGES_PREFIX
                 + receiverId + ":"
                 + senderId);
@@ -60,18 +64,23 @@ public class ChatSingleCacheUtilImpl implements ChatSingleCacheUtil {
         //匹配接受者id
         ConcurrentMap<@NonNull String, @NonNull BlockingQueue> map = messageQueueCache.asMap();
         Set<@NonNull String> keySet = map.keySet();
-        CopyOnWriteArrayList<MessageData> messagDataS = null;
+        CopyOnWriteArrayList<MessageData> messagDataS = new CopyOnWriteArrayList<>();
         for (String key : keySet) {
             String[] receiverIdS = key.split(":");
-            String receiver = receiverIdS[1];
+            String receiver = receiverIdS[2];
             MessageData messagData = new MessageData();
             if (receiverId.equals(receiver)){
                 BlockingQueue queue = map.get(key);
                 List<Message> messages = Collections.synchronizedList(new ArrayList<Message>());
-                queue.forEach((message)->{
-                    messages.add((Message) message);
-                });
-                messagData.setSendId(receiverIdS[2]);
+                //出队列，添加到messages列表中
+                while (true){
+                    Object entiry = queue.poll();
+                    if(entiry==null){
+                        break;
+                    }
+                    messages.add((Message) entiry);
+                }
+                messagData.setSendId(receiverIdS[3]);
                 messagData.setMessages(messages);
             }
             messagDataS.add(messagData);

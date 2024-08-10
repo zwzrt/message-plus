@@ -7,6 +7,7 @@ import cn.redcoral.messageplus.manage.ChatRoomManage;
 import cn.redcoral.messageplus.port.MessagePlusBase;
 import cn.redcoral.messageplus.properties.MessagePlusProperties;
 import cn.redcoral.messageplus.utils.cache.ChatSingleCacheUtil;
+import cn.redcoral.messageplus.utils.cache.impl.ChatSingleCacheUtilImpl;
 import cn.redcoral.messageplus.utils.exterior.SpringUtils;
 import com.github.benmanes.caffeine.cache.Cache;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
@@ -34,7 +35,7 @@ public class BeanUtil {
 
     
     public static ChatSingleCacheUtil chatSingleCache(){
-        if (chatSingleCache == null) chatSingleCache = SpringUtils.getBean(ChatSingleCacheUtil.class);
+        if (chatSingleCache == null) chatSingleCache = SpringUtils.getBean(ChatSingleCacheUtilImpl.class);
         return chatSingleCache;
     }
     /**

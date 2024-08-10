@@ -79,6 +79,7 @@ public class MessageHandler {
                 boolean sended = MessagePlusUtils.sendMessage(receiverId, message);
                 log.info("用户在线");
                 if(!sended){
+                    messagePlusBase.onFailedMessage(message);
                     new Thread(()->{
                         chatSingleCacheUtil.addChatSingleContent(senderId,receiverId,message);
                     }).start();

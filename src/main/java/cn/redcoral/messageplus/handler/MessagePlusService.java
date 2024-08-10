@@ -49,7 +49,7 @@ public class MessagePlusService {
         ChatSingleCacheUtil chatSingleCacheUtil = BeanUtil.chatSingleCache();
         CopyOnWriteArrayList<MessageData> messageDatas = chatSingleCacheUtil.removeChatSingleContent(sid);
         log.info("opop");
-        if (messageDatas != null)
+        if (!messageDatas.isEmpty())
         {
             log.info("消息重发");
             new Thread(() -> {
