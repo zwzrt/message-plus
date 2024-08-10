@@ -27,7 +27,10 @@ public class MessageInitialize {
         MessagePlusInitializeMapper initializeMapper = BeanUtil.messagePlusInitializeMapper();
         // 1.2、执行语句
         initializeMapper.createMessage();
-        initializeMapper.createMassBlacklistTable();
+        // 创建群组
+        initializeMapper.createGroup();
+        // 创建群组黑名单
+        initializeMapper.createGroupBlacklistTable();
         // 创建聊天室表
         initializeMapper.createChatRoomTable();
         // 创建聊天室历史表

@@ -12,9 +12,14 @@ public interface MessagePlusInitializeMapper {
     void createMessage();
 
     /**
+     * 创建群组表
+     */
+    void createGroup();
+
+    /**
      * 创建群组黑名单表
      */
-    void createMassBlacklistTable();
+    void createGroupBlacklistTable();
 
     /**
      * 创建聊天室表

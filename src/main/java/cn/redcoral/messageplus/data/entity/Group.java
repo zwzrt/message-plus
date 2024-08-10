@@ -1,5 +1,7 @@
 package cn.redcoral.messageplus.data.entity;
 
+import cn.hutool.core.bean.BeanUtil;
+import cn.redcoral.messageplus.data.entity.po.GroupPo;
 import cn.redcoral.messageplus.manage.MessagePlusUtils;
 import lombok.Data;
 
@@ -69,6 +71,16 @@ public class Group {
         clientIdList.forEach(group::joinGroup);
         return group;
     }
+    /**
+     * 创建群组
+     * @return 群组
+     */
+    public static Group BuildGroup(GroupPo groupPo) {
+        if (groupPo == null) return null;
+        Group group = new Group();
+        BeanUtil.copyProperties(groupPo, group);
+        return group;
+    }
 
     /**
      * 加入群组
@@ -114,6 +126,7 @@ public class Group {
     /**
      * 上线
      */
+    @Deprecated
     public void topLine(String userId) {
         userNumLock.lock();
         this.onlineUserNum++;
@@ -122,6 +135,7 @@ public class Group {
     /**
      * 下线
      */
+    @Deprecated
     public void downLine(String userId) {
         userNumLock.lock();
         this.onlineUserNum--;

@@ -1,9 +1,11 @@
 package cn.redcoral.messageplus.manage;
 
 import cn.redcoral.messageplus.data.entity.Group;
+import cn.redcoral.messageplus.data.service.GroupService;
 import cn.redcoral.messageplus.port.GroupInterface;
 import cn.redcoral.messageplus.utils.exterior.SpringUtils;
 import org.springframework.beans.BeansException;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 
 import java.util.ArrayList;
@@ -16,7 +18,6 @@ import java.util.concurrent.ConcurrentHashMap;
  **/
 @Configuration
 public class GroupManage {
-    public static final String GROUP_KEY = "MESSAGEPLUS:GROUP:";
 
     /**
      * 每个用户ID对应的群组ID（用户ID，群组ID数组），用户加入的群组
@@ -29,18 +30,22 @@ public class GroupManage {
 
     private GroupInterface groupInterface;
 
+    @Autowired
+    private GroupService groupService;
+
     /**
-     * 群组查询接口（一级）
+     * 群组查询接口
      * @param groupId 群组ID
      * @return 群组
      */
     public Group getGroupById(String groupId) {
-        Group group = idGroupMap.get(groupId);
-        // 集合中不存在，向Redis查询
-        if (group == null) {
-            group = getGroupByIdInCache(groupId);
-        }
-        return group;
+//        Group group = idGroupMap.get(groupId);
+//        // 集合中不存在，向Redis查询
+//        if (group == null) {
+//            group = getGroupByIdInCache(groupId);
+//        }
+//        return group;
+        return groupService.selectGroupById(groupId);
     }
 
     /**
