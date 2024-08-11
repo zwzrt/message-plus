@@ -67,7 +67,8 @@ public class MessageHandler {
             case "-1": {
                 // 提示出现失败消息(用户实现)
                 log.info("用户不在线");
-                messagePlusBase.onFailedMessage(message);
+                // TODO 提示出现失败消息
+//                messagePlusBase.onFailedMessage(message);
                 new Thread(()->{
                     chatSingleCacheUtil.addChatSingleContent(senderId,receiverId,message);
                 }).start();
@@ -79,7 +80,8 @@ public class MessageHandler {
                 boolean sended = MessagePlusUtils.sendMessage(receiverId, message);
                 log.info("用户在线");
                 if(!sended){
-                    messagePlusBase.onFailedMessage(message);
+                    // TODO 提示出现失败消息
+//                    messagePlusBase.onFailedMessage(message);
                     new Thread(()->{
                         chatSingleCacheUtil.addChatSingleContent(senderId,receiverId,message);
                     }).start();
@@ -96,26 +98,11 @@ public class MessageHandler {
     public void handleMassMessage(String senderId, String groupId, Message message) {
         // 调用开发者实现的群发接口
         Group group = MessagePlusUtils.getGroupById(groupId);
-        for (String receiverId : group.getClientIdList()) {
-            // 查看用户是否在线
-            String onLineTag = MessagePlusUtils.isOnLine(receiverId);
-            switch (onLineTag) {
-                // 不在线
-                case "-1": {
-                    // 提示出现失败消息
-                    messagePlusBase.onFailedMessage(message);
-                    // TODO 缓存
-                    break;
-                }
-                // 本地在线
-                case "0": {
-                    // 调用接收方法
-                    List<String> list = MessagePlusUtils.sendMessageToGroupBarringMe(senderId, groupId, message);
-                    // TODO 失败用户存储等待重发
-                    break;
-                }
-            }
-        }
+        // 调用接收方法
+        List<String> list = MessagePlusUtils.sendMessageToGroupBarringMe(senderId, groupId, message);
+        // TODO 提示出现失败消息
+        // TODO 缓存
+        // TODO 失败用户存储等待重发
     }
 
     /**
@@ -129,8 +116,7 @@ public class MessageHandler {
         List<String> offLineClientIdList = MessagePlusUtils.sendMessageToChatRoomBarringMe(senderId, chatRoomId, message);
         // 3.未发送成功，查询对应服务ID，通知对应服务进行再次发送
         for (String receiverId : offLineClientIdList) {
-            // 提示出现失败消息
-            messagePlusBase.onFailedMessage(message);
+            // TODO 提示出现失败消息
         }
     }
 

@@ -97,7 +97,6 @@ public class MessagePlusUtils {
         }
     }
 
-
     /**
      * 创建群组
      * @param createUserId 创建者ID
@@ -174,12 +173,14 @@ public class MessagePlusUtils {
         return offLineClientIdList;
     }
     /**
-     * 聊天室群发（不包括自己）
+     * @deprecated
+     * 聊天室群发（不包括自己）（目前使用广播方式进行群发）
      * @param userId 用户ID
      * @param chatRoomId 聊天室ID
      * @param message 消息内容
      * @return 失败用户ID
      */
+    @Deprecated
     public static List<String> sendMessageToChatRoomBarringMe(String userId, String chatRoomId, Message message) {
         ChatRoom chatRoom = BeanUtil.chatRoomManage().getChatRoomById(chatRoomId);
         if (chatRoom==null) return Collections.emptyList();

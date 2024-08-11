@@ -121,7 +121,7 @@ public class MessagePlusSendController {
 
         // 4.发送消息
         // 广播
-        simpMessagingTemplate.convertAndSend("/topic/chat/"+chatRoomId, message);
+        simpMessagingTemplate.convertAndSend("/messageplus/chatroom/"+chatRoomId, message);
 
         // 计数器减一
         CounterIdentifierUtil.numberOfSendsDecrease(senderId);

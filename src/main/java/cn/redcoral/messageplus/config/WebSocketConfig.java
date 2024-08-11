@@ -26,7 +26,7 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
     public void configureMessageBroker(MessageBrokerRegistry registry) {
         // 广播式配置名为 /nasus 消息代理 , 这个消息代理必须和 controller 中的 @SendTo 配置的地址前缀一样或者全匹配
         // 客户端订阅地址的前缀信息
-        registry.enableSimpleBroker("/topic");
+        registry.enableSimpleBroker("/messageplus");
 
         // 设置stomp的endpoint前缀
 //        registry.enableStompBrokerRelay("/topic", "/queue");
@@ -34,7 +34,7 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
         // 设置哪些目的地前缀用于代理目的
         //服务端接收地址的前缀
         //客户端发送到以"/app"开头的目的地的消息会被应用所接收处理。
-        registry.setApplicationDestinationPrefixes("/app");
+        registry.setApplicationDestinationPrefixes("/chatroom");
     }
 }
 

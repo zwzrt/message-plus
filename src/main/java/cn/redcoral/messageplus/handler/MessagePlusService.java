@@ -28,8 +28,6 @@ public class MessagePlusService {
      */
     protected String client_id;
     
-    private static final Class<MessagePlusService> MessagePlusBase = MessagePlusService.class;
-    
     
     /**
      * 连接建立成功调用的方法
@@ -38,7 +36,6 @@ public class MessagePlusService {
      */
     @OnOpen
     public void baseOnOpen(Session session, @PathParam(MessagePlusProperties.pathParamName) String sid) {
-        log.info("连接成功");
         this.client_id = sid;
         // 加入聊天
         MessagePlusUtils.joinChat(sid, this, session);
@@ -79,8 +76,7 @@ public class MessagePlusService {
      * @param messageJSON 客户端发送过来的消息
      */
     @OnMessage
-    public void baseOnMessage(String messageJSON, Session session) {
-    }
+    public void baseOnMessage(String messageJSON, Session session) {}
     
     /**
      * 处理过程中发生错误
