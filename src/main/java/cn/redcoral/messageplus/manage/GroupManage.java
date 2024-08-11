@@ -49,10 +49,12 @@ public class GroupManage {
     }
 
     /**
+     * @deprecated
      * 群组查询接口（向缓存查询）
      * @param groupId 群组ID
      * @return 群组
      */
+    @Deprecated
     protected Group getGroupByIdInCache(String groupId) {
         // 尝试注入groupInterface
         if (groupInterface == null) {
@@ -75,21 +77,32 @@ public class GroupManage {
      * @return 群组ID
      */
     public Group createGroup(String createUserId, String name, List<String> client_ids) {
-        Group group = new Group();
+        // 查询该群组是否存在
+        String groupId = groupService.selectGroupByNameAndCreateId(name, createUserId);
+        // 存在
+        if (groupId != null) {
+            return groupService.selectGroupById(groupId);
+        }
+        // 不存在
+        else {
+            // 1、准备数据
+            Group group = new Group();
 
-        group.setCreateUserId(createUserId);
-        group.setName(name);
-        // 加入群组
-        group.joinGroup(createUserId);
-        client_ids.forEach(client_id->{
-            group.joinGroup(client_id);
-            // 记录用户的群组ID
-            addUserByGroupIdMap(client_id, group.getId());
-        });
+            group.setCreateUserId(createUserId);
+            group.setName(name);
 
-        idGroupMap.put(group.getId(), group);
-
-        return group;
+            // 加入群组
+            group.joinGroup(createUserId);
+            client_ids.forEach(client_id->{
+                group.joinGroup(client_id);
+                // 记录用户的群组ID
+                addUserByGroupIdMap(client_id, group.getId());
+            });
+            // 2、在数据库创建数据
+            groupService.createGroup(group);
+            // 3、返回数据
+            return group;
+        }
     }
 
     /**
@@ -111,8 +124,8 @@ public class GroupManage {
     /**
      * 获取全部群组
      */
-    public ConcurrentHashMap<String, Group> getGroupList() {
-        return idGroupMap;
+    public List<Group> getGroupList() {
+        return groupService.selectAllGroup();
     }
 
 }

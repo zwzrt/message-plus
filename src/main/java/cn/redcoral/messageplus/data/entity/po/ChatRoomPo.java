@@ -11,8 +11,6 @@ import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
-import static cn.redcoral.messageplus.config.MessagePlusConfig.snowflake;
-
 /**
  * 聊天室
  * @author mo
@@ -49,10 +47,6 @@ public class ChatRoomPo implements Serializable {
      * 开播时间
      */
     private Timestamp openingTime = new Timestamp(System.currentTimeMillis());
-
-    {
-        this.id = snowflake.nextIdStr();
-    }
 
 
     /**

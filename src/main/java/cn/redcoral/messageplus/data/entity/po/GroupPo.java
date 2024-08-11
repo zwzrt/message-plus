@@ -1,5 +1,7 @@
 package cn.redcoral.messageplus.data.entity.po;
 
+import cn.hutool.core.bean.BeanUtil;
+import cn.redcoral.messageplus.data.entity.Group;
 import com.alibaba.fastjson.JSON;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
@@ -48,6 +50,13 @@ public class GroupPo implements Serializable {
         this.userNum = 0;
         this.clientIdList = new ArrayList<>();
     }
+
+    public static GroupPo BuildGroupPo(Group group) {
+        GroupPo groupPo = new GroupPo();
+        BeanUtil.copyProperties(group, groupPo);
+        return groupPo;
+    }
+
 
     public void setClientIds(String clientIds) {
         this.clientIds = clientIds;

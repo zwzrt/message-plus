@@ -2,15 +2,13 @@ package cn.redcoral.messageplus.data.entity;
 
 import cn.hutool.core.bean.BeanUtil;
 import cn.redcoral.messageplus.data.entity.po.ChatRoomPo;
+import cn.redcoral.messageplus.utils.SnowflakeIDUtil;
 import lombok.Data;
-import org.checkerframework.checker.units.qual.C;
 
 import java.io.Serializable;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
-
-import static cn.redcoral.messageplus.config.MessagePlusConfig.snowflake;
 
 /**
  * 聊天室
@@ -56,7 +54,7 @@ public class ChatRoom implements Serializable {
     private boolean isClose = false;
 
     {
-        this.id = snowflake.nextIdStr();
+        this.id = SnowflakeIDUtil.getID();
     }
 
 

@@ -43,11 +43,6 @@
     </properties>
 
     <dependencies>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-aop</artifactId>
-            <version>2.2.5.RELEASE</version>
-        </dependency>
         <!-- 配置处理器 -->
         <dependency>
             <groupId>org.springframework.boot</groupId>

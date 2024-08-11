@@ -3,6 +3,7 @@ package cn.redcoral.messageplus.data.entity;
 import cn.hutool.core.bean.BeanUtil;
 import cn.redcoral.messageplus.data.entity.po.GroupPo;
 import cn.redcoral.messageplus.manage.MessagePlusUtils;
+import cn.redcoral.messageplus.utils.SnowflakeIDUtil;
 import lombok.Data;
 
 import java.util.ArrayList;
@@ -47,7 +48,7 @@ public class Group {
     private List<String> clientIdList;
 
     public Group() {
-        this.id = UUID.randomUUID().toString();
+        this.id = SnowflakeIDUtil.getGroupID();
         this.userNum = 0;
         this.clientIdList = new ArrayList<>();
     }
@@ -80,6 +81,14 @@ public class Group {
         Group group = new Group();
         BeanUtil.copyProperties(groupPo, group);
         return group;
+    }
+
+    public static List<Group> BuildGroupList(List<GroupPo> groupPos) {
+        List<Group> groupList = new ArrayList<>();
+        for (GroupPo groupPo : groupPos) {
+            groupList.add(BuildGroup(groupPo));
+        }
+        return groupList;
     }
 
     /**
@@ -124,6 +133,7 @@ public class Group {
         return userNum;
     }
     /**
+     * @deprecated
      * 上线
      */
     @Deprecated
@@ -133,6 +143,7 @@ public class Group {
         userNumLock.unlock();
     }
     /**
+     * @deprecated
      * 下线
      */
     @Deprecated

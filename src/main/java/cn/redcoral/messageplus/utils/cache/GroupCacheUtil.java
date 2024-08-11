@@ -26,6 +26,13 @@ public interface GroupCacheUtil {
      * @param groupId 群组ID
      * @param mappingFunction 替补查询方案
      */
-    public Group getGroupById(String groupId, Function<? super String, ? extends String> mappingFunction);
+    Group getGroupById(String groupId, Function<? super String, ? extends String> mappingFunction);
 
+    /**
+     * 通过群组名称和创建者ID查询群组
+     * @param name 群组名称
+     * @param createUserId 创建者ID
+     * @return 群组ID
+     */
+    String getGroupByNameAndCreateId(String name, String createUserId);
 }

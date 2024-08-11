@@ -21,6 +21,8 @@ public class GroupCacheUtilImpl implements GroupCacheUtil {
     @Override
     public void setGroup(Group group) {
         stringCache.put(group.getId(), JSON.toJSONString(group));
+        // 存储群组标识符
+        stringCache.put(group.getCreateUserId()+":"+group.getName(), group.getId());
     }
 
     @Override
@@ -33,5 +35,10 @@ public class GroupCacheUtilImpl implements GroupCacheUtil {
     public Group getGroupById(String groupId, Function<? super String, ? extends String> mappingFunction) {
         String jsonGroup = stringCache.get(groupId, mappingFunction);
         return JSON.parseObject(jsonGroup, Group.class);
+    }
+
+    @Override
+    public String getGroupByNameAndCreateId(String name, String createUserId) {
+        return stringCache.get(createUserId+":"+name, (k)->null);
     }
 }
