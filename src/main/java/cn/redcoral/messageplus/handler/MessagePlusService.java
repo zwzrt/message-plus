@@ -6,16 +6,13 @@ import cn.redcoral.messageplus.manage.MessagePlusUtils;
 import cn.redcoral.messageplus.properties.MessagePlusProperties;
 import cn.redcoral.messageplus.utils.BeanUtil;
 import cn.redcoral.messageplus.utils.cache.ChatSingleCacheUtil;
-import cn.redcoral.messageplus.utils.cache.MessageData;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import javax.websocket.*;
 import javax.websocket.server.PathParam;
 import javax.websocket.server.ServerEndpoint;
-import java.util.List;
-import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.concurrent.BlockingQueue;
 
 /**
  * 消息处理器
@@ -47,23 +44,18 @@ public class MessagePlusService {
         MessagePlusUtils.joinChat(sid, this, session);
         // TODO 消息重发
         ChatSingleCacheUtil chatSingleCacheUtil = BeanUtil.chatSingleCache();
-        CopyOnWriteArrayList<MessageData> messageDatas = chatSingleCacheUtil.removeChatSingleContent(sid);
-        log.info("opop");
-        if (!messageDatas.isEmpty())
-        {
-            log.info("消息重发");
-            new Thread(() -> {
-                messageDatas.forEach((MessageData) -> {
-                    List<Message> messages = MessageData.getMessages();
-                    synchronized (MessagePlusBase)
-                    {
-                        for (Message message : messages)
-                        {
-                            MessagePlusUtils.sendMessage(sid, message);
-                        }
+        BlockingQueue blockingQueue = chatSingleCacheUtil.removeChatSingleContent(sid);
+        if(blockingQueue!=null){
+            //准备重发
+            log.info("准备消息重发");
+            new Thread(()->{
+                while (true){
+                    Message message = (Message) blockingQueue.poll();
+                    if(message==null){
+                        break;
                     }
-                });
-                
+                    MessagePlusUtils.sendMessage(sid,message);
+                }
             }).start();
         }
         

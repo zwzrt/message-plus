@@ -31,5 +31,5 @@ public class CachePrefixConstant {
      */
     public static final String CHAT_ROOM_THUMBS_UP = PREFIX_HEAD + "CHAT_ROOM:THUMBS_UP:";
     
-    public static final String CHAT_SIGLE_CONTENT = PREFIX_HEAD + "CHAT_SIGLE_CONTENT:";
+    public static final String CHAT_SINGLE_CONTENT = PREFIX_HEAD + "CHAT_SINGLE_CONTENT:";
 }

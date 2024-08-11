@@ -2,6 +2,7 @@ package cn.redcoral.messageplus.utils.cache;
 
 import cn.redcoral.messageplus.data.entity.message.Message;
 
+import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 /**
@@ -15,5 +16,5 @@ public interface ChatSingleCacheUtil {
     void addChatSingleContent(String senderId, String receiverId, Message message);
     
     //移除聊天内容
-    CopyOnWriteArrayList<MessageData> removeChatSingleContent(String receiverId);
+    BlockingQueue removeChatSingleContent(String receiverId);
 }
