@@ -68,7 +68,8 @@ public class MessagePlusSendController {
      * @param msg 消息体
      */
     @PostMapping("/send/mass")
-    public void sendMassMessage(HttpServerRequest request, @RequestParam("id1") String senderId, @RequestParam("id2") String groupId, @RequestBody Object msg) throws Exception {
+    public void sendMassMessage(HttpServerRequest request, @RequestParam("id1") String senderId,
+                                @RequestParam("id2") String groupId, @RequestBody String msg) throws Exception {
         // 1.并发限流
         // 短时间发送消息达到上限，禁止发送消息
         if (CounterIdentifierUtil.isLessThanOrEqual(senderId, MessagePersistenceProperties.concurrentNumber)) {

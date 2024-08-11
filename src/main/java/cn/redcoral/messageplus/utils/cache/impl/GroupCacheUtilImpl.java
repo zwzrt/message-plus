@@ -27,6 +27,7 @@ public class GroupCacheUtilImpl implements GroupCacheUtil {
 
     @Override
     public Group getGroupById(String groupId) {
+        
         String jsonGroup = stringCache.get(groupId, (k)->null);
         return JSON.parseObject(jsonGroup, Group.class);
     }
