@@ -7,6 +7,8 @@ import cn.redcoral.messageplus.data.entity.message.MessageType;
 import cn.redcoral.messageplus.manage.ChatRoomManage;
 import cn.redcoral.messageplus.manage.MessagePlusUtils;
 import cn.redcoral.messageplus.port.MessagePlusBase;
+import cn.redcoral.messageplus.utils.BeanUtil;
+import cn.redcoral.messageplus.utils.cache.ChatGroupCacheUtil;
 import cn.redcoral.messageplus.utils.cache.ChatSingleCacheUtil;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -16,83 +18,97 @@ import org.springframework.stereotype.Component;
 import java.util.List;
 
 /**
- *  消息处理器
+ * 消息处理器
+ *
  * @author mo
  **/
 @AllArgsConstructor
 @Component
 @Slf4j
 public class MessageHandler {
-
+    
     private MessagePlusBase messagePlusBase;
+    
     private ChatRoomManage chatRoomManage;
     
     
     @Autowired
     private ChatSingleCacheUtil chatSingleCacheUtil;
-
+    
     /**
      * 处理消息（自动判断类型分发）
+     *
      * @param message 消息类
      */
     public void handlerMessage(Message message) {
-        switch (MessageType.valueOf(message.getType())) {
-            case SINGLE_SHOT: {
+        switch (MessageType.valueOf(message.getType()))
+        {
+            case SINGLE_SHOT:
+            {
                 this.handleSingleMessage(message.getSenderId(), message.getReceiverId(), message);
                 break;
             }
-            case MASS_SHOT: {
+            case MASS_SHOT:
+            {
                 this.handleMassMessage(message.getSenderId(), message.getGroupId(), message);
                 break;
             }
-            case SYSTEM_SHOT: {
-                messagePlusBase.onMessageBySystem(message.getSenderId(),message.getData().toString());
+            case SYSTEM_SHOT:
+            {
+                messagePlusBase.onMessageBySystem(message.getSenderId(), message.getData().toString());
                 break;
             }
-            case CHAT_ROOM_SHOT: {
+            case CHAT_ROOM_SHOT:
+            {
                 this.handleChatRoomMessage(message.getSenderId(), message.getChatRoomId(), message);
             }
         }
     }
-
+    
     /**
      * 处理单发消息
+     *
      * @param message 消息类
      */
     public void handleSingleMessage(String senderId, String receiverId, Message message) {
         // 查看用户是否在线
         String onLineTag = MessagePlusUtils.isOnLine(receiverId);
-        switch (onLineTag) {
+        switch (onLineTag)
+        {
             // 不在线
-            case "-1": {
+            case "-1":
+            {
                 // 提示出现失败消息(用户实现)
                 log.info("用户不在线");
                 // TODO 提示出现失败消息
-//                messagePlusBase.onFailedMessage(message);
-                new Thread(()->{
-                    chatSingleCacheUtil.addChatSingleContent(senderId,receiverId,message);
+                //                messagePlusBase.onFailedMessage(message);
+                new Thread(() -> {
+                    chatSingleCacheUtil.addChatContent(senderId, receiverId, message);
                 }).start();
                 break;
             }
             // 本地在线
-            case "0": {
+            case "0":
+            {
                 // 调用发送方法
                 boolean sended = MessagePlusUtils.sendMessage(receiverId, message);
                 log.info("用户在线");
-                if(!sended){
+                if (!sended)
+                {
                     // TODO 提示出现失败消息
-//                    messagePlusBase.onFailedMessage(message);
-                    new Thread(()->{
-                        chatSingleCacheUtil.addChatSingleContent(senderId,receiverId,message);
+                    //                    messagePlusBase.onFailedMessage(message);
+                    new Thread(() -> {
+                        chatSingleCacheUtil.addChatContent(senderId, receiverId, message);
                     }).start();
                 }
                 break;
             }
         }
     }
-
+    
     /**
      * 处理群发消息
+     *
      * @param message 消息类
      */
     public void handleMassMessage(String senderId, String groupId, Message message) {
@@ -101,12 +117,24 @@ public class MessageHandler {
         // 调用接收方法
         List<String> list = MessagePlusUtils.sendMessageToGroupBarringMe(senderId, groupId, message);
         // TODO 提示出现失败消息
-        // TODO 缓存
-        // TODO 失败用户存储等待重发
+        //有元素表名有用户不在线没收到消息
+        if (!list.isEmpty())
+        {
+            //用户不在线，有需要缓存的数据
+            new Thread(()->{
+                for (String receiverId : list)
+                {
+                    ChatGroupCacheUtil chatGroupCacheUtil = BeanUtil.chatGroupCacheUtil();
+                    chatGroupCacheUtil.addChatContent(senderId, receiverId, message);
+                }
+            }).start();
+        }
+        
     }
-
+    
     /**
      * 处理聊天室消息
+     *
      * @param message 消息类
      */
     public void handleChatRoomMessage(String senderId, String chatRoomId, Message message) {
@@ -115,9 +143,10 @@ public class MessageHandler {
         // 2.发送消息
         List<String> offLineClientIdList = MessagePlusUtils.sendMessageToChatRoomBarringMe(senderId, chatRoomId, message);
         // 3.未发送成功，查询对应服务ID，通知对应服务进行再次发送
-        for (String receiverId : offLineClientIdList) {
+        for (String receiverId : offLineClientIdList)
+        {
             // TODO 提示出现失败消息
         }
     }
-
+    
 }

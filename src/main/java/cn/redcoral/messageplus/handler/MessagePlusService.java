@@ -39,7 +39,7 @@ public class MessagePlusService {
         this.client_id = sid;
         // 加入聊天
         MessagePlusUtils.joinChat(sid, this, session);
-        // TODO 消息重发
+        // TODO 消息重发，直接调用messagecahche遍历发送，简化代码
         ChatSingleCacheUtil chatSingleCacheUtil = BeanUtil.chatSingleCache();
         BlockingQueue blockingQueue = chatSingleCacheUtil.removeChatSingleContent(sid);
         if(blockingQueue!=null){

@@ -3,6 +3,8 @@ package cn.redcoral.messageplus.manage;
 import cn.redcoral.messageplus.data.entity.ChatRoom;
 import cn.redcoral.messageplus.data.entity.Group;
 import cn.redcoral.messageplus.data.entity.message.Message;
+import cn.redcoral.messageplus.exception.Impl.MessageSendException;
+import cn.redcoral.messageplus.utils.cache.ChatGroupCacheUtil;
 import cn.redcoral.messageplus.utils.exterior.SpringUtils;
 import cn.redcoral.messageplus.handler.MessagePlusService;
 import cn.redcoral.messageplus.utils.BeanUtil;
@@ -163,10 +165,20 @@ public class MessagePlusUtils {
         List<String> offLineClientIdList = new ArrayList<>();
         group.getClientIdList().forEach(clientId->{
             if (clientId.equals(userId)) return;
-            // 在线
             if (userIdSessionMap.get(clientId)!=null) {
-                sendMessage(userIdSessionMap.get(clientId), message);
+                // 在线
+                try
+                {
+                    sendMessage(userIdSessionMap.get(clientId), message);
+                }catch (MessageSendException e){
+                    //消息没发出去，缓存
+                    new Thread(()->{
+                        ChatGroupCacheUtil chatGroupCacheUtil = BeanUtil.chatGroupCacheUtil();
+                        chatGroupCacheUtil.addChatContent(userId,clientId,message);
+                    }).start();
+                }
             } else {
+                //不在线
                 offLineClientIdList.add(clientId);
             }
         });
@@ -219,7 +231,7 @@ public class MessagePlusUtils {
                 session.getBasicRemote().sendObject(message);
             }
         } catch (EncodeException | IOException e) {
-            throw new RuntimeException(e);
+            throw new MessageSendException();
         }
     }
 

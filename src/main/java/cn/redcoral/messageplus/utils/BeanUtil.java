@@ -6,6 +6,7 @@ import cn.redcoral.messageplus.handler.MessageHandler;
 import cn.redcoral.messageplus.manage.ChatRoomManage;
 import cn.redcoral.messageplus.port.MessagePlusBase;
 import cn.redcoral.messageplus.properties.MessagePlusProperties;
+import cn.redcoral.messageplus.utils.cache.ChatGroupCacheUtil;
 import cn.redcoral.messageplus.utils.cache.ChatSingleCacheUtil;
 import cn.redcoral.messageplus.utils.cache.impl.ChatSingleCacheUtilImpl;
 import cn.redcoral.messageplus.utils.exterior.SpringUtils;
@@ -32,10 +33,18 @@ public class BeanUtil {
     private static MessagePlusInitializeMapper messagePlusInitializeMapper1;
     
     private static ChatSingleCacheUtil chatSingleCache;
+    
+    private static ChatGroupCacheUtil chatGroupCache;
 
+    public static ChatGroupCacheUtil chatGroupCacheUtil(){
+        if (chatGroupCache == null) chatGroupCache = SpringUtils.getBean(ChatGroupCacheUtil.class);
+        return chatGroupCache;
+    }
+    
+    
     
     public static ChatSingleCacheUtil chatSingleCache(){
-        if (chatSingleCache == null) chatSingleCache = SpringUtils.getBean(ChatSingleCacheUtilImpl.class);
+        if (chatSingleCache == null) chatSingleCache = SpringUtils.getBean(ChatSingleCacheUtil.class);
         return chatSingleCache;
     }
     /**

@@ -1,6 +1,7 @@
 package cn.redcoral.messageplus.utils.cache;
 
 import cn.redcoral.messageplus.data.entity.Group;
+import cn.redcoral.messageplus.data.entity.message.Message;
 
 import java.util.function.Function;
 
@@ -8,7 +9,7 @@ import java.util.function.Function;
  * 群组缓存
  * @author mo
  **/
-public interface GroupCacheUtil {
+public interface ChatGroupCacheUtil {
 
     /**
      * 保存群组信息
@@ -35,4 +36,12 @@ public interface GroupCacheUtil {
      * @return 群组ID
      */
     String getGroupByNameAndCreateId(String name, String createUserId);
+    
+    /**
+     * 添加群组聊天内容
+     * @param senderId 发送者ID
+     * @param receiverId 群组Id
+     * @param message 消息
+     */
+    void addChatContent(String senderId, String receiverId, Message message);
 }

@@ -32,7 +32,7 @@ public class ChatSingleCacheUtilImpl implements ChatSingleCacheUtil {
      * @param message 内容
      */
     @Override
-    public void addChatSingleContent(String senderId, String receiverId, Message message) {
+    public void addChatContent(String senderId, String receiverId, Message message) {
         log.info("准备缓存");
         //key:prefix+receiverId，value:queue<message>
         String key = CachePrefixConstant.CHAT_SINGLE_CONTENT+receiverId;
