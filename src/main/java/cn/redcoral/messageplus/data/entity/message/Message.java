@@ -1,7 +1,8 @@
 package cn.redcoral.messageplus.data.entity.message;
 
 import cn.hutool.core.bean.BeanUtil;
-import cn.redcoral.messageplus.data.entity.po.MessagePo;
+import cn.redcoral.messageplus.data.entity.po.FailedMessagePo;
+import cn.redcoral.messageplus.data.entity.po.HistoryMessagePo;
 import com.alibaba.fastjson.JSON;
 import lombok.Data;
 
@@ -126,17 +127,32 @@ public class Message {
         return message;
     }
 
-    public static Message BuildMessage(MessagePo messagePo) {
+    public static Message BuildMessage(FailedMessagePo failedMessagePo) {
         Message message = new Message();
-        BeanUtil.copyProperties(messagePo, message);
-        message.setData(JSON.parse(messagePo.getData()));
+        BeanUtil.copyProperties(failedMessagePo, message);
+        message.setData(JSON.parse(failedMessagePo.getData()));
         return message;
     }
 
-    public static List<Message> BuildMessageList(List<MessagePo> messagePoList) {
+    public static List<Message> BuildMessageList(List<FailedMessagePo> failedMessagePoList) {
         List<Message> messageList = new ArrayList<>();
-        for (MessagePo po : messagePoList) {
+        for (FailedMessagePo po : failedMessagePoList) {
             messageList.add(BuildMessage(po));
+        }
+        return messageList;
+    }
+
+    public static Message BuildHistoryMessage(HistoryMessagePo historyMessagePo) {
+        Message message = new Message();
+        BeanUtil.copyProperties(historyMessagePo, message);
+        message.setData(JSON.parse(historyMessagePo.getData()));
+        return message;
+    }
+
+    public static List<Message> BuildHistoryMessageList(List<HistoryMessagePo> historyMessagePoList) {
+        List<Message> messageList = new ArrayList<>();
+        for (HistoryMessagePo po : historyMessagePoList) {
+            messageList.add(BuildHistoryMessage(po));
         }
         return messageList;
     }

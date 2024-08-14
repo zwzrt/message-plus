@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import org.apache.ibatis.annotations.Mapper;
 
 /**
+ * 关闭聊天室 Mapper
  * @author mo
  **/
 @Mapper

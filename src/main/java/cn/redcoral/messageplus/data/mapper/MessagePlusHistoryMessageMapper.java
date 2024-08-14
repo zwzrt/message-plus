@@ -1,13 +1,13 @@
 package cn.redcoral.messageplus.data.mapper;
 
-import cn.redcoral.messageplus.data.entity.po.GroupPo;
+import cn.redcoral.messageplus.data.entity.po.HistoryMessagePo;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import org.apache.ibatis.annotations.Mapper;
 
 /**
- * 群组 Mapper
+ * 历史消息类
  * @author mo
  **/
 @Mapper
-public interface MessagePlusGroupMapper extends BaseMapper<GroupPo> {
+public interface MessagePlusHistoryMessageMapper extends BaseMapper<HistoryMessagePo> {
 }

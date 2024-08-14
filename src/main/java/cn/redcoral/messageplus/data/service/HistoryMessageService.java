@@ -8,7 +8,7 @@ import java.util.List;
  * 消息Service层
  * @author mo
  **/
-public interface MessageService {
+public interface HistoryMessageService {
 
     /**
      * 存储消息

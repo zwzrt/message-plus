@@ -1,15 +1,20 @@
 package cn.redcoral.messageplus.data.mapper;
 
 /**
- * 初始化表
+ * 初始化 Mapper
  * @author mo
  **/
 public interface MessagePlusInitializeMapper {
 
     /**
-     * 创建消息表
+     * 创建失败消息表
      */
-    void createMessage();
+    void createFailedMessage();
+
+    /**
+     * 创建历史消息表
+     */
+    void createHistoryMessage();
 
     /**
      * 创建群组表

@@ -15,6 +15,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.util.Arrays;
+import java.util.Comparator;
 import java.util.List;
 
 /**
@@ -114,6 +116,7 @@ public class MessageHandler {
     public void handleMassMessage(String senderId, String groupId, Message message) {
         // 调用开发者实现的群发接口
         Group group = MessagePlusUtils.getGroupById(groupId);
+
         // 调用接收方法
         List<String> list = MessagePlusUtils.sendMessageToGroupBarringMe(senderId, groupId, message);
         // TODO 提示出现失败消息
