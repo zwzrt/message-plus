@@ -54,11 +54,24 @@ public class MessagePlusChatRoomController {
 
 
     /**
+     * 关闭聊天室
+     * @param closeId 关闭者ID
+     * @param chatRoomId 聊天室ID
+     */
+    @DeleteMapping("/close")
+    public boolean closeChatRoom(HttpServerRequest request, @RequestParam("id1") String closeId, @RequestParam("id2") String chatRoomId) {
+        return chatRoomManage.closeChatRoomById(closeId, chatRoomId);
+    }
+
+
+
+    /**
      * 查询聊天室分页
      * @param page 当前页码
      * @param size 每页大小
      * @return 聊天室数组
      */
+    @GetMapping
     public List<ChatRoom> selectChatRoomList(HttpServerRequest request, @RequestParam("page") int page, @RequestParam("size") int size) {
         return chatRoomManage.selectChatRoomList(page, size);
     }

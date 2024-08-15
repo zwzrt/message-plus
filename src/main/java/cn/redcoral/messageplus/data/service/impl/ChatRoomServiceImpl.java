@@ -115,6 +115,8 @@ public class ChatRoomServiceImpl implements ChatRoomService {
             if (chatRoomPo != null) {
                 // 存储到缓存中
                 chatRoomCacheUtil.createChatRoomIdentification(createUserId, name, chatRoomPo.getId());
+                // 赋值
+                chatRoomId = chatRoomPo.getId();
             }
         }
         return chatRoomId;
