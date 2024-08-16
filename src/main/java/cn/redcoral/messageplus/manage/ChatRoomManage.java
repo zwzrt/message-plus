@@ -26,7 +26,7 @@ public class ChatRoomManage {
      * 聊天室数组（聊天室ID，聊天室）
      */
     private ConcurrentHashMap<String, ChatRoom> chatRoomByIdMap = new ConcurrentHashMap<>();
-    private List<String> chatRoomIdList = new ArrayList<>();
+
     @Autowired
     private ChatRoomCacheUtil chatRoomCacheUtil;
     @Autowired
@@ -44,7 +44,7 @@ public class ChatRoomManage {
         // 查询该聊天室是否存在
         String value = chatRoomService.existence(createUserId, name);
         ChatRoom chatRoom = null;
-        // 该群组不存在，进行创建
+        // 该聊天室不存在，进行创建
         if (value == null) {
             // 调用原始方法
             chatRoom = new ChatRoom();
@@ -59,11 +59,11 @@ public class ChatRoomManage {
 
             chatRoomByIdMap.put(chatRoom.getId(), chatRoom);
 
-            // 添加群组缓存（用于判断是否存在）
+            // 添加聊天室缓存（用于判断是否存在）
             chatRoomCacheUtil.createChatRoomIdentification(createUserId, name, chatRoom.getId());
-            // 添加群组信息缓存
+            // 添加聊天室信息缓存
             chatRoomCacheUtil.addChatRoom(chatRoom);
-            // 返回群组信息
+            // 返回聊天室信息
             return chatRoom;
         }
         chatRoom = new ChatRoom();
