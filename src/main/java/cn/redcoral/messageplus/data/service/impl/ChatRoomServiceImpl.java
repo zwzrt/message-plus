@@ -7,6 +7,7 @@ import cn.redcoral.messageplus.data.entity.po.ChatRoomPo;
 import cn.redcoral.messageplus.data.mapper.MessagePlusChatRoomCloseMapper;
 import cn.redcoral.messageplus.data.mapper.MessagePlusChatRoomMapper;
 import cn.redcoral.messageplus.data.service.ChatRoomService;
+import cn.redcoral.messageplus.utils.CounterIdentifierUtil;
 import cn.redcoral.messageplus.utils.cache.ChatRoomCacheUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
@@ -120,5 +121,16 @@ public class ChatRoomServiceImpl implements ChatRoomService {
             }
         }
         return chatRoomId;
+    }
+
+    /**
+     * 点赞
+     * @param senderId 点赞者ID
+     * @param chatRoomId 聊天室ID
+     */
+    @Override
+    public void upvote(String senderId, String chatRoomId) {
+        // TODO 增加聊天室点赞的持久化
+        CounterIdentifierUtil.numberOfSendsIncrease("chatroom:upvote:"+chatRoomId);
     }
 }

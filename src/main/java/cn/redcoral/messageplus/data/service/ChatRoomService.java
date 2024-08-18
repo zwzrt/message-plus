@@ -27,4 +27,11 @@ public interface ChatRoomService {
      * @param name 聊天室ID
      */
     String existence(String createUserId, String name);
+
+    /**
+     * 点赞
+     * @param senderId 点赞者ID
+     * @param chatRoomId 聊天室ID
+     */
+    void upvote(String senderId, String chatRoomId);
 }

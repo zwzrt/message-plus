@@ -2,6 +2,7 @@ package cn.redcoral.messageplus.manage;
 
 import cn.redcoral.messageplus.data.entity.ChatRoom;
 import cn.redcoral.messageplus.data.service.ChatRoomService;
+import cn.redcoral.messageplus.utils.CounterIdentifierUtil;
 import cn.redcoral.messageplus.utils.cache.ChatRoomCacheUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
@@ -155,7 +156,7 @@ public class ChatRoomManage {
      * @param chatRoomId 聊天室ID
      */
     public void thumbsUpNum(String senderId, String chatRoomId) {
-        //TODO 添加聊天室点赞逻辑
+        chatRoomService.upvote(senderId, chatRoomId);
     }
 
 }
