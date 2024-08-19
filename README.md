@@ -5,7 +5,9 @@
 
 ---
 
-#### [前往主页](https://zwzrt.github.io/)
+<a src="https://zwzrt.github.io/">前往主页</a>
+&ensp;|&ensp;
+<a src="https://zwzrt.github.io/">加入我们</a>
 
 #### 介绍
 
