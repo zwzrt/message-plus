@@ -17,7 +17,6 @@ import java.util.concurrent.ConcurrentHashMap;
  **/
 @Configuration
 public class ChatRoomManage {
-    public static final String CHAT_ROOM_KEY = "MESSAGEPLUS:CHATROOM:";
 
     /**
      * 每个用户ID对应的聊天室ID（用户ID，聊天室ID数组）

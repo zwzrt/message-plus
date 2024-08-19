@@ -9,7 +9,7 @@ import com.github.benmanes.caffeine.cache.Cache;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import static cn.redcoral.messageplus.manage.ChatRoomManage.CHAT_ROOM_KEY;
+import static cn.redcoral.messageplus.constant.CachePrefixConstant.CHAT_ROOM;
 
 /**
  * 操作ChatRoom的Redis工具类
@@ -23,12 +23,13 @@ public class ChatRoomCacheUtilImpl implements ChatRoomCacheUtil {
 
     @Override
     public void createChatRoomIdentification(String createId, String name, String chatRoomId) {
-        stringCache.put(CHAT_ROOM_KEY + createId+":"+name, chatRoomId);
+        stringCache.put(CHAT_ROOM + createId+":"+name, chatRoomId);
+        stringCache.put(CHAT_ROOM + chatRoomId, createId+":"+name);
     }
 
     @Override
     public void addChatRoom(ChatRoom chatRoom) {
-        stringCache.put(CHAT_ROOM_KEY + chatRoom.getId(), JSON.toJSONString(chatRoom));
+        stringCache.put(CHAT_ROOM + chatRoom.getId(), JSON.toJSONString(chatRoom));
     }
 
     /**
@@ -38,7 +39,7 @@ public class ChatRoomCacheUtilImpl implements ChatRoomCacheUtil {
     @Override
     public boolean deleteChatRoomById(String chatRoomId) {
         // 删除聊天室信息
-        stringCache.invalidate(CachePrefixConstant.CHAT_ROOM + chatRoomId);
+        stringCache.invalidate(CHAT_ROOM + chatRoomId);
         // 删除聊天室点赞
         stringCache.invalidate(CachePrefixConstant.CHAT_ROOM_THUMBS_UP + chatRoomId);
         return true;
@@ -50,12 +51,12 @@ public class ChatRoomCacheUtilImpl implements ChatRoomCacheUtil {
      */
     @Override
     public boolean existence(String chatRoomId) {
-        return stringCache.get(CachePrefixConstant.CHAT_ROOM + chatRoomId, (k)->null) != null;
+        return stringCache.get(CHAT_ROOM + chatRoomId, (k)->null) != null;
     }
 
     @Override
     public String existence(String createId, String name) {
-        return stringCache.get(CHAT_ROOM_KEY+createId+":"+name, (k)->null);
+        return stringCache.get(CHAT_ROOM+createId+":"+name, (k)->null);
     }
 
     /**

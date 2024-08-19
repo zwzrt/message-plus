@@ -60,20 +60,24 @@ public class ChatRoomServiceImpl implements ChatRoomService {
     @Transactional
     @Override
     public boolean closeChatRoom(String stopUserId, String chatRoomId) {
+        // 1、查询原始数据
         LambdaQueryWrapper<ChatRoomPo> lqw = new LambdaQueryWrapper<>();
         lqw.eq(ChatRoomPo::getId, chatRoomId);
         lqw.eq(ChatRoomPo::getCreateUserId, stopUserId);
         ChatRoomPo chatRoomPo = chatRoomMapper.selectOne(lqw);
         // 该聊天室不存在 或者 关闭者不是创建者 或 已经关闭
         if (chatRoomPo == null) return false;
+        // 2、初始化数据
         ChatRoomHistoryPo chatRoomHistoryPo = new ChatRoomHistoryPo();
         BeanUtil.copyProperties(chatRoomPo, chatRoomHistoryPo);
+        // 获取点赞数
+        chatRoomHistoryPo.setThumbsUpNum(CounterIdentifierUtil.getNum("chatroom:upvote:"+chatRoomId));
         // 添加关闭时间
         chatRoomHistoryPo.setOffTime(new Timestamp(System.currentTimeMillis()));
-        // 添加关闭的聊天室到表中
+        // 3、 添加关闭的聊天室到表中
         boolean bo = chatRoomCloseMapper.insert(chatRoomHistoryPo)==1;
         if (!bo) return false;
-        // 删除之前的表
+        // 4、删除之前的表中的数据
         bo = chatRoomMapper.deleteById(chatRoomPo.getId()) == 1;
         return bo;
     }
@@ -104,6 +108,24 @@ public class ChatRoomServiceImpl implements ChatRoomService {
     }
 
     @Override
+    public boolean existence(String chatRoomId) {
+        // 在缓存中查询是否存在
+        boolean bo = chatRoomCacheUtil.existence(chatRoomId);
+        // 不存在，在数据库查询
+        if (!bo) {
+            LambdaQueryWrapper<ChatRoomPo> lqw = new LambdaQueryWrapper<>();
+            lqw.eq(ChatRoomPo::getId, chatRoomId);
+            ChatRoomPo chatRoomPo = chatRoomMapper.selectOne(lqw);
+            // 若存在，则插入缓存中
+            if (chatRoomPo != null) {
+                // 存储到缓存中
+                chatRoomCacheUtil.createChatRoomIdentification(chatRoomPo.getCreateUserId(), chatRoomPo.getName(), chatRoomId);
+                return true;
+            } else return false;
+        } else return true;
+    }
+
+    @Override
     public String existence(String createUserId, String name) {
         // 在缓存中查询是否存在
         String chatRoomId = chatRoomCacheUtil.existence(createUserId, name);
@@ -130,7 +152,11 @@ public class ChatRoomServiceImpl implements ChatRoomService {
      */
     @Override
     public void upvote(String senderId, String chatRoomId) {
-        // TODO 增加聊天室点赞的持久化
-        CounterIdentifierUtil.numberOfSendsIncrease("chatroom:upvote:"+chatRoomId);
+        // 1、查询该聊天室是否存在
+        boolean bo = this.existence(chatRoomId);
+        if (bo) {
+            // 2、增加点赞数
+            CounterIdentifierUtil.numberOfSendsIncrease("chatroom:upvote:"+chatRoomId);
+        }
     }
 }

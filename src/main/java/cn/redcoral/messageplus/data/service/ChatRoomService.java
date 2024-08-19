@@ -1,6 +1,8 @@
 package cn.redcoral.messageplus.data.service;
 
 import cn.redcoral.messageplus.data.entity.ChatRoom;
+import cn.redcoral.messageplus.data.entity.po.ChatRoomPo;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 
 import java.util.List;
 
@@ -20,6 +22,12 @@ public interface ChatRoomService {
      * @param size 每页大小
      */
     List<ChatRoom> selectChatRoomList(int page, int size);
+
+    /**
+     * 判断是否存在
+     * @param chatRoomId 聊天室ID
+     */
+    boolean existence(String chatRoomId);
 
     /**
      * 判断是否存在

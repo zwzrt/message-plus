@@ -47,6 +47,10 @@ public class CounterIdentifierUtil {
         numberOfSendsIdentifierMap.put(id, n + num);
     }
 
+    public static int getNum(String id) {
+        return numberOfSendsIdentifierMap.getOrDefault(id, 0);
+    }
+
     /**
      * 是否小于于等于
      */
