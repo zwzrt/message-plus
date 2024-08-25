@@ -31,18 +31,10 @@ public class ChatRoomPo implements Serializable {
      */
     private String name;
     /**
-     * 最大人数
-     */
-    private int maxUserNum = 0;
-    /**
      * 用户ID列表
      */
     @TableField(exist = false)
     private List<String> clientIdList = new ArrayList<>();
-    /**
-     * 点赞数量
-     */
-    private long thumbsUpNum = 0;
     /**
      * 开播时间
      */
@@ -91,7 +83,7 @@ public class ChatRoomPo implements Serializable {
         }
 
         int size = clientIdList.size();
-        if (size>maxUserNum) maxUserNum = size;
+//        if (size>maxUserNum) maxUserNum = size;
         return size;
     }
     /**

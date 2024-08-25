@@ -8,6 +8,7 @@ import cn.redcoral.messageplus.data.mapper.MessagePlusChatRoomCloseMapper;
 import cn.redcoral.messageplus.data.mapper.MessagePlusChatRoomMapper;
 import cn.redcoral.messageplus.data.service.ChatRoomService;
 import cn.redcoral.messageplus.utils.CounterIdentifierUtil;
+import cn.redcoral.messageplus.utils.CounterMaxUtil;
 import cn.redcoral.messageplus.utils.cache.ChatRoomCacheUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
@@ -72,6 +73,8 @@ public class ChatRoomServiceImpl implements ChatRoomService {
         BeanUtil.copyProperties(chatRoomPo, chatRoomHistoryPo);
         // 获取点赞数
         chatRoomHistoryPo.setThumbsUpNum(CounterIdentifierUtil.getNum("chatroom:upvote:"+chatRoomId));
+        // 添加最大人数
+        chatRoomHistoryPo.setMaxUserNum(CounterMaxUtil.getMaxNum("chatroom:maxUserNum:" + chatRoomId));
         // 添加关闭时间
         chatRoomHistoryPo.setOffTime(new Timestamp(System.currentTimeMillis()));
         // 3、 添加关闭的聊天室到表中

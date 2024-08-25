@@ -3,6 +3,7 @@ package cn.redcoral.messageplus.manage;
 import cn.redcoral.messageplus.data.entity.ChatRoom;
 import cn.redcoral.messageplus.data.service.ChatRoomService;
 import cn.redcoral.messageplus.utils.CounterIdentifierUtil;
+import cn.redcoral.messageplus.utils.CounterMaxUtil;
 import cn.redcoral.messageplus.utils.cache.ChatRoomCacheUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
@@ -117,6 +118,8 @@ public class ChatRoomManage {
             chatRoomIdList.remove(chatRoomId);
             chatRoomIdList.add(chatRoomId);
         }
+        // 增加聊天室最大人数
+        CounterMaxUtil.plusOne("chatroom:maxUserNum:" + chatRoomId, client_id);
     }
 
 
