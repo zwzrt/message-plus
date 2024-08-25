@@ -148,9 +148,19 @@ public class ChatRoomManage {
         return chatRoom;
     }
 
+    /**
+     * 查询聊天室当前最大人数
+     * @param chatRoomId 聊天室ID
+     * @return 聊天室当前最大人数
+     */
+    public int getMaxUserNum(String chatRoomId) {
+        return CounterMaxUtil.getMaxNum("chatroom:maxUserNum:" + chatRoomId);
+    }
     public List<ChatRoom> selectChatRoomList(int page, int size) {
         return chatRoomService.selectChatRoomList(page, size);
     }
+
+
 
     /**
      * 给聊天室点赞点赞

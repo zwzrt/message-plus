@@ -1,0 +1,2 @@
+### 获取聊天室最大人数
+GET {{host}}/chatroom/maxUserNum?id=1827727819960365056

@@ -75,5 +75,9 @@ public class MessagePlusChatRoomController {
     public List<ChatRoom> selectChatRoomList(HttpServerRequest request, @RequestParam("page") int page, @RequestParam("size") int size) {
         return chatRoomManage.selectChatRoomList(page, size);
     }
+    @GetMapping("/maxUserNum")
+    public String selectChatRoomMaxUserNumById(HttpServerRequest request, @RequestParam("id") String chatRoomId) {
+        return String.valueOf(chatRoomManage.getMaxUserNum(chatRoomId));
+    }
 
 }
