@@ -60,10 +60,11 @@ public class ChatRoomServiceImpl implements ChatRoomService {
 
     @Transactional
     @Override
-    public boolean closeChatRoom(String stopUserId, String chatRoomId) {
+    public boolean closeChatRoom(String stopUserId, ChatRoom chatRoom) {
+        if (chatRoom == null) return false;
         // 1、查询原始数据
         LambdaQueryWrapper<ChatRoomPo> lqw = new LambdaQueryWrapper<>();
-        lqw.eq(ChatRoomPo::getId, chatRoomId);
+        lqw.eq(ChatRoomPo::getId, chatRoom.getId());
         lqw.eq(ChatRoomPo::getCreateUserId, stopUserId);
         ChatRoomPo chatRoomPo = chatRoomMapper.selectOne(lqw);
         // 该聊天室不存在 或者 关闭者不是创建者 或 已经关闭
@@ -72,9 +73,11 @@ public class ChatRoomServiceImpl implements ChatRoomService {
         ChatRoomHistoryPo chatRoomHistoryPo = new ChatRoomHistoryPo();
         BeanUtil.copyProperties(chatRoomPo, chatRoomHistoryPo);
         // 获取点赞数
-        chatRoomHistoryPo.setThumbsUpNum(CounterIdentifierUtil.getNum("chatroom:upvote:"+chatRoomId));
+        chatRoomHistoryPo.setThumbsUpNum(CounterIdentifierUtil.getNum("chatroom:upvote:"+chatRoom.getId()));
         // 添加最大人数
-        chatRoomHistoryPo.setMaxUserNum(CounterMaxUtil.getMaxNum("chatroom:maxUserNum:" + chatRoomId));
+        chatRoomHistoryPo.setMaxUserNum(chatRoom.getMaxUserNum());
+        // 添加总人数
+        chatRoomHistoryPo.setAllUserNum(CounterMaxUtil.getMaxNum("chatroom:allUserNum:"+chatRoom.getId()));
         // 添加关闭时间
         chatRoomHistoryPo.setOffTime(new Timestamp(System.currentTimeMillis()));
         // 3、 添加关闭的聊天室到表中
@@ -92,6 +95,17 @@ public class ChatRoomServiceImpl implements ChatRoomService {
         lqw.le(ChatRoomPo::getOpeningTime, new Timestamp(System.currentTimeMillis()));
         // 查询
         return ChatRoom.BuildChatRoomList(chatRoomMapper.selectList(lqw));
+    }
+
+    @Override
+    public ChatRoom selectChatRoomById(String id) {
+        if (id==null) return null;
+        ChatRoom chatRoom = chatRoomCacheUtil.getChatRoomById(id);
+        if (chatRoom == null) {
+            ChatRoomPo chatRoomPo = chatRoomMapper.selectById(id);
+            chatRoom = ChatRoom.BuildChatRoom(chatRoomPo);
+        }
+        return chatRoom;
     }
 
     @Override
@@ -131,9 +145,9 @@ public class ChatRoomServiceImpl implements ChatRoomService {
     @Override
     public String existence(String createUserId, String name) {
         // 在缓存中查询是否存在
-        String chatRoomId = chatRoomCacheUtil.existence(createUserId, name);
+        String id = chatRoomCacheUtil.existence(createUserId, name);
         // 不存在，在数据库查询
-        if (chatRoomId == null) {
+        if (id == null) {
             LambdaQueryWrapper<ChatRoomPo> lqw = new LambdaQueryWrapper<>();
             lqw.eq(ChatRoomPo::getCreateUserId, createUserId).eq(ChatRoomPo::getName, name);
             ChatRoomPo chatRoomPo = chatRoomMapper.selectOne(lqw);
@@ -142,10 +156,10 @@ public class ChatRoomServiceImpl implements ChatRoomService {
                 // 存储到缓存中
                 chatRoomCacheUtil.createChatRoomIdentification(createUserId, name, chatRoomPo.getId());
                 // 赋值
-                chatRoomId = chatRoomPo.getId();
+                id = chatRoomPo.getId();
             }
         }
-        return chatRoomId;
+        return id;
     }
 
     /**

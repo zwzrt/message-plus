@@ -20,11 +20,14 @@ public class ChatRoomCacheUtilImpl implements ChatRoomCacheUtil {
 
     @Autowired
     private Cache<String, String> stringCache;
+    @Autowired
+    private Cache<String, ChatRoom> chatRoomCache;
 
     @Override
     public void createChatRoomIdentification(String createId, String name, String chatRoomId) {
         stringCache.put(CHAT_ROOM + createId+":"+name, chatRoomId);
         stringCache.put(CHAT_ROOM + chatRoomId, createId+":"+name);
+        chatRoomCache.put(CHAT_ROOM+chatRoomId, new ChatRoom(chatRoomId, createId, name));
     }
 
     @Override
@@ -42,6 +45,13 @@ public class ChatRoomCacheUtilImpl implements ChatRoomCacheUtil {
         stringCache.invalidate(CHAT_ROOM + chatRoomId);
         // 删除聊天室点赞
         stringCache.invalidate(CachePrefixConstant.CHAT_ROOM_THUMBS_UP + chatRoomId);
+        ChatRoom chatRoom = chatRoomCache.get(CHAT_ROOM+chatRoomId, k->null);
+        if (chatRoom != null) {
+            // 删除聊天室标识符
+            stringCache.invalidate(CHAT_ROOM+chatRoom.getCreateUserId()+":"+chatRoom.getName());
+            // 删除聊天室信息
+            chatRoomCache.invalidate(CHAT_ROOM+chatRoomId);
+        }
         return true;
     }
 
@@ -51,12 +61,17 @@ public class ChatRoomCacheUtilImpl implements ChatRoomCacheUtil {
      */
     @Override
     public boolean existence(String chatRoomId) {
-        return stringCache.get(CHAT_ROOM + chatRoomId, (k)->null) != null;
+        return stringCache.get(CHAT_ROOM + chatRoomId, k->null) != null;
     }
 
     @Override
     public String existence(String createId, String name) {
-        return stringCache.get(CHAT_ROOM+createId+":"+name, (k)->null);
+        return stringCache.get(CHAT_ROOM+createId+":"+name, k->null);
+    }
+
+    @Override
+    public ChatRoom getChatRoomById(String chatRoomId) {
+        return chatRoomCache.get(CHAT_ROOM+chatRoomId, k->null);
     }
 
     /**

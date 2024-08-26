@@ -198,7 +198,7 @@ public class MessagePlusUtils {
         if (chatRoom==null) return Collections.emptyList();
 
         List<String> offLineClientIdList = new ArrayList<>();
-        chatRoom.getClientIdList().forEach(clientId->{
+        chatRoom.getClientIdMap().forEach((clientId,i)->{
             if (clientId.equals(userId)) return;
             // 在线
             if (userIdSessionMap.get(clientId)!=null) {

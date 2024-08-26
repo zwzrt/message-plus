@@ -1,0 +1,8 @@
+### 获取聊天室当前人数
+GET {{host}}/chatroom/userNum?id=1827972695092244480
+
+### 获取聊天室最大人数
+GET {{host}}/chatroom/maxUserNum?id=1827972695092244480
+
+### 获取聊天室总人数
+GET {{host}}/chatroom/allUserNum?id=1827972695092244480

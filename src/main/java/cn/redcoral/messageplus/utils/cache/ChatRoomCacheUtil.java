@@ -43,6 +43,12 @@ public interface ChatRoomCacheUtil {
     String existence(String createId, String name);
 
     /**
+     * 查询对应ID的聊天室
+     * @param chatRoomId 聊天室ID
+     */
+    ChatRoom getChatRoomById(String chatRoomId);
+
+    /**
      * 点赞
      * @param chatRoomId 聊天室ID
      */

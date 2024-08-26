@@ -35,6 +35,10 @@ public class ChatRoomHistoryPo implements Serializable {
      */
     private int maxUserNum = 0;
     /**
+     * 总人数
+     */
+    private int allUserNum = 0;
+    /**
      * 用户ID列表
      */
     @TableField(exist = false)

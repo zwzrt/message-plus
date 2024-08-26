@@ -2,14 +2,11 @@ package cn.redcoral.messageplus.data.entity.po;
 
 import cn.hutool.core.bean.BeanUtil;
 import cn.redcoral.messageplus.data.entity.ChatRoom;
-import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 
 import java.io.Serializable;
 import java.sql.Timestamp;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * 聊天室
@@ -30,11 +27,6 @@ public class ChatRoomPo implements Serializable {
      * 聊天室名称
      */
     private String name;
-    /**
-     * 用户ID列表
-     */
-    @TableField(exist = false)
-    private List<String> clientIdList = new ArrayList<>();
     /**
      * 开播时间
      */
@@ -64,39 +56,6 @@ public class ChatRoomPo implements Serializable {
         ChatRoomPo chatRoomPo = new ChatRoomPo();
         BeanUtil.copyProperties(chatRoom, chatRoomPo);
         return chatRoomPo;
-    }
-
-    /**
-     * 加入聊天室
-     * @param userId 用户ID
-     * @return 总人数
-     */
-    public int joinChatRoom(String userId) {
-        if (userId==null||userId.isEmpty()) return -1;
-
-        int index = clientIdList.indexOf(userId);
-
-        // 未加入聊天室
-        if (index==-1) {
-            // 加入聊天室
-            clientIdList.add(userId);
-        }
-
-        int size = clientIdList.size();
-//        if (size>maxUserNum) maxUserNum = size;
-        return size;
-    }
-    /**
-     * 退出聊天室
-     * @param userId 用户ID
-     * @return 总人数
-     */
-    public int exitChatRoom(String userId) {
-        if (userId==null||userId.isEmpty()) return -1;
-        // 退出聊天室
-        clientIdList.remove(userId);
-
-        return clientIdList.size();
     }
 
 }

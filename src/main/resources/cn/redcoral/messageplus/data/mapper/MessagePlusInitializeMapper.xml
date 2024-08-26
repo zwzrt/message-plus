@@ -59,6 +59,7 @@
             `create_user_id` varchar(30) NOT NULL COMMENT '创建者id',
             `name` varchar(30) NOT NULL COMMENT '聊天室名称',
             `max_user_num` int NOT NULL COMMENT '最大人数',
+            `all_user_num` int NOT NULL COMMENT '总人数',
             `thumbs_up_num` bigint(30) NOT NULL COMMENT '点赞数量',
             `opening_time` timestamp not null comment '开播时间',
             `off_time` timestamp not null comment '停播时间'

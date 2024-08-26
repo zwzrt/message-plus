@@ -3,18 +3,23 @@ package cn.redcoral.messageplus.data.entity;
 import cn.hutool.core.bean.BeanUtil;
 import cn.redcoral.messageplus.data.entity.po.ChatRoomPo;
 import cn.redcoral.messageplus.utils.SnowflakeIDUtil;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
 import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * 聊天室
  * @author mo
  **/
 @Data
+@NoArgsConstructor
 public class ChatRoom implements Serializable {
     /**
      * 聊天室ID
@@ -33,9 +38,17 @@ public class ChatRoom implements Serializable {
      */
     private int maxUserNum = 0;
     /**
+     * 总人数
+     */
+    private int allUserNum = 0;
+    /**
+     * 当前人数
+     */
+    private int userNum = 0;
+    /**
      * 用户ID列表
      */
-    private List<String> clientIdList = new ArrayList<>();
+    private Map<String, Integer> clientIdMap = new HashMap<>();
     /**
      * 点赞数量
      */
@@ -48,13 +61,15 @@ public class ChatRoom implements Serializable {
      * 停播时间
      */
     private Timestamp offTime;
-    /**
-     * 是否关闭
-     */
-    private boolean isClose = false;
 
     {
         this.id = SnowflakeIDUtil.getID();
+    }
+
+    public ChatRoom(String id, String createUserId, String name) {
+        this.id = id;
+        this.createUserId = createUserId;
+        this.name = name;
     }
 
 
@@ -75,7 +90,7 @@ public class ChatRoom implements Serializable {
 
     public static ChatRoom BuildChatRoom(ChatRoomPo chatRoomPo) {
         ChatRoom chatRoom = new ChatRoom();
-        BeanUtil.copyProperties(chatRoomPo, chatRoomPo);
+        BeanUtil.copyProperties(chatRoomPo, chatRoom);
         return chatRoom;
     }
 
@@ -95,29 +110,30 @@ public class ChatRoom implements Serializable {
     public int joinChatRoom(String userId) {
         if (userId==null||userId.isEmpty()) return -1;
 
-        int index = clientIdList.indexOf(userId);
+        // 是否存在
+        Integer i = clientIdMap.get(userId);
 
         // 未加入聊天室
-        if (index==-1) {
+        if (i==null) {
             // 加入聊天室
-            clientIdList.add(userId);
+            clientIdMap.put(userId, 1);
         }
 
-        int size = clientIdList.size();
-        if (size>maxUserNum) maxUserNum = size;
-        return size;
+        // 设置最大人数
+        this.maxUserNum = clientIdMap.size()>this.maxUserNum?clientIdMap.size():this.maxUserNum;
+        return clientIdMap.size();
     }
     /**
      * 退出聊天室
      * @param userId 用户ID
      * @return 总人数
      */
-    public int exitChatRoom(String userId) {
+    public int quitChatRoom(String userId) {
         if (userId==null||userId.isEmpty()) return -1;
         // 退出聊天室
-        clientIdList.remove(userId);
+        clientIdMap.remove(userId);
 
-        return clientIdList.size();
+        return clientIdMap.size();
     }
 
 }

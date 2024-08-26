@@ -2,7 +2,6 @@ package cn.redcoral.messageplus.manage;
 
 import cn.redcoral.messageplus.data.entity.ChatRoom;
 import cn.redcoral.messageplus.data.service.ChatRoomService;
-import cn.redcoral.messageplus.utils.CounterIdentifierUtil;
 import cn.redcoral.messageplus.utils.CounterMaxUtil;
 import cn.redcoral.messageplus.utils.cache.ChatRoomCacheUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,11 +41,12 @@ public class ChatRoomManage {
      * @return 聊天室ID
      */
     public ChatRoom createChatRoom(String createUserId, String name) {
+        ChatRoom chatRoom;
         // 查询该聊天室是否存在
-        String value = chatRoomService.existence(createUserId, name);
-        ChatRoom chatRoom = null;
+        String chatRoomId = chatRoomService.existence(createUserId, name);
+        chatRoom = chatRoomService.selectChatRoomById(chatRoomId);
         // 该聊天室不存在，进行创建
-        if (value == null) {
+        if (chatRoomId == null || chatRoom == null) {
             // 调用原始方法
             chatRoom = new ChatRoom();
             chatRoom.setCreateUserId(createUserId);
@@ -58,17 +58,13 @@ public class ChatRoomManage {
                 return null;
             }
 
-            chatRoomByIdMap.put(chatRoom.getId(), chatRoom);
-
             // 添加聊天室缓存（用于判断是否存在）
             chatRoomCacheUtil.createChatRoomIdentification(createUserId, name, chatRoom.getId());
             // 添加聊天室信息缓存
             chatRoomCacheUtil.addChatRoom(chatRoom);
-            // 返回聊天室信息
-            return chatRoom;
         }
-        chatRoom = new ChatRoom();
-        chatRoom.setId(value);
+        chatRoomByIdMap.put(chatRoom.getId(), chatRoom);
+        // 返回聊天室信息
         return chatRoom;
     }
 
@@ -118,8 +114,10 @@ public class ChatRoomManage {
             chatRoomIdList.remove(chatRoomId);
             chatRoomIdList.add(chatRoomId);
         }
-        // 增加聊天室最大人数
+        // 记录聊天室最大人数
         CounterMaxUtil.plusOne("chatroom:maxUserNum:" + chatRoomId, client_id);
+        // 记录聊天室总人数
+        CounterMaxUtil.plusOne("chatroom:allUserNum:" + chatRoomId, client_id);
     }
 
 
@@ -131,10 +129,19 @@ public class ChatRoomManage {
      */
     public boolean closeChatRoomById(String client_id, String chatRoomId) {
         // 1、操作数据库
-        boolean bo = chatRoomService.closeChatRoom(client_id, chatRoomId);
+        boolean bo = chatRoomService.closeChatRoom(client_id, chatRoomByIdMap.get(chatRoomId));
         if (!bo) return false;
         // 2、删除缓存
         return chatRoomCacheUtil.deleteChatRoomById(chatRoomId);
+    }
+
+    /**
+     * 退出聊天室
+     * @param quitId 退出者ID
+     * @param chatRoomId 聊天室ID
+     */
+    public void quitChatRoomById(String quitId, String chatRoomId) {
+        chatRoomByIdMap.get(chatRoomId).quitChatRoom(quitId);
     }
     
 
@@ -149,13 +156,36 @@ public class ChatRoomManage {
     }
 
     /**
+     * 查询聊天室当前人数
+     * @param chatRoomId 聊天室ID
+     * @return 聊天室当前总人数
+     */
+    public int getUserNum(String chatRoomId) {
+        ChatRoom chatRoom = chatRoomByIdMap.get(chatRoomId);
+        if (chatRoom == null) return 0;
+        else return chatRoom.getClientIdMap().size();
+    }
+
+    /**
+     * 查询聊天室当前总人数
+     * @param chatRoomId 聊天室ID
+     * @return 聊天室当前总人数
+     */
+    public int getAllUserNum(String chatRoomId) {
+        return CounterMaxUtil.getMaxNum("chatroom:allUserNum:" + chatRoomId);
+    }
+
+    /**
      * 查询聊天室当前最大人数
      * @param chatRoomId 聊天室ID
      * @return 聊天室当前最大人数
      */
     public int getMaxUserNum(String chatRoomId) {
-        return CounterMaxUtil.getMaxNum("chatroom:maxUserNum:" + chatRoomId);
+        ChatRoom chatRoom = chatRoomByIdMap.get(chatRoomId);
+        if (chatRoom == null) return 0;
+        else return chatRoom.getMaxUserNum();
     }
+
     public List<ChatRoom> selectChatRoomList(int page, int size) {
         return chatRoomService.selectChatRoomList(page, size);
     }

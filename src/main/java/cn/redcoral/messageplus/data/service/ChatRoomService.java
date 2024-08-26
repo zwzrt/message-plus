@@ -12,9 +12,14 @@ import java.util.List;
 public interface ChatRoomService {
     ChatRoom insertChatRoom(ChatRoom chatRoom);
 
-    boolean closeChatRoom(String stopUserId, String chatRoomId);
+    boolean closeChatRoom(String stopUserId, ChatRoom chatRoom);
 
     List<ChatRoom> selectChatRooms();
+
+    /**
+     * 查询聊天室
+     */
+    ChatRoom selectChatRoomById(String id);
 
     /**
      * 查询聊天室分页

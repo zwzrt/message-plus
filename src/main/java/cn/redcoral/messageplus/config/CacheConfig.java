@@ -1,5 +1,6 @@
 package cn.redcoral.messageplus.config;
 
+import cn.redcoral.messageplus.data.entity.ChatRoom;
 import cn.redcoral.messageplus.properties.MessagePersistenceProperties;
 import cn.redcoral.messageplus.utils.cache.impl.ChatSingleCacheUtilImpl;
 import com.github.benmanes.caffeine.cache.Cache;
@@ -51,6 +52,18 @@ public class CacheConfig {
             .build();
 
     /**
+     * 字符串-长整型缓存实例，用于缓存字符串对长整型的数据
+     */
+    public static Cache<String, ChatRoom> stringChatRoomCache = Caffeine.newBuilder()
+            // 初始容量设置为10，以减少初始时的资源分配
+            .initialCapacity(10)
+            // 最大容量设置为100，以限制内存使用
+            .maximumSize(100)
+            // 设置写入后10秒过期，确保数据的时效性
+            .expireAfterWrite(10, TimeUnit.SECONDS)
+            .build();
+
+    /**
      * 消息限制缓存，用于存储和管理消息的发送限制信息
      */
     public static Cache<String, Integer> messageRestrictionsCache = Caffeine.newBuilder()
@@ -83,6 +96,15 @@ public class CacheConfig {
     @Bean
     public Cache<String, Integer> messageRestrictionsCache() {
         return messageRestrictionsCache;
+    }
+
+    /**
+     * 配置消息限制缓存Bean
+     * @return Cache 消息限制缓存实例
+     */
+    @Bean
+    public Cache<String, ChatRoom> stringChatRoomCache() {
+        return stringChatRoomCache;
     }
 
     /**
