@@ -1,6 +1,5 @@
 package cn.redcoral.messageplus.utils;
 
-import java.util.concurrent.Callable;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -10,7 +9,15 @@ import java.util.concurrent.TimeUnit;
 public class RetryUtil {
 
     public interface Run {
+        /**
+         * 运行主体
+         */
         void run() throws Exception;
+        /**
+         * 运行完成后的方法
+         * @param bo 重试是否成功
+         */
+        void finish(boolean bo);
     }
 
     /**
@@ -37,7 +44,9 @@ public class RetryUtil {
             for (int i = 0; i < retryTimes;) {
                 try {
                     run.run();
-                    break;
+                    // 执行成功
+                    run.finish(true);
+                    return null;
                 } catch (RuntimeException e) {
                     // 进行下一次重试
                     i++;
@@ -45,6 +54,8 @@ public class RetryUtil {
                     Thread.sleep(timeUnit.toMillis(retryInterval));
                 }
             }
+            // 执行失败
+            run.finish(false);
             return null;
         });
     }
