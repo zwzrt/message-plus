@@ -47,4 +47,11 @@ public interface ChatRoomService {
      * @param chatRoomId 聊天室ID
      */
     void upvote(String senderId, String chatRoomId);
+
+    /**
+     * 查询未关闭的聊天室
+     * @param userId 创建者ID
+     * @return 未关闭的聊天室列表
+     */
+    List<ChatRoom> selectNotCloseChatRoomListByCreateId(String userId);
 }

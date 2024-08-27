@@ -2,6 +2,7 @@ package cn.redcoral.messageplus.controller;
 
 import cn.hutool.http.server.HttpServerRequest;
 import cn.redcoral.messageplus.data.entity.ChatRoom;
+import cn.redcoral.messageplus.data.service.ChatRoomService;
 import cn.redcoral.messageplus.manage.ChatRoomManage;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -18,6 +19,8 @@ public class MessagePlusChatRoomController {
 
     @Autowired
     private ChatRoomManage chatRoomManage;
+    @Autowired
+    private ChatRoomService chatRoomService;
 
 
     /**
@@ -83,6 +86,11 @@ public class MessagePlusChatRoomController {
     @GetMapping
     public List<ChatRoom> selectChatRoomList(HttpServerRequest request, @RequestParam("page") int page, @RequestParam("size") int size) {
         return chatRoomManage.selectChatRoomList(page, size);
+    }
+
+    @GetMapping("/noclose")
+    public List<ChatRoom> selectMyChatRoomList(HttpServerRequest request, @RequestParam("id") String userId) {
+        return chatRoomService.selectNotCloseChatRoomListByCreateId(userId);
     }
 
     /**

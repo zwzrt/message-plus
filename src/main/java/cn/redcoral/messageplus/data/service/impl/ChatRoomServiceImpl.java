@@ -20,6 +20,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.sql.Timestamp;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -175,5 +176,14 @@ public class ChatRoomServiceImpl implements ChatRoomService {
             // 2、增加点赞数
             CounterIdentifierUtil.numberOfSendsIncrease("chatroom:upvote:"+chatRoomId);
         }
+    }
+
+    @Override
+    public List<ChatRoom> selectNotCloseChatRoomListByCreateId(String userId) {
+        // TODO 缓存
+        LambdaQueryWrapper<ChatRoomPo> lqw = new LambdaQueryWrapper<>();
+        lqw.eq(ChatRoomPo::getCreateUserId, userId);
+        List<ChatRoomPo> chatRoomPoList = chatRoomMapper.selectList(lqw);
+        return ChatRoom.BuildChatRoomList(chatRoomPoList);
     }
 }
