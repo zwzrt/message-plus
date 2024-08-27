@@ -66,7 +66,7 @@ public class CacheConfig {
     /**
      * 消息限制缓存，用于存储和管理消息的发送限制信息
      */
-    public static Cache<String, Integer> messageRestrictionsCache = Caffeine.newBuilder()
+    public static Cache<String, Integer> stringIntCache = Caffeine.newBuilder()
             .initialCapacity(1000) // 初始容量设置为1000，适应较大的初始需求
             .maximumSize(1000000000) // 设置一个较大的最大容量以适应大量消息限制数据
             // 根据消息持久化属性中的周期限制时间设置过期时间，确保与业务逻辑一致
@@ -94,8 +94,8 @@ public class CacheConfig {
      * @return Cache 消息限制缓存实例
      */
     @Bean
-    public Cache<String, Integer> messageRestrictionsCache() {
-        return messageRestrictionsCache;
+    public Cache<String, Integer> stringIntCache() {
+        return stringIntCache;
     }
 
     /**

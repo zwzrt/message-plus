@@ -3,6 +3,7 @@ package cn.redcoral.messageplus.utils.cache;
 import cn.redcoral.messageplus.data.entity.Group;
 import cn.redcoral.messageplus.data.entity.message.Message;
 
+import java.util.concurrent.Callable;
 import java.util.function.Function;
 
 /**
@@ -44,4 +45,11 @@ public interface ChatGroupCacheUtil {
      * @param message 消息
      */
     void addChatContent(String senderId, String receiverId, Message message);
+
+    /**
+     * 查询群组的总人数
+     * @param groupId 群组ID
+     * @return 群组总人数
+     */
+    Integer getUserNumById(String groupId, Callable<Integer> call);
 }

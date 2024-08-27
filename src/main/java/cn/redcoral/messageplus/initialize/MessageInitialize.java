@@ -26,8 +26,6 @@ public class MessageInitialize {
         // 1.1、获取mapper类
         MessagePlusInitializeMapper initializeMapper = BeanUtil.messagePlusInitializeMapper();
         // 1.2、执行语句
-        // 创建失败消息表
-        initializeMapper.createFailedMessage();
         // 创建历史消息表
         initializeMapper.createHistoryMessage();
         // 创建群组表

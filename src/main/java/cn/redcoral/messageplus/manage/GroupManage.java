@@ -128,4 +128,11 @@ public class GroupManage {
         return groupService.selectAllGroup();
     }
 
+    /**
+     * 获取群组总人数
+     */
+    public int getUserNum(String groupId) {
+        return groupService.selectUserNumById(groupId);
+    }
+
 }

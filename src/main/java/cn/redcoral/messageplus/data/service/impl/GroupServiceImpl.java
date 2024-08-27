@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.concurrent.Callable;
 
 /**
  * @author mo
@@ -20,7 +21,7 @@ public class GroupServiceImpl implements GroupService {
     @Autowired
     private MessagePlusGroupMapper groupMapper;
     @Autowired
-    private ChatGroupCacheUtil chatGroupCacheUtil;
+    private ChatGroupCacheUtil groupCacheUtil;
 
 
     @Override
@@ -28,7 +29,7 @@ public class GroupServiceImpl implements GroupService {
         GroupPo groupPo = GroupPo.BuildGroupPo(group);
         groupMapper.insert(groupPo);
         // 加入缓存
-        chatGroupCacheUtil.setGroup(group);
+        groupCacheUtil.setGroup(group);
     }
 
     @Override
@@ -39,14 +40,14 @@ public class GroupServiceImpl implements GroupService {
     @Override
     public Group selectGroupById(String groupId) {
         // 从缓存中获取
-        Group group = chatGroupCacheUtil.getGroupById(groupId);
+        Group group = groupCacheUtil.getGroupById(groupId);
         // 若不存在则再数据库查询
         if (group == null) {
             GroupPo groupPo = groupMapper.selectById(groupId);
             if (groupPo != null) {
                 group = Group.BuildGroup(groupPo);
                 // 存储到缓存中
-                chatGroupCacheUtil.setGroup(group);
+                groupCacheUtil.setGroup(group);
             }
         }
         return group;
@@ -55,7 +56,7 @@ public class GroupServiceImpl implements GroupService {
     @Override
     public String selectGroupByNameAndCreateId(String name, String createId) {
         // 1、从缓存中查询群组ID
-        String groupId = chatGroupCacheUtil.getGroupByNameAndCreateId(name, createId);
+        String groupId = groupCacheUtil.getGroupByNameAndCreateId(name, createId);
         // 不存在，向数据库查询
         if (groupId == null) {
             LambdaQueryWrapper<GroupPo> lqw = new LambdaQueryWrapper<>();
@@ -65,10 +66,19 @@ public class GroupServiceImpl implements GroupService {
             // 若查询到，则返回群组ID，并且重新向缓存添加数据
             if (groupPo != null) {
                 groupId = groupPo.getId();
-                chatGroupCacheUtil.setGroup(Group.BuildGroup(groupPo));
+                groupCacheUtil.setGroup(Group.BuildGroup(groupPo));
             }
         }
         return groupId;
+    }
+
+    @Override
+    public int selectUserNumById(String groupId) {
+        return groupCacheUtil.getUserNumById(groupId, ()->{
+            GroupPo groupPo = groupMapper.selectById(groupId);
+            if (groupPo != null) return groupPo.getUserNum();
+            else return -1;
+        });
     }
 
 }

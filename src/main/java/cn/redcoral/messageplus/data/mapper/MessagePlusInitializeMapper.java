@@ -7,11 +7,6 @@ package cn.redcoral.messageplus.data.mapper;
 public interface MessagePlusInitializeMapper {
 
     /**
-     * 创建失败消息表
-     */
-    void createFailedMessage();
-
-    /**
      * 创建历史消息表
      */
     void createHistoryMessage();

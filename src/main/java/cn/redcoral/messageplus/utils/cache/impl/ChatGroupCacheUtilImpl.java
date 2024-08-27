@@ -1,6 +1,7 @@
 package cn.redcoral.messageplus.utils.cache.impl;
 
 import cn.redcoral.messageplus.constant.CachePrefixConstant;
+import cn.redcoral.messageplus.constant.GroupCacheConstant;
 import cn.redcoral.messageplus.data.entity.Group;
 import cn.redcoral.messageplus.data.entity.message.Message;
 import cn.redcoral.messageplus.utils.cache.ChatGroupCacheUtil;
@@ -12,6 +13,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.Callable;
 import java.util.function.Function;
 
 /**
@@ -23,7 +25,8 @@ public class ChatGroupCacheUtilImpl implements ChatGroupCacheUtil {
 
     @Autowired
     private Cache<String, String> stringCache;
-    
+    @Autowired
+    private Cache<String, Integer> intCache;
     @Autowired
     private Cache<String,BlockingQueue> messageQueueCache;
 
@@ -67,5 +70,16 @@ public class ChatGroupCacheUtilImpl implements ChatGroupCacheUtil {
         }
         //队列存在
         queue.add(message);
+    }
+
+    @Override
+    public Integer getUserNumById(String groupId, Callable<Integer> call) {
+        return intCache.get(GroupCacheConstant.GROUP_PREFIX+groupId, (k)->{
+            try {
+                return call.call();
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
+        });
     }
 }

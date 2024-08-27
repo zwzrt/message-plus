@@ -33,4 +33,10 @@ public interface GroupService {
      */
     String selectGroupByNameAndCreateId(String name, String createId);
 
+    /**
+     * 查询群组的总人数
+     * @param groupId 群组ID
+     * @return 群组人数
+     */
+    int selectUserNumById(String groupId);
 }

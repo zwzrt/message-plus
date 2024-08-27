@@ -28,6 +28,7 @@ public class HistoryMessagePo {
     private String chatRoomId; // 聊天室ID
     private String receiverId; // 接收者ID
     private String data; // 消息数据
+    private boolean isFail; // 是否失败
     private Timestamp createTime; // 创建时间
 
     /**

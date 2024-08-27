@@ -1,7 +1,6 @@
 package cn.redcoral.messageplus.data.entity.message;
 
 import cn.hutool.core.bean.BeanUtil;
-import cn.redcoral.messageplus.data.entity.po.FailedMessagePo;
 import cn.redcoral.messageplus.data.entity.po.HistoryMessagePo;
 import com.alibaba.fastjson.JSON;
 import lombok.Data;
@@ -125,21 +124,6 @@ public class Message {
         message.setSenderId(senderId);
         message.setData(data);
         return message;
-    }
-
-    public static Message BuildMessage(FailedMessagePo failedMessagePo) {
-        Message message = new Message();
-        BeanUtil.copyProperties(failedMessagePo, message);
-        message.setData(JSON.parse(failedMessagePo.getData()));
-        return message;
-    }
-
-    public static List<Message> BuildMessageList(List<FailedMessagePo> failedMessagePoList) {
-        List<Message> messageList = new ArrayList<>();
-        for (FailedMessagePo po : failedMessagePoList) {
-            messageList.add(BuildMessage(po));
-        }
-        return messageList;
     }
 
     public static Message BuildHistoryMessage(HistoryMessagePo historyMessagePo) {
