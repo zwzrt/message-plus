@@ -2,7 +2,7 @@ package cn.redcoral.messageplus.handler;
 
 import cn.redcoral.messageplus.config.MessageEncoder;
 import cn.redcoral.messageplus.data.entity.message.Message;
-import cn.redcoral.messageplus.manage.MessagePlusUtils;
+import cn.redcoral.messageplus.manage.MessageManage;
 import cn.redcoral.messageplus.properties.MessagePlusProperties;
 import cn.redcoral.messageplus.utils.BeanUtil;
 import cn.redcoral.messageplus.utils.cache.ChatSingleCacheUtil;
@@ -38,7 +38,7 @@ public class MessagePlusService {
     public void baseOnOpen(Session session, @PathParam(MessagePlusProperties.pathParamName) String sid) {
         this.client_id = sid;
         // 加入聊天
-        MessagePlusUtils.joinChat(sid, this, session);
+        MessageManage.joinChat(sid, this, session);
         // TODO 消息重发，直接调用messagecahche遍历发送，简化代码
         ChatSingleCacheUtil chatSingleCacheUtil = BeanUtil.chatSingleCache();
         BlockingQueue blockingQueue = chatSingleCacheUtil.removeChatSingleContent(sid);
@@ -51,7 +51,7 @@ public class MessagePlusService {
                     if(message==null){
                         break;
                     }
-                    MessagePlusUtils.sendMessage(sid,message);
+                    MessageManage.sendMessage(sid,message);
                 }
             }).start();
         }
@@ -66,7 +66,7 @@ public class MessagePlusService {
     @OnClose
     public void baseOnClose() {
         // 删除用户的会话
-        MessagePlusUtils.quitChat(this.client_id);
+        MessageManage.quitChat(this.client_id);
         BeanUtil.messagePlusBase().onClose(this.client_id);
     }
     

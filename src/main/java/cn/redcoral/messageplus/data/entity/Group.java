@@ -2,13 +2,12 @@ package cn.redcoral.messageplus.data.entity;
 
 import cn.hutool.core.bean.BeanUtil;
 import cn.redcoral.messageplus.data.entity.po.GroupPo;
-import cn.redcoral.messageplus.manage.MessagePlusUtils;
+import cn.redcoral.messageplus.manage.MessageManage;
 import cn.redcoral.messageplus.utils.SnowflakeIDUtil;
 import lombok.Data;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
@@ -101,14 +100,14 @@ public class Group {
 
         int index = clientIdList.indexOf(userId);
         // 在线且已经加入
-        if (MessagePlusUtils.userIdSessionMap.get(userId)!=null&&index!=-1) {
+        if (MessageManage.userIdSessionMap.get(userId)!=null&&index!=-1) {
             //聊天室在线人数加一
             userNumLock.lock();
             this.onlineUserNum++;
             userNumLock.unlock();
         }
         // 在线但是没有加入
-        else if (MessagePlusUtils.userIdSessionMap.get(userId)==null&&index==-1) {
+        else if (MessageManage.userIdSessionMap.get(userId)==null&&index==-1) {
             //加入的人数，和聊天室在线人数加一
             userNumLock.lock();
             userNum++;

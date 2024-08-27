@@ -5,7 +5,7 @@ import cn.redcoral.messageplus.data.entity.Group;
 import cn.redcoral.messageplus.data.entity.message.Message;
 import cn.redcoral.messageplus.data.entity.message.MessageType;
 import cn.redcoral.messageplus.manage.ChatRoomManage;
-import cn.redcoral.messageplus.manage.MessagePlusUtils;
+import cn.redcoral.messageplus.manage.MessageManage;
 import cn.redcoral.messageplus.port.MessagePlusBase;
 import cn.redcoral.messageplus.utils.BeanUtil;
 import cn.redcoral.messageplus.utils.cache.ChatGroupCacheUtil;
@@ -15,8 +15,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.util.Arrays;
-import java.util.Comparator;
 import java.util.List;
 
 /**
@@ -74,7 +72,7 @@ public class MessageHandler {
      */
     public void handleSingleMessage(String senderId, String receiverId, Message message) {
         // 查看用户是否在线
-        String onLineTag = MessagePlusUtils.isOnLine(receiverId);
+        String onLineTag = MessageManage.isOnLine(receiverId);
         switch (onLineTag)
         {
             // 不在线
@@ -93,7 +91,7 @@ public class MessageHandler {
             case "0":
             {
                 // 调用发送方法
-                boolean sended = MessagePlusUtils.sendMessage(receiverId, message);
+                boolean sended = MessageManage.sendMessage(receiverId, message);
                 log.info("用户在线");
                 if (!sended)
                 {
@@ -115,10 +113,10 @@ public class MessageHandler {
      */
     public void handleMassMessage(String senderId, String groupId, Message message) {
         // 调用开发者实现的群发接口
-        Group group = MessagePlusUtils.getGroupById(groupId);
+        Group group = MessageManage.getGroupById(groupId);
 
         // 调用接收方法
-        List<String> list = MessagePlusUtils.sendMessageToGroupBarringMe(senderId, groupId, message);
+        List<String> list = MessageManage.sendMessageToGroupBarringMe(senderId, groupId, message);
         // TODO 提示出现失败消息
         //有元素表名有用户不在线没收到消息
         if (!list.isEmpty())
@@ -144,7 +142,7 @@ public class MessageHandler {
         // 1.调用开发者实现的群发接口
         ChatRoom chatRoom = chatRoomManage.getChatRoomById(chatRoomId);
         // 2.发送消息
-        List<String> offLineClientIdList = MessagePlusUtils.sendMessageToChatRoomBarringMe(senderId, chatRoomId, message);
+        List<String> offLineClientIdList = MessageManage.sendMessageToChatRoomBarringMe(senderId, chatRoomId, message);
         // 3.未发送成功，查询对应服务ID，通知对应服务进行再次发送
         for (String receiverId : offLineClientIdList)
         {

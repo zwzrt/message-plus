@@ -21,7 +21,7 @@ import java.util.concurrent.locks.ReentrantLock;
  * 消息增强器工具类
  * @author mo
  **/
-public class MessagePlusUtils {
+public class MessageManage {
 
     /**
      * 群组管理
