@@ -6,6 +6,16 @@
       "sourceType": "cn.redcoral.messageplus.properties.MessagePlusProperties"
     },
     {
+      "name": "messageplus.chatroom",
+      "type": "cn.redcoral.messageplus.properties.MessagePlusChatRoomProperties",
+      "sourceType": "cn.redcoral.messageplus.properties.MessagePlusChatRoomProperties"
+    },
+    {
+      "name": "messageplus.cluster",
+      "type": "cn.redcoral.messageplus.properties.MessagePlusClusterProperties",
+      "sourceType": "cn.redcoral.messageplus.properties.MessagePlusClusterProperties"
+    },
+    {
       "name": "messageplus.message",
       "type": "cn.redcoral.messageplus.properties.MessagePersistenceProperties",
       "sourceType": "cn.redcoral.messageplus.properties.MessagePersistenceProperties"
@@ -13,46 +23,70 @@
   ],
   "properties": [
     {
-      "name": "messageplus.persistence",
-      "type": "java.lang.Boolean",
-      "description": "是否开启持久化",
-      "sourceType": "cn.redcoral.messageplus.properties.MessagePlusProperties",
-      "defaultValue": false
-    },
-    {
-      "name": "messageplus.service-id",
-      "type": "java.lang.String",
-      "description": "服务ID",
-      "sourceType": "cn.redcoral.messageplus.properties.MessagePlusProperties",
-      "defaultValue": ""
-    },
-    {
-      "name": "messageplus.path-param-name",
-      "type": "java.lang.String",
-      "description": "路径参数名称",
-      "sourceType": "cn.redcoral.messageplus.properties.MessagePlusProperties",
-      "defaultValue": "sid"
-    },
-    {
       "name": "messageplus.auto-send",
       "type": "java.lang.Boolean",
       "description": "自动发送消息",
-      "sourceType": "cn.redcoral.messageplus.properties.MessagePlusProperties",
-      "defaultValue": false
+      "sourceType": "cn.redcoral.messageplus.properties.MessagePlusProperties"
+    },
+    {
+      "name": "messageplus.cluster.open",
+      "type": "java.lang.Boolean",
+      "description": "是否开启持久化",
+      "sourceType": "cn.redcoral.messageplus.properties.MessagePlusClusterProperties"
+    },
+    {
+      "name": "messageplus.message.concurrent-number",
+      "type": "java.lang.Integer",
+      "description": "消息并发数",
+      "sourceType": "cn.redcoral.messageplus.properties.MessagePersistenceProperties"
+    },
+    {
+      "name": "messageplus.message.cycle-restrictions-num",
+      "type": "java.lang.Integer",
+      "description": "限制消息周期内的次数",
+      "sourceType": "cn.redcoral.messageplus.properties.MessagePersistenceProperties"
+    },
+    {
+      "name": "messageplus.message.cycle-restrictions-time",
+      "type": "java.lang.Integer",
+      "description": "限制消息周期的时间（单位：s）",
+      "sourceType": "cn.redcoral.messageplus.properties.MessagePersistenceProperties"
     },
     {
       "name": "messageplus.message.expiration-time",
       "type": "java.lang.Integer",
       "description": "消息过期时间（默认-1永不过期）",
-      "sourceType": "cn.redcoral.messageplus.properties.MessagePersistenceProperties",
-      "defaultValue": -1
+      "sourceType": "cn.redcoral.messageplus.properties.MessagePersistenceProperties"
+    },
+    {
+      "name": "messageplus.message.interval-time",
+      "type": "java.lang.Long",
+      "description": "每次重试所需间隔时间(单位:ms)",
+      "sourceType": "cn.redcoral.messageplus.properties.MessagePersistenceProperties"
     },
     {
       "name": "messageplus.message.message-persistence",
       "type": "java.lang.Boolean",
       "description": "消息持久化",
-      "sourceType": "cn.redcoral.messageplus.properties.MessagePersistenceProperties",
-      "defaultValue": true
+      "sourceType": "cn.redcoral.messageplus.properties.MessagePersistenceProperties"
+    },
+    {
+      "name": "messageplus.message.message-time-out",
+      "type": "java.lang.Integer",
+      "description": "消息超时时间（单位：分钟）",
+      "sourceType": "cn.redcoral.messageplus.properties.MessagePersistenceProperties"
+    },
+    {
+      "name": "messageplus.message.retry-count",
+      "type": "java.lang.Integer",
+      "description": "发送失败后重试次数",
+      "sourceType": "cn.redcoral.messageplus.properties.MessagePersistenceProperties"
+    },
+    {
+      "name": "messageplus.service-id",
+      "type": "java.lang.String",
+      "description": "服务ID",
+      "sourceType": "cn.redcoral.messageplus.properties.MessagePlusProperties"
     }
   ],
   "hints": []

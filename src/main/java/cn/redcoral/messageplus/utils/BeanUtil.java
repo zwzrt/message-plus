@@ -1,6 +1,6 @@
 package cn.redcoral.messageplus.utils;
 
-import cn.redcoral.messageplus.config.CacheConfig;
+import cn.redcoral.messageplus.config.cache.CacheConfig;
 import cn.redcoral.messageplus.data.mapper.MessagePlusInitializeMapper;
 import cn.redcoral.messageplus.data.service.HistoryMessageService;
 import cn.redcoral.messageplus.handler.MessageHandler;
@@ -10,7 +10,6 @@ import cn.redcoral.messageplus.properties.MessagePersistenceProperties;
 import cn.redcoral.messageplus.properties.MessagePlusProperties;
 import cn.redcoral.messageplus.utils.cache.ChatGroupCacheUtil;
 import cn.redcoral.messageplus.utils.cache.ChatSingleCacheUtil;
-import cn.redcoral.messageplus.utils.cache.impl.ChatSingleCacheUtilImpl;
 import cn.redcoral.messageplus.utils.exterior.SpringUtils;
 import com.github.benmanes.caffeine.cache.Cache;
 import org.springframework.messaging.simp.SimpMessagingTemplate;

@@ -1,4 +1,4 @@
-package cn.redcoral.messageplus.config;
+package cn.redcoral.messageplus.config.cache;
 
 import cn.redcoral.messageplus.data.entity.ChatRoom;
 import cn.redcoral.messageplus.properties.MessagePersistenceProperties;

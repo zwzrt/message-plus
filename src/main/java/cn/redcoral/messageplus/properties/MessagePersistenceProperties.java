@@ -51,7 +51,7 @@ public class MessagePersistenceProperties {
     
     
     
-    public  boolean isMessagePersistence() {
+    public boolean isMessagePersistence() {
         return MessagePersistenceProperties.messagePersistence;
     }
     public void setMessagePersistence(boolean messagePersistence) {

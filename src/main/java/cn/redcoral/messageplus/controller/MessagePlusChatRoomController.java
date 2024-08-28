@@ -2,12 +2,21 @@ package cn.redcoral.messageplus.controller;
 
 import cn.hutool.http.server.HttpServerRequest;
 import cn.redcoral.messageplus.data.entity.ChatRoom;
+import cn.redcoral.messageplus.data.entity.message.Message;
 import cn.redcoral.messageplus.data.service.ChatRoomService;
+import cn.redcoral.messageplus.handler.MessageHandler;
 import cn.redcoral.messageplus.manage.ChatRoomManage;
+import cn.redcoral.messageplus.port.MessagePlusBase;
+import cn.redcoral.messageplus.properties.MessagePersistenceProperties;
+import cn.redcoral.messageplus.properties.MessagePlusChatRoomProperties;
+import cn.redcoral.messageplus.utils.CounterIdentifierUtil;
+import cn.redcoral.messageplus.utils.ExpirationQueueUtil;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 /**
  * 聊天室
@@ -21,6 +30,16 @@ public class MessagePlusChatRoomController {
     private ChatRoomManage chatRoomManage;
     @Autowired
     private ChatRoomService chatRoomService;
+    @Autowired
+    private MessagePlusBase messagePlusBase;
+    @Autowired
+    private SimpMessagingTemplate simpMessagingTemplate;
+
+    /**
+     * 消息过期队列
+     */
+    private static final ExpirationQueueUtil expirationQueueUtil = new ExpirationQueueUtil(MessagePlusChatRoomProperties.survivalTime, TimeUnit.SECONDS, MessagePlusChatRoomProperties.messageMaxSize);
+
 
 
     /**
@@ -52,6 +71,41 @@ public class MessagePlusChatRoomController {
     @PostMapping("/thumbsUpNum")
     public void thumbsUpNum(HttpServerRequest request, @RequestParam("id1") String senderId, @RequestParam("id2") String chatRoomId) {
         chatRoomManage.thumbsUpNum(senderId, chatRoomId);
+    }
+    /**
+     * 发送聊天室消息
+     * @param senderId 发送者ID
+     * @param chatRoomId 聊天室ID
+     * @param msg 消息体
+     */
+    @PostMapping("/send")
+    public void sendChatRoomMessage(HttpServerRequest request, @RequestParam("id1") String senderId, @RequestParam("id2") String chatRoomId, @RequestBody Object msg) throws Exception {
+        // 1.并发限流
+        // 短时间发送消息达到上限，禁止发送消息
+        if (CounterIdentifierUtil.isLessThanOrEqual(senderId, MessagePersistenceProperties.concurrentNumber)) {
+            return;
+        }
+        // 计数器加一
+        CounterIdentifierUtil.numberOfSendsIncrease(senderId);
+
+        // TODO 2.查询是否禁言
+
+        // 3.权限校验
+        Message message = Message.buildChatRoom(senderId, chatRoomId, msg);
+        // 进行权限校验
+        boolean bo = messagePlusBase.onMessageCheck(request, message);
+        // 权限校验不通过
+        if (!bo) return;
+
+        // 4.发送消息
+        // 广播
+        simpMessagingTemplate.convertAndSend("/messageplus/chatroom/"+chatRoomId, message);
+
+        // 5.临时存储消息
+        expirationQueueUtil.add("chatroom:"+chatRoomId, message);
+
+        // 计数器减一
+        CounterIdentifierUtil.numberOfSendsDecrease(senderId);
     }
 
 
@@ -88,6 +142,11 @@ public class MessagePlusChatRoomController {
         return chatRoomManage.selectChatRoomList(page, size);
     }
 
+    /**
+     * 查询未关闭的聊天室
+     * @param userId 创建者ID
+     * @return 未关闭的聊天室ID
+     */
     @GetMapping("/noclose")
     public List<ChatRoom> selectMyChatRoomList(HttpServerRequest request, @RequestParam("id") String userId) {
         return chatRoomService.selectNotCloseChatRoomListByCreateId(userId);
@@ -113,6 +172,11 @@ public class MessagePlusChatRoomController {
     @GetMapping("/allUserNum")
     public String selectChatRoomAllUserNumById(HttpServerRequest request, @RequestParam("id") String chatRoomId) {
         return String.valueOf(chatRoomManage.getAllUserNum(chatRoomId));
+    }
+
+    @GetMapping("/history/message")
+    public List<Message> selectChatRoomHistoryMessage(HttpServerRequest request, @RequestParam("id") String chatRoomId) {
+        return expirationQueueUtil.getSurvivalList("chatroom:"+chatRoomId);
     }
 
 
