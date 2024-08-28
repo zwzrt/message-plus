@@ -15,10 +15,25 @@ public interface GroupService {
      */
     void createGroup(Group group);
 
+
+
     /**
      * 获取全部群组
      */
     List<Group> selectAllGroup();
+
+    /**
+     * 模糊查询群组
+     * @param name 群组名称
+     * @return 群组列表
+     */
+    List<Group> likeByName(String name);
+
+    /**
+     * 查询指定用户的群组
+     * @return 群组列表
+     */
+    List<Group> selectGroupListByCreateId(String createUserId);
 
     /**
      * 根据群组ID查询群组信息
@@ -40,6 +55,8 @@ public interface GroupService {
      */
     int selectUserNumById(String groupId);
 
+
+
     /**
      * 修改名称
      * @param groupId 群组ID
@@ -47,4 +64,5 @@ public interface GroupService {
      * @return 是否成功
      */
     boolean updateGroupName(String groupId, String newName);
+
 }

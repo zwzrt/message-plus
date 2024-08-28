@@ -10,6 +10,7 @@ import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.Callable;
 
@@ -36,6 +37,20 @@ public class GroupServiceImpl implements GroupService {
     @Override
     public List<Group> selectAllGroup() {
         return Group.BuildGroupList(groupMapper.selectList(null));
+    }
+
+    @Override
+    public List<Group> likeByName(String name) {
+        LambdaQueryWrapper<GroupPo> lqw = new LambdaQueryWrapper<>();
+        lqw.like(GroupPo::getName, name);
+        return Group.BuildGroupList(groupMapper.selectList(lqw));
+    }
+
+    @Override
+    public List<Group> selectGroupListByCreateId(String createUserId) {
+        LambdaQueryWrapper<GroupPo> lqw = new LambdaQueryWrapper<>();
+        lqw.eq(GroupPo::getCreateUserId, createUserId);
+        return Group.BuildGroupList(groupMapper.selectList(lqw));
     }
 
     @Override

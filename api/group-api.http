@@ -1,2 +1,8 @@
+### 模糊搜索
+GET {{host}}/group/like?name=相爱
+
+### 查询我的群组
+GET {{host}}/group/mygroup?id=001
+
 ### 修改群组名称
 PUT {{host}}/group?id=1822532077254488064&name=相亲相爱一家人

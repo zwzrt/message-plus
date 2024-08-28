@@ -121,6 +121,25 @@ public class GroupManage {
         }
     }
 
+
+
+    /**
+     * 模糊查询群组
+     * @param name 群组名称
+     * @return 群组列表
+     */
+    public List<Group> likeByName(String name) {
+        return groupService.likeByName(name);
+    }
+
+    /**
+     * 查询指定用户的群组
+     * @return 群组列表
+     */
+    public List<Group> selectGroupListByCreateId(String createUserId) {
+        return groupService.selectGroupListByCreateId(createUserId);
+    }
+
     /**
      * 获取全部群组
      */
