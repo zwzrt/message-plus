@@ -6,6 +6,7 @@ import cn.redcoral.messageplus.data.mapper.MessagePlusGroupMapper;
 import cn.redcoral.messageplus.data.service.GroupService;
 import cn.redcoral.messageplus.utils.cache.ChatGroupCacheUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -79,6 +80,14 @@ public class GroupServiceImpl implements GroupService {
             if (groupPo != null) return groupPo.getUserNum();
             else return -1;
         });
+    }
+
+    @Override
+    public boolean updateGroupName(String groupId, String newName) {
+        LambdaUpdateWrapper<GroupPo> lqw = new LambdaUpdateWrapper<>();
+        lqw.eq(GroupPo::getId, groupId);
+        lqw.set(GroupPo::getName, newName);
+        return groupMapper.update(lqw) > 0;
     }
 
 }

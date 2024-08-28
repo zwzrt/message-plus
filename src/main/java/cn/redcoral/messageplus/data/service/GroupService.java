@@ -39,4 +39,12 @@ public interface GroupService {
      * @return 群组人数
      */
     int selectUserNumById(String groupId);
+
+    /**
+     * 修改名称
+     * @param groupId 群组ID
+     * @param newName 群组新名称
+     * @return 是否成功
+     */
+    boolean updateGroupName(String groupId, String newName);
 }

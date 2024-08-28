@@ -135,4 +135,16 @@ public class GroupManage {
         return groupService.selectUserNumById(groupId);
     }
 
+
+
+    /**
+     * 修改名称
+     * @param groupId 群组ID
+     * @param newName 群组新名称
+     * @return 是否成功
+     */
+    public boolean updateGroupName(String groupId, String newName) {
+        return groupService.updateGroupName(groupId, newName);
+    }
+
 }

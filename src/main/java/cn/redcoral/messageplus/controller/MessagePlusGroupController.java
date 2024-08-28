@@ -2,10 +2,7 @@ package cn.redcoral.messageplus.controller;
 
 import cn.redcoral.messageplus.manage.GroupManage;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * 群聊
@@ -34,6 +31,11 @@ public class MessagePlusGroupController {
     @GetMapping
     public int selectUserNumById(@RequestParam("id") String groupId) {
         return groupManage.getUserNum(groupId);
+    }
+
+    @PutMapping
+    public boolean updateGroupNameById(@RequestParam("id") String groupId, @RequestParam("name") String groupName) {
+        return groupManage.updateGroupName(groupId, groupName);
     }
 
 }
