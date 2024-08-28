@@ -49,7 +49,44 @@ public class MessagePersistenceProperties {
      */
     public static long intervalTime = 1000;
     
+    /**
+     * 消息存储条数(一个群组或双人会话)
+     */
+    public static long storedRecords = 1000;
     
+    /**
+     * 消息最大存储时间(单位:天)
+     */
+    public static int survivalTime = 5;
+    
+    /**
+     * 检查时间间隔(单位:天)
+     */
+    public static int CheckTime = 1;
+    
+    public long getStoredRecords() {
+        return storedRecords;
+    }
+    
+    public void setStoredRecords(long storedRecords) {
+        MessagePersistenceProperties.storedRecords = storedRecords;
+    }
+    
+    public int getSurvivalTime() {
+        return survivalTime;
+    }
+    
+    public void setSurvivalTime(int survivalTime) {
+        MessagePersistenceProperties.survivalTime = survivalTime;
+    }
+    
+    public int getCheckTime() {
+        return CheckTime;
+    }
+    
+    public static void setCheckTime(int checkTime) {
+        CheckTime = checkTime;
+    }
     
     public boolean isMessagePersistence() {
         return MessagePersistenceProperties.messagePersistence;

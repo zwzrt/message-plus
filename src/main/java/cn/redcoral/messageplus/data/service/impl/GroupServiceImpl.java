@@ -5,7 +5,9 @@ import cn.redcoral.messageplus.data.entity.po.GroupPo;
 import cn.redcoral.messageplus.data.mapper.MessagePlusGroupMapper;
 import cn.redcoral.messageplus.data.service.GroupService;
 import cn.redcoral.messageplus.utils.cache.ChatGroupCacheUtil;
+import com.alibaba.fastjson.JSON;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -96,6 +98,25 @@ public class GroupServiceImpl implements GroupService {
             else return -1;
         });
     }
+    
+    @Override
+    public boolean deleteGroup(String groupId) {
+        int flag = groupMapper.deleteById(groupId);
+        return flag>0;
+    }
+    
+    @Override
+    public boolean joinGroup(String groupId, String userId) {
+        GroupPo groupPo = groupMapper.selectById(groupId);
+        List<String> ids = JSON.parseArray(groupPo.getClientIds(), String.class);
+        ids.add(userId);
+        UpdateWrapper<GroupPo> wrp = new UpdateWrapper<>();
+        wrp.eq("id",groupId);
+        wrp.set("client_ids",JSON.toJSONString(ids));
+        int update = groupMapper.update(wrp);
+        return update>0;
+    }
+    
 
     @Override
     public boolean updateGroupName(String groupId, String newName) {

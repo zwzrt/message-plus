@@ -64,5 +64,9 @@ public interface GroupService {
      * @return 是否成功
      */
     boolean updateGroupName(String groupId, String newName);
+    
+    boolean deleteGroup(String groupId);
+    
+    boolean joinGroup(String groupId, String userId);
 
 }

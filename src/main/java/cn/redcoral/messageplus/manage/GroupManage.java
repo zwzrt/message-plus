@@ -28,6 +28,7 @@ public class GroupManage {
      */
     private ConcurrentHashMap<String, Group> idGroupMap = new ConcurrentHashMap<>();
 
+    @Deprecated
     private GroupInterface groupInterface;
 
     @Autowired
@@ -153,7 +154,14 @@ public class GroupManage {
     public int getUserNum(String groupId) {
         return groupService.selectUserNumById(groupId);
     }
-
+    
+    public boolean deleteGroup(String groupId) {
+       return groupService.deleteGroup(groupId);
+    }
+    
+    public boolean joinGroup(String groupId, String userId) {
+       return groupService.joinGroup(groupId,userId);
+    }
 
 
     /**

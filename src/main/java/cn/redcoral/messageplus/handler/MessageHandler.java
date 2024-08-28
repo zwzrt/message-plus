@@ -142,13 +142,11 @@ public class MessageHandler {
                 //给没有收到消息的缓存
                 RetryUtil.retry(properties.getRetryCount(), properties.getIntervalTime(),
                         () -> {
-                            
                             //先重发，再缓存
                             boolean flag = MessageManage.sendMessage(receiverId, message);
                             if(!flag){
                                 throw new RuntimeException();
                             }
-                            
                         }, (bo) -> {
                             Message messageCopy = cn.hutool.core.bean.BeanUtil.copyProperties(message, Message.class);
                             messageCopy.setReceiverId(receiverId);
@@ -160,7 +158,6 @@ public class MessageHandler {
                                         true,id));
                             }
                         });
-                
             }
             allIdList.removeAll(faildList);
             allIdList.remove(senderId);

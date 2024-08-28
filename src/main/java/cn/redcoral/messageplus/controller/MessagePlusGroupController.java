@@ -7,6 +7,9 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+import java.util.List;
+import org.springframework.web.bind.annotation.*;
+
 /**
  * 群聊
  * @author mo
@@ -24,8 +27,24 @@ public class MessagePlusGroupController {
     public void a() {
 
     }
-
-
+    
+    
+    /**
+     * 创建群组
+     * @param createUserId 创建者ID
+     * @param name 群组名称
+     * @param client_ids 成员ID
+     */
+    @PostMapping
+    public void createGroup(String createUserId, String name, List<String> client_ids){
+        groupManage.createGroup(createUserId,name,client_ids);
+    }
+    
+    @DeleteMapping("/{groupId}")
+    public boolean deleteGroup(@PathVariable("groupId") String groupId){
+       return groupManage.deleteGroup(groupId);
+    }
+    
     /**
      * 模糊搜索群组
      */
@@ -55,9 +74,13 @@ public class MessagePlusGroupController {
 
 
 
-    @PutMapping
+    @PutMapping("updatename")
     public boolean updateGroupNameById(@RequestParam("id") String groupId, @RequestParam("name") String groupName) {
         return groupManage.updateGroupName(groupId, groupName);
     }
 
+    @PutMapping("join")
+    public boolean joinGroup(@RequestParam("id") String groupId, @RequestParam("userId") String userId) {
+        return groupManage.joinGroup(groupId,userId);
+    }
 }
