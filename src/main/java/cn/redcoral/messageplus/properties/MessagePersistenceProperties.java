@@ -21,23 +21,26 @@ public class MessagePersistenceProperties {
      * 消息过期时间（默认-1永不过期）
      */
     public static int expirationTime = -1;
+
     /**
      * 消息并发数
      */
     public static int concurrentNumber = 1;
+
     /**
      * 限制消息周期的时间（单位：s）
      */
     public static int cycleRestrictionsTime = 1;
-    
-    /**
-     * 消息超时时间（单位：分钟）
-     */
-    public static int messageTimeOut = 3;
     /**
      * 限制消息周期内的次数
      */
     public static int cycleRestrictionsNum = 10;
+
+    /**
+     * 消息超时时间（单位：分钟）
+     */
+    public static int messageTimeOut = 3;
+
     
     /**
      * 发送失败后重试次数

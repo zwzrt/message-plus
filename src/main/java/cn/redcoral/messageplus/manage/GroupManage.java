@@ -2,9 +2,6 @@ package cn.redcoral.messageplus.manage;
 
 import cn.redcoral.messageplus.data.entity.Group;
 import cn.redcoral.messageplus.data.service.GroupService;
-import cn.redcoral.messageplus.port.GroupInterface;
-import cn.redcoral.messageplus.utils.exterior.SpringUtils;
-import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 
@@ -28,9 +25,6 @@ public class GroupManage {
      */
     private ConcurrentHashMap<String, Group> idGroupMap = new ConcurrentHashMap<>();
 
-    @Deprecated
-    private GroupInterface groupInterface;
-
     @Autowired
     private GroupService groupService;
 
@@ -49,26 +43,6 @@ public class GroupManage {
         return groupService.selectGroupById(groupId);
     }
 
-    /**
-     * @deprecated
-     * 群组查询接口（向缓存查询）
-     * @param groupId 群组ID
-     * @return 群组
-     */
-    @Deprecated
-    protected Group getGroupByIdInCache(String groupId) {
-        // 尝试注入groupInterface
-        if (groupInterface == null) {
-            try {
-                groupInterface = SpringUtils.getBean(GroupInterface.class);
-            } catch (BeansException be) {}
-        }
-        // 调用二级接口
-        if (groupInterface==null) return null;
-        else {
-            return groupInterface.getGroupInCustom(groupId);
-        }
-    }
 
     /**
      * 创建群组

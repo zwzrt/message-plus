@@ -17,7 +17,7 @@ public class MessagePlusChatRoomProperties {
      */
     public static int survivalTime = 120;
     /**
-     * 消息最大条数
+     * 消息临时存储最大条数
      */
     public static int messageMaxSize = 20;
 
