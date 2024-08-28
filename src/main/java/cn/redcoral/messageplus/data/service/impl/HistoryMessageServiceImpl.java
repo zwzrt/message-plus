@@ -5,6 +5,8 @@ import cn.redcoral.messageplus.data.entity.po.HistoryMessagePo;
 import cn.redcoral.messageplus.data.mapper.MessagePlusHistoryMessageMapper;
 import cn.redcoral.messageplus.data.service.HistoryMessageService;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -16,7 +18,7 @@ import java.util.List;
  * @author mo
  **/
 @Service
-public class HistoryFailedMessageServiceImpl implements HistoryMessageService {
+public class HistoryMessageServiceImpl implements HistoryMessageService {
 
     @Autowired
     private MessagePlusHistoryMessageMapper messageMapper;
@@ -24,13 +26,25 @@ public class HistoryFailedMessageServiceImpl implements HistoryMessageService {
 
     @Transactional
     @Override
-    public boolean insertMessage(Message message) {
+    public Long insertMessage(Message message,boolean isFail) {
         // 消息创建时间不能为空
-        if (message.getCreateTime() == null) return false;
+        if (message.getCreateTime() == null) return null;
         // 插入并返回结果
-        return messageMapper.insert(new HistoryMessagePo(message)) == 1;
+        HistoryMessagePo historyMessagePo = new HistoryMessagePo(message, isFail);
+        messageMapper.insert(historyMessagePo);
+        return historyMessagePo.getId();
     }
-
+    
+    @Transactional
+    @Override
+    public boolean updateMessage(Long id, boolean isFail) {
+        UpdateWrapper<HistoryMessagePo> lpw = new UpdateWrapper<>();
+        lpw.eq("id",id);
+        lpw.set("is_fail",isFail);
+        int isOk = messageMapper.update(lpw);
+        return isOk>0;
+    }
+    
     @Override
     public void removeMessageBySenderId(String senderId) {
         LambdaQueryWrapper<HistoryMessagePo> lqw = new LambdaQueryWrapper<>();

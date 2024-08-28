@@ -2,10 +2,15 @@ package cn.redcoral.messageplus.handler;
 
 import cn.redcoral.messageplus.config.MessageEncoder;
 import cn.redcoral.messageplus.data.entity.message.Message;
+import cn.redcoral.messageplus.data.entity.po.HistoryMessagePo;
+import cn.redcoral.messageplus.data.service.HistoryMessageService;
+import cn.redcoral.messageplus.properties.MessagePersistenceProperties;
 import cn.redcoral.messageplus.manage.MessageManage;
 import cn.redcoral.messageplus.properties.MessagePlusProperties;
 import cn.redcoral.messageplus.utils.BeanUtil;
+import cn.redcoral.messageplus.utils.RetryUtil;
 import cn.redcoral.messageplus.utils.cache.ChatSingleCacheUtil;
+import com.alibaba.fastjson.JSON;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
@@ -39,21 +44,44 @@ public class MessagePlusService {
         this.client_id = sid;
         // 加入聊天
         MessageManage.joinChat(sid, this, session);
-        // TODO 消息重发，直接调用messagecahche遍历发送，简化代码
+        // 消息重发，直接调用messagecahche遍历发送，简化代码
         ChatSingleCacheUtil chatSingleCacheUtil = BeanUtil.chatSingleCache();
-        BlockingQueue blockingQueue = chatSingleCacheUtil.removeChatSingleContent(sid);
-        if(blockingQueue!=null){
+        BlockingQueue blockingQueue = chatSingleCacheUtil.getChatSingleContent(sid);
+        
+        MessagePersistenceProperties properties = BeanUtil.messagePersistenceProperties();
+        HistoryMessageService historyMessageService = BeanUtil.historyService();
+        
+        if (blockingQueue != null)
+        {
             //准备重发
-            log.info("准备消息重发");
-            new Thread(()->{
-                while (true){
-                    Message message = (Message) blockingQueue.poll();
-                    if(message==null){
-                        break;
-                    }
-                    MessageManage.sendMessage(sid,message);
+            while (true)
+            {
+                HistoryMessagePo message = (HistoryMessagePo) blockingQueue.poll();
+                if (message == null)
+                {
+                    //TODO 队列为空删除缓存
+                    chatSingleCacheUtil.removeCache(sid);
+                    break;
                 }
-            }).start();
+                //取到了消息准备重发
+                RetryUtil.retry(properties.getRetryCount(), properties.getIntervalTime(),
+                        () -> {
+                            Message msg = cn.hutool.core.bean.BeanUtil.copyProperties(message, Message.class);
+                            msg.setData(JSON.parse(message.getData()));
+                            boolean flag = MessageManage.sendMessage(sid,
+                                    msg);
+                            if (!flag) {
+                                throw new RuntimeException();
+                            }
+                        }
+                        , (bo) -> {
+                            if(bo){
+                                //成功重发，修改数据库
+                                historyMessageService.updateMessage(message.getId(),false);
+                            }
+                        });
+            }
+            
         }
         
         // 调用下游方法
@@ -76,7 +104,8 @@ public class MessagePlusService {
      * @param messageJSON 客户端发送过来的消息
      */
     @OnMessage
-    public void baseOnMessage(String messageJSON, Session session) {}
+    public void baseOnMessage(String messageJSON, Session session) {
+    }
     
     /**
      * 处理过程中发生错误

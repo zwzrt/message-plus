@@ -140,5 +140,8 @@ public class Message {
         }
         return messageList;
     }
-
+    
+    public void setData(Object data) {
+        this.data = data;
+    }
 }

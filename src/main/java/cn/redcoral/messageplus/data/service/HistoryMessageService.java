@@ -15,9 +15,9 @@ public interface HistoryMessageService {
      * @param message 消息
      * @return 是否成功
      */
-    boolean insertMessage(Message message);
+    Long insertMessage(Message message,boolean isFail);
 
-
+    boolean updateMessage(Long id,boolean isFail);
 
     /**
      * 通过发送者ID删除对应消息

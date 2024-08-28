@@ -2,6 +2,7 @@ package cn.redcoral.messageplus.utils.cache.impl;
 
 import cn.redcoral.messageplus.constant.CachePrefixConstant;
 import cn.redcoral.messageplus.data.entity.message.Message;
+import cn.redcoral.messageplus.data.entity.po.HistoryMessagePo;
 import cn.redcoral.messageplus.utils.cache.ChatSingleCacheUtil;
 import com.github.benmanes.caffeine.cache.Cache;
 import lombok.extern.slf4j.Slf4j;
@@ -27,12 +28,11 @@ public class ChatSingleCacheUtilImpl implements ChatSingleCacheUtil {
     
     /**
      * 添加聊天内容
-     * @param senderId 发送者
      * @param receiverId 接受者
      * @param message 内容
      */
     @Override
-    public void addChatContent(String senderId, String receiverId, Message message) {
+    public void addChatContent( String receiverId, HistoryMessagePo message) {
         log.info("准备缓存");
         //key:prefix+receiverId，value:queue<message>
         String key = CachePrefixConstant.CHAT_SINGLE_CONTENT+receiverId;
@@ -53,8 +53,9 @@ public class ChatSingleCacheUtilImpl implements ChatSingleCacheUtil {
      * @param receiverId
      * @return
      */
+    //改成两个都可以用的
     @Override
-    public BlockingQueue removeChatSingleContent(String receiverId) {
+    public BlockingQueue getChatSingleContent(String receiverId) {
         //匹配接受者id
         ConcurrentMap<@NonNull String, @NonNull BlockingQueue> map = messageQueueCache.asMap();
         Set<@NonNull String> keySet = map.keySet();
@@ -68,5 +69,18 @@ public class ChatSingleCacheUtilImpl implements ChatSingleCacheUtil {
         }
         //该用户没有消息
         return null;
+    }
+    
+    @Override
+    public void removeCache(String receiverId) {
+        ConcurrentMap<@NonNull String, @NonNull BlockingQueue> map = messageQueueCache.asMap();
+        Set<@NonNull String> keySet = map.keySet();
+        for (String key : keySet)
+        {
+            String[] keyStrs = key.split(":");
+            if(receiverId.equals(keyStrs[2])){
+                messageQueueCache.invalidate(key);
+            }
+        }
     }
 }

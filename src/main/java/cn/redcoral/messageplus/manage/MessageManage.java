@@ -158,25 +158,15 @@ public class MessageManage {
     public static List<String> sendMessageToGroupBarringMe(String userId, String groupId, Message message) {
         Group group = getGroupManage().getGroupById(groupId);
         if (group==null) return Collections.emptyList();
-//        group.getUserIdDialogueMap().forEachEntry(group.getUserIdDialogueMap().size(), action -> {
-//            if (action.getKey().equals(userId)) return;
-//            sendMessage(action.getValue().getSession(), message);
-//        });
+        //        group.getUserIdDialogueMap().forEachEntry(group.getUserIdDialogueMap().size(), action -> {
+        //            if (action.getKey().equals(userId)) return;
+        //            sendMessage(action.getValue().getSession(), message);
+        //        });
         List<String> offLineClientIdList = new ArrayList<>();
         group.getClientIdList().forEach(clientId->{
             if (clientId.equals(userId)) return;
             if (userIdSessionMap.get(clientId)!=null) {
-                // 在线
-                try
-                {
-                    sendMessage(userIdSessionMap.get(clientId), message);
-                }catch (MessageSendException e){
-                    //消息没发出去，缓存
-                    new Thread(()->{
-                        ChatGroupCacheUtil chatGroupCacheUtil = BeanUtil.chatGroupCacheUtil();
-                        chatGroupCacheUtil.addChatContent(userId,clientId,message);
-                    }).start();
-                }
+                sendMessage(userIdSessionMap.get(clientId), message);
             } else {
                 //不在线
                 offLineClientIdList.add(clientId);

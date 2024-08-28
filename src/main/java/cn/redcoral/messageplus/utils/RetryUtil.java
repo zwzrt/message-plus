@@ -13,6 +13,9 @@ public class RetryUtil {
          * 运行主体
          */
         void run() throws Exception;
+    }
+    
+    public interface Finish {
         /**
          * 运行完成后的方法
          * @param bo 重试是否成功
@@ -27,8 +30,8 @@ public class RetryUtil {
      * @param retryInterval 重试间隔（默认为ms）
      * @param run 重试内容
      */
-    public static void retry(int retryTimes, int retryInterval, Run run) {
-        retry(retryTimes, retryInterval, TimeUnit.MILLISECONDS, run);
+    public static void retry(int retryTimes, long retryInterval, Run run, Finish finish) {
+        retry(retryTimes, retryInterval, TimeUnit.MILLISECONDS, run, finish);
     }
 
     /**
@@ -37,15 +40,15 @@ public class RetryUtil {
      * @param retryTimes 重试次数
      * @param retryInterval 重试间隔
      * @param timeUnit 时间单位
-     * @param callable 重试内容
+     * @param run 重试内容
      */
-    public static void retry(int retryTimes, int retryInterval, TimeUnit timeUnit, Run run) {
+    public static void retry(int retryTimes, long retryInterval, TimeUnit timeUnit, Run run, Finish finish) {
         AsyncUtil.async(()->{
             for (int i = 0; i < retryTimes;) {
                 try {
                     run.run();
                     // 执行成功
-                    run.finish(true);
+                    finish.finish(true);
                     return null;
                 } catch (RuntimeException e) {
                     // 进行下一次重试
@@ -55,7 +58,7 @@ public class RetryUtil {
                 }
             }
             // 执行失败
-            run.finish(false);
+            finish.finish(false);
             return null;
         });
     }

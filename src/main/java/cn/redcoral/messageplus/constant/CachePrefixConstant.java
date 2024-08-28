@@ -41,4 +41,19 @@ public class CachePrefixConstant {
      */
     public static final String CHAT_GROUP_CONTENT = HEAD_PREFIX + "CHAT_GROUP_CONTENT:";
     
+    public enum SingleGroupEnum{
+        SINGLE("SINGLE"),
+        GROUP("GROUP");
+        
+        private final String value;
+        
+        SingleGroupEnum(String value){
+            this.value = value;
+        }
+        
+        public String getValue(){
+            return value;
+        }
+    }
+    
 }

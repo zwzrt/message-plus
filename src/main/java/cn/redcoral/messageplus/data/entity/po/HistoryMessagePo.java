@@ -62,8 +62,16 @@ public class HistoryMessagePo {
     /**
      * 构造点对点消息对象
      */
-    public HistoryMessagePo(Message message) {
+    public HistoryMessagePo(Message message,boolean isFail,Long Id) {
         BeanUtil.copyProperties(message, this);
+        this.isFail=isFail;
+        this.id=Id;
+        this.data = JSON.toJSONString(message.getData());
+    }
+    
+    public HistoryMessagePo(Message message,boolean isFail) {
+        BeanUtil.copyProperties(message, this);
+        this.isFail=isFail;
         this.data = JSON.toJSONString(message.getData());
     }
 

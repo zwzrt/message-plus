@@ -2,9 +2,11 @@ package cn.redcoral.messageplus.utils;
 
 import cn.redcoral.messageplus.config.CacheConfig;
 import cn.redcoral.messageplus.data.mapper.MessagePlusInitializeMapper;
+import cn.redcoral.messageplus.data.service.HistoryMessageService;
 import cn.redcoral.messageplus.handler.MessageHandler;
 import cn.redcoral.messageplus.manage.ChatRoomManage;
 import cn.redcoral.messageplus.port.MessagePlusBase;
+import cn.redcoral.messageplus.properties.MessagePersistenceProperties;
 import cn.redcoral.messageplus.properties.MessagePlusProperties;
 import cn.redcoral.messageplus.utils.cache.ChatGroupCacheUtil;
 import cn.redcoral.messageplus.utils.cache.ChatSingleCacheUtil;
@@ -35,7 +37,21 @@ public class BeanUtil {
     private static ChatSingleCacheUtil chatSingleCache;
     
     private static ChatGroupCacheUtil chatGroupCache;
-
+    
+    private static MessagePersistenceProperties messagePersistenceProperties;
+    
+    private static HistoryMessageService historyMessageService;
+    
+    public static HistoryMessageService historyService(){
+        if (historyMessageService == null) historyMessageService = SpringUtils.getBean(HistoryMessageService.class);
+        return historyMessageService;
+    }
+    
+    public static MessagePersistenceProperties messagePersistenceProperties(){
+        if (messagePersistenceProperties == null) messagePersistenceProperties = SpringUtils.getBean(MessagePersistenceProperties.class);
+        return messagePersistenceProperties;
+    }
+    
     public static ChatGroupCacheUtil chatGroupCacheUtil(){
         if (chatGroupCache == null) chatGroupCache = SpringUtils.getBean(ChatGroupCacheUtil.class);
         return chatGroupCache;

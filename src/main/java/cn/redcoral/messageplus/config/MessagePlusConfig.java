@@ -1,19 +1,12 @@
 package cn.redcoral.messageplus.config;
 
-import cn.hutool.core.lang.Snowflake;
-import cn.redcoral.messageplus.controller.MessagePlusChatRoomController;
-import cn.redcoral.messageplus.controller.MessagePlusSendController;
 import cn.redcoral.messageplus.initialize.MessageInitialize;
 import cn.redcoral.messageplus.properties.MessagePlusProperties;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.ibatis.annotations.Mapper;
 import org.mybatis.spring.annotation.MapperScan;
-import org.springframework.boot.web.servlet.ServletComponentScan;
 import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
-import org.springframework.context.annotation.EnableAspectJAutoProxy;
-import org.springframework.context.annotation.Import;
 import org.springframework.web.socket.server.standard.ServerEndpointExporter;
 
 /**

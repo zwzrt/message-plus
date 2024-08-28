@@ -1,6 +1,7 @@
 package cn.redcoral.messageplus.properties;
 
 import lombok.Data;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;
 
@@ -10,6 +11,7 @@ import org.springframework.stereotype.Component;
 @Data
 @Component("messagePersistenceProperties")
 @ConfigurationProperties(prefix = "messageplus.message")
+@Slf4j
 public class MessagePersistenceProperties {
     /**
      * 消息持久化
@@ -29,7 +31,7 @@ public class MessagePersistenceProperties {
     public static int cycleRestrictionsTime = 1;
     
     /**
-     * 消息超时时间（单位：day）
+     * 消息超时时间（单位：分钟）
      */
     public static int messageTimeOut = 3;
     /**
@@ -37,34 +39,44 @@ public class MessagePersistenceProperties {
      */
     public static int cycleRestrictionsNum = 10;
     
+    /**
+     * 发送失败后重试次数
+     */
+    public static int retryCount = 1;
     
-
-    public static boolean isMessagePersistence() {
+    /**
+     * 每次重试所需间隔时间(单位:ms)
+     */
+    public static long intervalTime = 1000;
+    
+    
+    
+    public  boolean isMessagePersistence() {
         return MessagePersistenceProperties.messagePersistence;
     }
     public void setMessagePersistence(boolean messagePersistence) {
         MessagePersistenceProperties.messagePersistence = messagePersistence;
     }
-    public static int getExpirationTime() {
+    public int getExpirationTime() {
         return expirationTime;
     }
     public void setExpirationTime(int expirationTime) {
         MessagePersistenceProperties.expirationTime = expirationTime;
     }
-    public static int getConcurrentNumber() {
+    public int getConcurrentNumber() {
         return concurrentNumber;
     }
     public void setConcurrentNumber(int concurrentNumber) {
         MessagePersistenceProperties.concurrentNumber = concurrentNumber;
     }
-    public static int getCycleRestrictionsTime() {
+    public int getCycleRestrictionsTime() {
         return cycleRestrictionsTime;
     }
     public void setCycleRestrictionsTime(int cycleRestrictionsTime) {
         MessagePersistenceProperties.cycleRestrictionsTime = cycleRestrictionsTime;
     }
     
-    public static int getMessageTimeOut() {
+    public int getMessageTimeOut() {
         return messageTimeOut;
     }
     
@@ -72,10 +84,29 @@ public class MessagePersistenceProperties {
         MessagePersistenceProperties.messageTimeOut = messageTimeOut;
     }
     
-    public static int getCycleRestrictionsNum() {
+    public int getCycleRestrictionsNum() {
         return cycleRestrictionsNum;
     }
     public void setCycleRestrictionsNum(int cycleRestrictionsNum) {
         MessagePersistenceProperties.cycleRestrictionsNum = cycleRestrictionsNum;
+    }
+    
+    public int getRetryCount() {
+        return retryCount;
+    }
+    
+    public void setRetryCount(int retryCount) {
+        if(retryCount<1){
+            retryCount=1;
+        }
+        MessagePersistenceProperties.retryCount = retryCount;
+    }
+    
+    public long getIntervalTime() {
+        return intervalTime;
+    }
+    
+    public void setIntervalTime(long intervalTime) {
+        MessagePersistenceProperties.intervalTime = intervalTime;
     }
 }

@@ -77,7 +77,7 @@ public class CacheConfig {
             .initialCapacity(100) // 初始容量设置为1000，适应较大的初始需求
             .maximumSize(10000000) // 设置一个较大的最大容量以适应大量消息限制数据
             // 根据消息持久化属性中的周期限制时间设置过期时间，确保与业务逻辑一致
-            .expireAfterWrite(MessagePersistenceProperties.messageTimeOut, TimeUnit.DAYS)
+            .expireAfterWrite(MessagePersistenceProperties.messageTimeOut, TimeUnit.MINUTES)
             .build();
     
     /**
