@@ -32,7 +32,12 @@
 </div>
 
 # <img src="./doc/img/logo_white_min.png" width="50"> 消息增强器
-<h1>ddd</h1>
+
+<div>
+    <img src="./doc/img/logo_white_min.png" width="50" alt="">
+    <h1 style="float: left;">消息增强器</h1>
+</div>
+
 
 <img src="./doc/img/logo_white_min.png" width="100" height="100">
 
