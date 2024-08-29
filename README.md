@@ -95,6 +95,6 @@ Maven + SpringBoot + WebSocket + MyBatisPlus + Caffeine + Hutool
 
 感谢以下贡献者所做的一切贡献！
 
-<a title="mo" href="https://gitee.com/modmb"><img src="https://foruda.gitee.com/avatar/1720421931102111157/11861406_modmb_1720421931.png!avatar60" alt="11861406 modmb 1720421931"></a>
-<a title="墨桑" href="https://gitee.com/MS_mos"><img src="https://foruda.gitee.com/avatar/1722943436086411647/10922893_ms_mos_1722943436.png!avatar60" alt="10922893 ms mos 1722943436"></a>
-<a title="w_m" href="https://gitee.com/Tyrannosaurus_warriors"><img src="https://foruda.gitee.com/avatar/1724938967562580050/12890918_tyrannosaurus_warriors_1724938967.png!avatar60" alt="w_m-Tyrannosaurus_warriors"></a>
+<a title="mo" href="https://gitee.com/modmb"><img src="https://foruda.gitee.com/avatar/1720421931102111157/11861406_modmb_1720421931.png!avatar70" alt="11861406 modmb 1720421931"></a>
+<a title="墨桑" href="https://gitee.com/MS_mos"><img src="https://foruda.gitee.com/avatar/1722943436086411647/10922893_ms_mos_1722943436.png!avatar70" alt="10922893 ms mos 1722943436"></a>
+<a title="w_m" href="https://gitee.com/Tyrannosaurus_warriors"><img src="https://foruda.gitee.com/avatar/1724938967562580050/12890918_tyrannosaurus_warriors_1724938967.png!avatar70" alt="w_m-Tyrannosaurus_warriors"></a>
