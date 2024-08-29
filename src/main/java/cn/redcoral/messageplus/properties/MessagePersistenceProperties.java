@@ -45,7 +45,7 @@ public class MessagePersistenceProperties {
     /**
      * 发送失败后重试次数
      */
-    public static int retryCount = 1;
+    public static int retryCount = 2;
     
     /**
      * 每次重试所需间隔时间(单位:ms)

@@ -3,7 +3,6 @@ package cn.redcoral.messageplus.utils.cache.impl;
 import cn.redcoral.messageplus.constant.CachePrefixConstant;
 import cn.redcoral.messageplus.constant.GroupCacheConstant;
 import cn.redcoral.messageplus.data.entity.Group;
-import cn.redcoral.messageplus.data.entity.message.Message;
 import cn.redcoral.messageplus.data.entity.po.HistoryMessagePo;
 import cn.redcoral.messageplus.utils.cache.ChatGroupCacheUtil;
 import com.alibaba.fastjson.JSON;
