@@ -1,7 +1,28 @@
 
-# 消息增强器（message-plus）
+[//]: # (# 消息增强器（message-plus）)
 
-<a href='https://gitee.com/modmb/message-plus/stargazers'><img src='https://gitee.com/modmb/message-plus/badge/star.svg?theme=dark' alt='star'></img></a><a href='https://gitee.com/modmb/message-plus/members'><img src='https://gitee.com/modmb/message-plus/badge/fork.svg?theme=dark' alt='fork'></img></a>![DingTalk](https://img.shields.io/static/v1?label=Github&message=message-plus&color=orange)
+<table cellspacing="0" cellpadding="0" border="0" style="border: 0;">
+    <tr>
+        <td rowspan="2"><img src="./doc/img/logo2.png" style="height: 80px;" alt="logo"></td>
+        <td><div style="height: 80px; line-height: 80px; font-size: 30px;">消息增强器（message-plus）</div></td>
+    </tr>
+    <tr>
+        <td>
+            <a href='https://gitee.com/modmb/message-plus/stargazers'>
+                <img src='https://gitee.com/modmb/message-plus/badge/star.svg?theme=dark' alt='star'></img>
+            </a>
+            <a href='https://gitee.com/modmb/message-plus/members'>
+                <img src='https://gitee.com/modmb/message-plus/badge/fork.svg?theme=dark' alt='fork'></img>
+            </a>
+            <img src="https://img.shields.io/static/v1?label=Github&message=message-plus&color=orange" alt="">
+        </td>
+    </tr>
+</table>
+<div style="margin: 20px 0; height: 80px">
+    <img src="./doc/img/logo2.png" style="height: 80px; float: left;" alt="logo">
+    <div style="height: 80px; line-height: 80px; float: left; font-size: 30px;">消息增强器（message-plus）</div>
+</div>
+<a href='https://gitee.com/modmb/message-plus/stargazers'><img src='https://gitee.com/modmb/message-plus/badge/star.svg?theme=dark' alt='star'></img></a><a href='https://gitee.com/modmb/message-plus/members'><img src='https://gitee.com/modmb/message-plus/badge/fork.svg?theme=dark' alt='fork'></img></a><img src="https://img.shields.io/static/v1?label=Github&message=message-plus&color=orange">
 
 ---
 
@@ -14,7 +35,7 @@
 
 基于WebSocket的消息增强器，帮助开发者快速开发即时聊天系统。支持单发、群发、聊天室及系统功能;以及数据持久化；支持失败消息的持久化及重发功能。
 
-（此版本为单机版，集群版请前往[集群版仓库](https://gitee.com/modmb/message-plus-cluster)（Gitee））
+此版本为单机版，集群版请前往[集群版仓库](https://gitee.com/modmb/message-plus-cluster)（Gitee）
 
 ### 软件架构
 
