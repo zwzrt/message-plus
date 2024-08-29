@@ -1,28 +1,35 @@
 
 [//]: # (# 消息增强器（message-plus）)
 
-<table cellspacing="0" cellpadding="0" border="0" style="border: 0;">
-    <tr>
-        <td rowspan="2"><img src="./doc/img/logo2.png" style="height: 80px;" alt="logo"></td>
-        <td><div style="height: 80px; line-height: 80px; font-size: 30px;">消息增强器（message-plus）</div></td>
-    </tr>
-    <tr>
-        <td>
-            <a href='https://gitee.com/modmb/message-plus/stargazers'>
-                <img src='https://gitee.com/modmb/message-plus/badge/star.svg?theme=dark' alt='star'></img>
-            </a>
-            <a href='https://gitee.com/modmb/message-plus/members'>
-                <img src='https://gitee.com/modmb/message-plus/badge/fork.svg?theme=dark' alt='fork'></img>
-            </a>
-            <img src="https://img.shields.io/static/v1?label=Github&message=message-plus&color=orange" alt="">
-        </td>
-    </tr>
-</table>
-<div style="margin: 20px 0; height: 80px">
-    <img src="./doc/img/logo2.png" style="height: 80px; float: left;" alt="logo">
-    <div style="height: 80px; line-height: 80px; float: left; font-size: 30px;">消息增强器（message-plus）</div>
+<img src="./doc/img/logo2.png" style="width: 100%; margin: 5% 0;" alt="logo">
+
+<div style="height: 80px; width: 600px; margin: 30px 0;">
+    <img src="./doc/img/logo2.png" style="height: 80px; float: left; width: 35%" alt="logo">
+    <div style="height: 60px; line-height: 60px; float: left; font-size: 25px; width: 64%; margin-left: 1%">消息增强器（message-plus）</div>
+    <div style="float: left; width: 63%; height: 16px; font-size: 10px; line-height: 16px; margin: 2px 1%;">
+        <a href='https://gitee.com/modmb/message-plus/stargazers' style="margin-right: 5px">
+            <img src='https://gitee.com/modmb/message-plus/badge/star.svg?theme=dark' alt='star'></img>
+        </a>
+        <a href='https://gitee.com/modmb/message-plus/members' style="margin-right: 5px">
+            <img src='https://gitee.com/modmb/message-plus/badge/fork.svg?theme=dark' alt='fork'></img>
+        </a>
+        <img src="https://img.shields.io/static/v1?label=Github&message=message-plus&color=orange" alt="">
+    </div>
 </div>
-<a href='https://gitee.com/modmb/message-plus/stargazers'><img src='https://gitee.com/modmb/message-plus/badge/star.svg?theme=dark' alt='star'></img></a><a href='https://gitee.com/modmb/message-plus/members'><img src='https://gitee.com/modmb/message-plus/badge/fork.svg?theme=dark' alt='fork'></img></a><img src="https://img.shields.io/static/v1?label=Github&message=message-plus&color=orange">
+
+<div style="height: 80px; width: 600px; margin: 30px 0;">
+    <img src="./doc/img/logo_min.png" style="height: 60px; float: left; width: 9%; margin: 10px 2%" alt="logo">
+    <div style="height: 60px; line-height: 60px; float: left; font-size: 25px; width: 64%; margin-left: 1%">消息增强器（message-plus）</div>
+    <div style="float: left; width: 63%; height: 16px; font-size: 10px; line-height: 16px; margin: 2px 1%;">
+        <a href='https://gitee.com/modmb/message-plus/stargazers' style="margin-right: 5px">
+            <img src='https://gitee.com/modmb/message-plus/badge/star.svg?theme=dark' alt='star'></img>
+        </a>
+        <a href='https://gitee.com/modmb/message-plus/members' style="margin-right: 5px">
+            <img src='https://gitee.com/modmb/message-plus/badge/fork.svg?theme=dark' alt='fork'></img>
+        </a>
+        <img src="https://img.shields.io/static/v1?label=Github&message=message-plus&color=orange" alt="">
+    </div>
+</div>
 
 ---
 
