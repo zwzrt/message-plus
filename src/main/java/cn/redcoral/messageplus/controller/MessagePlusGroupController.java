@@ -1,7 +1,13 @@
 package cn.redcoral.messageplus.controller;
 
+import cn.hutool.http.server.HttpServerRequest;
 import cn.redcoral.messageplus.data.entity.Group;
+import cn.redcoral.messageplus.data.entity.message.Message;
+import cn.redcoral.messageplus.handler.MessageHandler;
 import cn.redcoral.messageplus.manage.GroupManage;
+import cn.redcoral.messageplus.port.MessagePlusBase;
+import cn.redcoral.messageplus.properties.MessagePersistenceProperties;
+import cn.redcoral.messageplus.utils.CounterIdentifierUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -20,6 +26,10 @@ public class MessagePlusGroupController {
 
     @Autowired
     private GroupManage groupManage;
+    @Autowired
+    private MessagePlusBase messagePlusBase;
+    @Autowired
+    private MessageHandler messageHandler;
 
     /**
      * 拉入黑名单
@@ -39,12 +49,50 @@ public class MessagePlusGroupController {
     public void createGroup(String createUserId, String name, List<String> client_ids){
         groupManage.createGroup(createUserId,name,client_ids);
     }
+
+    /**
+     * 发送群发类消息
+     * @param groupId 群组ID
+     * @param msg 消息体
+     */
+    @PostMapping("/send")
+    public void sendMassMessage(HttpServerRequest request, @RequestParam("id1") String senderId,
+                                @RequestParam("id2") String groupId, @RequestBody String msg) throws Exception {
+        // 1.并发限流
+        // 短时间发送消息达到上限，禁止发送消息
+        if (CounterIdentifierUtil.isLessThanOrEqual(senderId, MessagePersistenceProperties.concurrentNumber)) {
+            return;
+        }
+        // 计数器加一
+        CounterIdentifierUtil.numberOfSendsIncrease(senderId);
+
+        // TODO 2.查询是否禁言
+
+        // 3.权限校验
+        Message message = Message.buildMass(senderId, groupId, msg);
+        // 进行权限校验
+        boolean bo = messagePlusBase.onMessageCheck(request, message);
+        // 权限校验不通过
+        if (!bo) return;
+
+        // 4.发送群发消息
+        messageHandler.handleMassMessage(senderId, groupId, message);
+
+        // 计数器减一
+        CounterIdentifierUtil.numberOfSendsDecrease(senderId);
+    }
+
+
+
     
     @DeleteMapping("/{groupId}")
     public boolean deleteGroup(@PathVariable("groupId") String groupId){
        return groupManage.deleteGroup(groupId);
     }
-    
+
+
+
+
     /**
      * 模糊搜索群组
      */
@@ -83,4 +131,5 @@ public class MessagePlusGroupController {
     public boolean joinGroup(@RequestParam("id") String groupId, @RequestParam("userId") String userId) {
         return groupManage.joinGroup(groupId,userId);
     }
+
 }
