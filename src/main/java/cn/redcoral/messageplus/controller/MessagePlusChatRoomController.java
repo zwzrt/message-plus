@@ -4,7 +4,6 @@ import cn.hutool.http.server.HttpServerRequest;
 import cn.redcoral.messageplus.data.entity.ChatRoom;
 import cn.redcoral.messageplus.data.entity.message.Message;
 import cn.redcoral.messageplus.data.service.ChatRoomService;
-import cn.redcoral.messageplus.handler.MessageHandler;
 import cn.redcoral.messageplus.manage.ChatRoomManage;
 import cn.redcoral.messageplus.port.MessagePlusBase;
 import cn.redcoral.messageplus.properties.MessagePersistenceProperties;

@@ -85,13 +85,16 @@ public class MessagePlusGroupController {
 
 
     
+    /**
+     * 删除群组
+     * @param groupId 群组ID
+     * @return 是否删除成功
+     */
     @DeleteMapping("/{groupId}")
     public boolean deleteGroup(@PathVariable("groupId") String groupId){
        return groupManage.deleteGroup(groupId);
     }
-
-
-
+    
 
     /**
      * 模糊搜索群组
@@ -119,17 +122,40 @@ public class MessagePlusGroupController {
     public int selectUserNumById(@RequestParam("id") String groupId) {
         return groupManage.getUserNum(groupId);
     }
-
-
-
+    
+    
+    /**
+     * 修改群组名称
+     * @param groupId 群组ID
+     * @param groupName 新群组名称
+     * @return 是否修改成功
+     */
     @PutMapping("updatename")
     public boolean updateGroupNameById(@RequestParam("id") String groupId, @RequestParam("name") String groupName) {
         return groupManage.updateGroupName(groupId, groupName);
     }
-
+    
+    /**
+     * 加入群组
+     * @param groupId 群组ID
+     * @param userId 用户ID
+     * @return 是否加入成功
+     */
     @PutMapping("join")
     public boolean joinGroup(@RequestParam("id") String groupId, @RequestParam("userId") String userId) {
         return groupManage.joinGroup(groupId,userId);
     }
-
+    
+    /**
+     * 退出群组
+     * @param groupId 群组Id
+     * @param userId 用户Id
+     * @return 退出是否成功
+     */
+    @PutMapping("signout")
+    public boolean signOut(@RequestParam("id")String groupId,@RequestParam("userId")String userId){
+        return groupManage.signOutGroup(groupId,userId);
+    }
+    
+    //TODO 被踢出群组
 }

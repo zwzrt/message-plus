@@ -117,7 +117,19 @@ public class GroupServiceImpl implements GroupService {
         return update>0;
     }
     
-
+    @Override
+    public boolean signOutGroup(String groupId, String userId) {
+        GroupPo groupPo = groupMapper.selectById(groupId);
+        List<String> ids = JSON.parseArray(groupPo.getClientIds(), String.class);
+        ids.remove(userId);
+        UpdateWrapper<GroupPo> wrp = new UpdateWrapper<>();
+        wrp.eq("id",groupId);
+        wrp.set("client_ids",JSON.toJSONString(ids));
+        int update = groupMapper.update(wrp);
+        return update>0;
+    }
+    
+    
     @Override
     public boolean updateGroupName(String groupId, String newName) {
         LambdaUpdateWrapper<GroupPo> lqw = new LambdaUpdateWrapper<>();

@@ -90,7 +90,7 @@ public class MessageHandler {
             case "-1":
             {
                 // 提示出现失败消息(用户实现)
-                log.info("用户不在线");
+//                log.info("用户不在线");
                 // TODO 提示出现失败消息
                 //                messagePlusBase.onFailedMessage(message);
                 //TODO 返回值改为布尔类型，提示开发者发送消息失败
@@ -103,7 +103,7 @@ public class MessageHandler {
             {
                 // 调用发送方法
                 boolean sended = MessageManage.sendMessage(receiverId, message);
-                log.info("用户在线");
+//                log.info("用户在线");
                 if (!sended)
                 {
                     // TODO 提示出现失败消息

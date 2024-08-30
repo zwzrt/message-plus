@@ -68,5 +68,6 @@ public interface GroupService {
     boolean deleteGroup(String groupId);
     
     boolean joinGroup(String groupId, String userId);
-
+    
+    boolean signOutGroup(String groupId, String userId);
 }

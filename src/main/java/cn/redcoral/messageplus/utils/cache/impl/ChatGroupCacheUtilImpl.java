@@ -57,7 +57,7 @@ public class ChatGroupCacheUtilImpl implements ChatGroupCacheUtil {
     
     @Override
     public void addChatContent(String senderId, String receiverId, HistoryMessagePo message) {
-        log.info("准备缓存");
+//        log.info("准备缓存");
         //key:prefix+receiverId，value:queue<message>
         String key = CachePrefixConstant.CHAT_GROUP_CONTENT+receiverId;
         BlockingQueue queue = messageQueueCache.getIfPresent(key);

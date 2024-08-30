@@ -33,7 +33,7 @@ public class ChatSingleCacheUtilImpl implements ChatSingleCacheUtil {
      */
     @Override
     public void addChatContent( String receiverId, HistoryMessagePo message) {
-        log.info("准备缓存");
+//        log.info("准备缓存");
         //key:prefix+receiverId，value:queue<message>
         String key = CachePrefixConstant.CHAT_SINGLE_CONTENT+receiverId;
         BlockingQueue queue = messageQueueCache.getIfPresent(key);

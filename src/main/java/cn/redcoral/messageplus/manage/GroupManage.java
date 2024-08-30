@@ -147,5 +147,8 @@ public class GroupManage {
     public boolean updateGroupName(String groupId, String newName) {
         return groupService.updateGroupName(groupId, newName);
     }
-
+    
+    public boolean signOutGroup(String groupId, String userId) {
+        return groupService.signOutGroup(groupId,userId);
+    }
 }

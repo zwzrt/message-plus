@@ -31,7 +31,7 @@ public class MessagePlusSingleController {
      */
     @PostMapping("/send")
     public void sendSingleMessage(HttpServerRequest request, @RequestParam("id1") String senderId, @RequestParam("id2") String receiverId, @RequestBody Object msg) throws Exception {
-        log.info("接收到消息"+msg);
+//        log.info("接收到消息"+msg);
         // 1.并发限流
         // 短时间发送消息达到上限，禁止发送消息(默认为1)
         if (CounterIdentifierUtil.isLessThanOrEqual(senderId, MessagePersistenceProperties.concurrentNumber)) {

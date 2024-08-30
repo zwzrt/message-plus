@@ -59,7 +59,7 @@ public class MessagePlusService {
                 HistoryMessagePo message = (HistoryMessagePo) blockingQueue.poll();
                 if (message == null)
                 {
-                    //TODO 队列为空删除缓存
+                    // 队列为空删除缓存
                     chatSingleCacheUtil.removeCache(sid);
                     break;
                 }
