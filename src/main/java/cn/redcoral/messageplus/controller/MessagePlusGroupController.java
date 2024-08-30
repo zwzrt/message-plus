@@ -13,9 +13,6 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-import java.util.List;
-import org.springframework.web.bind.annotation.*;
-
 /**
  * 群聊
  * @author mo
@@ -84,7 +81,7 @@ public class MessagePlusGroupController {
 
 
 
-    
+
     /**
      * 删除群组
      * @param groupId 群组ID
@@ -94,7 +91,9 @@ public class MessagePlusGroupController {
     public boolean deleteGroup(@PathVariable("groupId") String groupId){
        return groupManage.deleteGroup(groupId);
     }
-    
+
+
+
 
     /**
      * 模糊搜索群组
@@ -122,8 +121,8 @@ public class MessagePlusGroupController {
     public int selectUserNumById(@RequestParam("id") String groupId) {
         return groupManage.getUserNum(groupId);
     }
-    
-    
+
+
     /**
      * 修改群组名称
      * @param groupId 群组ID
@@ -134,7 +133,7 @@ public class MessagePlusGroupController {
     public boolean updateGroupNameById(@RequestParam("id") String groupId, @RequestParam("name") String groupName) {
         return groupManage.updateGroupName(groupId, groupName);
     }
-    
+
     /**
      * 加入群组
      * @param groupId 群组ID
@@ -145,7 +144,7 @@ public class MessagePlusGroupController {
     public boolean joinGroup(@RequestParam("id") String groupId, @RequestParam("userId") String userId) {
         return groupManage.joinGroup(groupId,userId);
     }
-    
+
     /**
      * 退出群组
      * @param groupId 群组Id
@@ -156,6 +155,6 @@ public class MessagePlusGroupController {
     public boolean signOut(@RequestParam("id")String groupId,@RequestParam("userId")String userId){
         return groupManage.signOutGroup(groupId,userId);
     }
-    
+
     //TODO 被踢出群组
 }

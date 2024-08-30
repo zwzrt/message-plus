@@ -1,10 +1,8 @@
 package cn.redcoral.messageplus.utils.cache;
 
 import cn.redcoral.messageplus.data.entity.Group;
-import cn.redcoral.messageplus.data.entity.message.Message;
 import cn.redcoral.messageplus.data.entity.po.HistoryMessagePo;
 
-import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.Callable;
 import java.util.function.Function;
 

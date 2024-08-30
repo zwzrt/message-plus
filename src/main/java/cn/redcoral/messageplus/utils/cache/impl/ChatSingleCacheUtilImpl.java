@@ -1,7 +1,6 @@
 package cn.redcoral.messageplus.utils.cache.impl;
 
 import cn.redcoral.messageplus.constant.CachePrefixConstant;
-import cn.redcoral.messageplus.data.entity.message.Message;
 import cn.redcoral.messageplus.data.entity.po.HistoryMessagePo;
 import cn.redcoral.messageplus.utils.cache.ChatSingleCacheUtil;
 import com.github.benmanes.caffeine.cache.Cache;

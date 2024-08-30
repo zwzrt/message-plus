@@ -1,8 +1,6 @@
 package cn.redcoral.messageplus.data.service;
 
 import cn.redcoral.messageplus.data.entity.ChatRoom;
-import cn.redcoral.messageplus.data.entity.po.ChatRoomPo;
-import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 
 import java.util.List;
 

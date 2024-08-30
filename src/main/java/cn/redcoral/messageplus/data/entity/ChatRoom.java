@@ -3,7 +3,6 @@ package cn.redcoral.messageplus.data.entity;
 import cn.hutool.core.bean.BeanUtil;
 import cn.redcoral.messageplus.data.entity.po.ChatRoomPo;
 import cn.redcoral.messageplus.utils.SnowflakeIDUtil;
-import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 

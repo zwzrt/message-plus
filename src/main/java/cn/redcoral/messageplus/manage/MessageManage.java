@@ -4,7 +4,6 @@ import cn.redcoral.messageplus.data.entity.ChatRoom;
 import cn.redcoral.messageplus.data.entity.Group;
 import cn.redcoral.messageplus.data.entity.message.Message;
 import cn.redcoral.messageplus.exception.Impl.MessageSendException;
-import cn.redcoral.messageplus.utils.cache.ChatGroupCacheUtil;
 import cn.redcoral.messageplus.utils.exterior.SpringUtils;
 import cn.redcoral.messageplus.handler.MessagePlusService;
 import cn.redcoral.messageplus.utils.BeanUtil;

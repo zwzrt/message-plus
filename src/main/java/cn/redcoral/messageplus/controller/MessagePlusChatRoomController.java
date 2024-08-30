@@ -173,6 +173,11 @@ public class MessagePlusChatRoomController {
         return String.valueOf(chatRoomManage.getAllUserNum(chatRoomId));
     }
 
+    /**
+     * 查询聊天室的历史消息
+     * @param chatRoomId 聊天室ID
+     * @return 历史消息
+     */
     @GetMapping("/history/message")
     public List<Message> selectChatRoomHistoryMessage(HttpServerRequest request, @RequestParam("id") String chatRoomId) {
         return expirationQueueUtil.getSurvivalList("chatroom:"+chatRoomId);

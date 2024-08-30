@@ -1,7 +1,5 @@
 package cn.redcoral.messageplus.properties;
 
-import cn.hutool.core.lang.UUID;
-import cn.redcoral.messageplus.port.MessagePlusBase;
 import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;

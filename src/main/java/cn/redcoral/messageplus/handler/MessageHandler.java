@@ -14,7 +14,6 @@ import cn.redcoral.messageplus.utils.BeanUtil;
 import cn.redcoral.messageplus.utils.RetryUtil;
 import cn.redcoral.messageplus.utils.cache.ChatGroupCacheUtil;
 import cn.redcoral.messageplus.utils.cache.ChatSingleCacheUtil;
-import jdk.nashorn.internal.ir.IfNode;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
