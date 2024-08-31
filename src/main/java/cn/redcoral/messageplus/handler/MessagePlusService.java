@@ -4,6 +4,7 @@ import cn.redcoral.messageplus.config.MessageEncoder;
 import cn.redcoral.messageplus.data.entity.message.Message;
 import cn.redcoral.messageplus.data.entity.po.HistoryMessagePo;
 import cn.redcoral.messageplus.data.service.HistoryMessageService;
+import cn.redcoral.messageplus.port.MessagePlusUtil;
 import cn.redcoral.messageplus.properties.MessagePersistenceProperties;
 import cn.redcoral.messageplus.manage.MessageManage;
 import cn.redcoral.messageplus.properties.MessagePlusProperties;
@@ -17,6 +18,7 @@ import org.springframework.stereotype.Component;
 import javax.websocket.*;
 import javax.websocket.server.PathParam;
 import javax.websocket.server.ServerEndpoint;
+import java.io.IOException;
 import java.util.concurrent.BlockingQueue;
 
 /**
@@ -26,7 +28,7 @@ import java.util.concurrent.BlockingQueue;
  **/
 @Slf4j
 @Component
-@ServerEndpoint(value = "/messageplus/ws/{sid}", encoders = {MessageEncoder.class})
+@ServerEndpoint(value = "/messageplus/ws/{id}/{token}", encoders = {MessageEncoder.class})
 public class MessagePlusService {
     /**
      * 客户端唯一标识
@@ -40,7 +42,12 @@ public class MessagePlusService {
      * @param sid 唯一ID
      */
     @OnOpen
-    public void baseOnOpen(Session session, @PathParam(MessagePlusProperties.pathParamName) String sid) {
+    public void baseOnOpen(Session session, @PathParam("id") String sid, @PathParam("token") String token) throws IOException {
+        // 未登录，拒绝连接
+        if (MessagePlusProperties.tokenExpirationTime!=0 && (token == null || !MessagePlusUtil.isOnlineByToken(token))) {
+            session.close();
+            return;
+        }
         this.client_id = sid;
         // 加入聊天
         MessageManage.joinChat(sid, this, session);

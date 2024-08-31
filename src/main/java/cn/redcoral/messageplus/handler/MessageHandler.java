@@ -203,10 +203,10 @@ public class MessageHandler {
                     if(!flag){
                         throw new RuntimeException();
                     }
-                    log.info("失败重发");
+//                    log.info("失败重发");
                 },
                 (bo) -> {
-            log.info("重发"+bo);
+//            log.info("重发"+bo);
                     Long id = historyMessageService.insertMessage(message, !bo);
                     if (id==null)
                     {

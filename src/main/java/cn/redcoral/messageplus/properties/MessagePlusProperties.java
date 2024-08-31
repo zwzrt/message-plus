@@ -17,14 +17,13 @@ public class MessagePlusProperties {
      * 服务ID
      */
     public static String serviceId = UUID.randomUUID().toString(true);
+
     /**
-     * 路径参数名称
+     * Token过期时间（默认：0，单位：分钟）
      */
-    public final static String pathParamName = "sid";
-    /**
-     * 自动发送消息
-     */
-    public static boolean autoSend = false;
+    public static int tokenExpirationTime = 0;
+
+
 
     public static String getServiceId() {
         return MessagePlusProperties.serviceId;
@@ -32,10 +31,11 @@ public class MessagePlusProperties {
     public void setServiceId(String serviceId) {
         MessagePlusProperties.serviceId = serviceId;
     }
-    public static boolean isAutoSend() {
-        return MessagePlusProperties.autoSend;
+    public static int getTokenExpirationTime() {
+        return MessagePlusProperties.tokenExpirationTime;
     }
-    public void setAutoSend(boolean autoSend) {
-        MessagePlusProperties.autoSend = autoSend;
+    public void setTokenExpirationTime(int tokenExpirationTime) {
+        MessagePlusProperties.tokenExpirationTime = tokenExpirationTime;
     }
+
 }

@@ -53,6 +53,9 @@ public class CounterIdentifierUtil {
 
     /**
      * 是否小于于等于
+     * @param id 计数器ID
+     * @param num 需要比较的值
+     * @return 是否
      */
     public static boolean isLessThanOrEqual(String id, int num) {
         return num<=numberOfSendsIdentifierMap.getOrDefault(id, 0);

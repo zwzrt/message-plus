@@ -1,7 +1,7 @@
 
 [//]: # (# 消息增强器（message-plus）)
 
-![](./doc/img/logo_max_white.png) 
+[![](./doc/img/logo_max_white.png)](https://www.red-coral.cn/)
 
 # 消息增强器
 
