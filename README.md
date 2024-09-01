@@ -81,7 +81,7 @@ Maven + SpringBoot + WebSocket + MyBatisPlus + Caffeine + Hutool
    <dependency>
        <groupId>io.github.zwzrt</groupId>
        <artifactId>message-plus</artifactId>
-       <version>0.2.0-beta</version>
+       <version>0.2.1-beta</version>
    </dependency>
    ```
 前往 [学习文档](https://www.red-coral.cn/nav)
