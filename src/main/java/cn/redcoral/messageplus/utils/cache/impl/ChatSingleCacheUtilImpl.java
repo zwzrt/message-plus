@@ -3,6 +3,7 @@ package cn.redcoral.messageplus.utils.cache.impl;
 import cn.redcoral.messageplus.constant.CachePrefixConstant;
 import cn.redcoral.messageplus.data.entity.po.HistoryMessagePo;
 import cn.redcoral.messageplus.utils.cache.ChatSingleCacheUtil;
+import cn.redcoral.messageplus.utils.cache.MPCache;
 import com.github.benmanes.caffeine.cache.Cache;
 import lombok.extern.slf4j.Slf4j;
 import org.checkerframework.checker.nullness.qual.NonNull;
@@ -23,7 +24,7 @@ import java.util.concurrent.ConcurrentMap;
 public class ChatSingleCacheUtilImpl implements ChatSingleCacheUtil {
     
     @Autowired
-    private Cache<String, BlockingQueue> messageQueueCache;
+    private MPCache<String, BlockingQueue> messageQueueCache;
     
     /**
      * 添加聊天内容

@@ -2,6 +2,7 @@ package cn.redcoral.messageplus.utils.cache.impl;
 
 import cn.redcoral.messageplus.constant.CachePrefixConstant;
 import cn.redcoral.messageplus.properties.MessagePlusProperties;
+import cn.redcoral.messageplus.utils.cache.MPCache;
 import cn.redcoral.messageplus.utils.cache.UserCacheUtil;
 import com.github.benmanes.caffeine.cache.Cache;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,7 +15,7 @@ import org.springframework.stereotype.Service;
 @Service
 public class UserCacheUtilImpl implements UserCacheUtil {
     @Autowired
-    private Cache<String, String> stringCache;
+    private MPCache<String, String> stringCache;
 
     /**
      * 存储用户ID及所在服务ID

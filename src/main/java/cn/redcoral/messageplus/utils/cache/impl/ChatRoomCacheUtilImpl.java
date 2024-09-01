@@ -4,6 +4,7 @@ import cn.redcoral.messageplus.constant.CachePrefixConstant;
 import cn.redcoral.messageplus.data.entity.ChatRoom;
 import cn.redcoral.messageplus.utils.CounterIdentifierUtil;
 import cn.redcoral.messageplus.utils.cache.ChatRoomCacheUtil;
+import cn.redcoral.messageplus.utils.cache.MPCache;
 import com.alibaba.fastjson.JSON;
 import com.github.benmanes.caffeine.cache.Cache;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,9 +20,9 @@ import static cn.redcoral.messageplus.constant.CachePrefixConstant.CHAT_ROOM;
 public class ChatRoomCacheUtilImpl implements ChatRoomCacheUtil {
 
     @Autowired
-    private Cache<String, String> stringCache;
+    private MPCache<String, String> stringCache;
     @Autowired
-    private Cache<String, ChatRoom> chatRoomCache;
+    private MPCache<String, ChatRoom> chatRoomCache;
 
     @Override
     public void createChatRoomIdentification(String createId, String name, String chatRoomId) {

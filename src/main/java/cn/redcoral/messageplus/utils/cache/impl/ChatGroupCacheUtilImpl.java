@@ -5,6 +5,7 @@ import cn.redcoral.messageplus.constant.GroupCacheConstant;
 import cn.redcoral.messageplus.data.entity.Group;
 import cn.redcoral.messageplus.data.entity.po.HistoryMessagePo;
 import cn.redcoral.messageplus.utils.cache.ChatGroupCacheUtil;
+import cn.redcoral.messageplus.utils.cache.MPCache;
 import com.alibaba.fastjson.JSON;
 import com.github.benmanes.caffeine.cache.Cache;
 import lombok.extern.slf4j.Slf4j;
@@ -24,11 +25,11 @@ import java.util.function.Function;
 public class ChatGroupCacheUtilImpl implements ChatGroupCacheUtil {
 
     @Autowired
-    private Cache<String, String> stringCache;
+    private MPCache<String, String> stringCache;
     @Autowired
-    private Cache<String, Integer> intCache;
+    private MPCache<String, Integer> intCache;
     @Autowired
-    private Cache<String,BlockingQueue> messageQueueCache;
+    private MPCache<String,BlockingQueue> messageQueueCache;
 
     @Override
     public void setGroup(Group group) {

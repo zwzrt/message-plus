@@ -3,7 +3,7 @@
 
 [![](./doc/img/logo_max_white.png)](https://www.red-coral.cn/)
 
-# 消息增强器
+# 消息增强器（message-plus）
 
 <a href='https://gitee.com/modmb/message-plus/stargazers' style="margin-right: 5px">
     <img src='https://gitee.com/modmb/message-plus/badge/star.svg?theme=dark' alt='star'></img>

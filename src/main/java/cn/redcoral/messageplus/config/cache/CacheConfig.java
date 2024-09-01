@@ -2,6 +2,7 @@ package cn.redcoral.messageplus.config.cache;
 
 import cn.redcoral.messageplus.data.entity.ChatRoom;
 import cn.redcoral.messageplus.properties.MessagePersistenceProperties;
+import cn.redcoral.messageplus.utils.cache.MPCache;
 import cn.redcoral.messageplus.utils.cache.impl.ChatSingleCacheUtilImpl;
 import com.github.benmanes.caffeine.cache.Cache;
 import com.github.benmanes.caffeine.cache.Caffeine;
@@ -85,8 +86,8 @@ public class CacheConfig {
      * @return CacheString, String 字符串缓存实例
      */
     @Bean
-    public Cache<String, String> stringCache() {
-        return stringCache;
+    public MPCache<String, String> stringCache() {
+        return new MPCache<>(stringCache);
     }
 
     /**
@@ -94,8 +95,8 @@ public class CacheConfig {
      * @return Cache 消息限制缓存实例
      */
     @Bean
-    public Cache<String, Integer> stringIntCache() {
-        return stringIntCache;
+    public MPCache<String, Integer> stringIntCache() {
+        return new MPCache<>(stringIntCache);
     }
 
     /**
@@ -103,8 +104,8 @@ public class CacheConfig {
      * @return Cache 消息限制缓存实例
      */
     @Bean
-    public Cache<String, ChatRoom> stringChatRoomCache() {
-        return stringChatRoomCache;
+    public MPCache<String, ChatRoom> stringChatRoomCache() {
+        return new MPCache<>(stringChatRoomCache);
     }
 
     /**
@@ -112,12 +113,12 @@ public class CacheConfig {
      * @return Cache字符串-长整型缓存实例
      */
     @Bean
-    public Cache<String, Long> stringStringCache() {
-        return stringLongCache;
+    public MPCache<String, Long> stringStringCache() {
+        return new MPCache<>(stringLongCache);
     }
     
     @Bean
-    public Cache<String, BlockingQueue> messageQueueCache() {
-        return messageQueueCache;
+    public MPCache<String, BlockingQueue> messageQueueCache() {
+        return new MPCache<>(messageQueueCache);
     }
 }
