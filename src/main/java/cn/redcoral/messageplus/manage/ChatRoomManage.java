@@ -131,7 +131,9 @@ public class ChatRoomManage {
         // 1、操作数据库
         boolean bo = chatRoomService.closeChatRoom(client_id, chatRoomByIdMap.get(chatRoomId));
         if (!bo) return false;
-        // 2、删除缓存
+        // 2、删除Map
+        chatRoomByIdMap.remove(chatRoomId);
+        // 3、删除缓存
         return chatRoomCacheUtil.deleteChatRoomById(chatRoomId);
     }
 
@@ -143,7 +145,14 @@ public class ChatRoomManage {
     public void quitChatRoomById(String quitId, String chatRoomId) {
         chatRoomByIdMap.get(chatRoomId).quitChatRoom(quitId);
     }
-    
+
+
+    /**
+     * 获取聊天室总数
+     */
+    public int getNum() {
+        return chatRoomByIdMap.size();
+    }
 
     /**
      * 聊天室查询接口

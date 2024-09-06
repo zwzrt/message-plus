@@ -34,6 +34,14 @@ public class GroupServiceImpl implements GroupService {
         groupCacheUtil.setGroup(group);
     }
 
+
+
+
+    @Override
+    public Long selectGroupNum() {
+        return groupMapper.selectCount(null);
+    }
+
     @Override
     public List<Group> selectAllGroup() {
         return Group.BuildGroupList(groupMapper.selectList(null));

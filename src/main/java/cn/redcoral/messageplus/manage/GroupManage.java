@@ -98,6 +98,14 @@ public class GroupManage {
 
 
 
+
+    /**
+     * 查询群组总数
+     */
+    public Long getGroupNum() {
+        return groupService.selectGroupNum();
+    }
+
     /**
      * 模糊查询群组
      * @param name 群组名称
@@ -151,4 +159,6 @@ public class GroupManage {
     public boolean signOutGroup(String groupId, String userId) {
         return groupService.signOutGroup(groupId,userId);
     }
+
+
 }

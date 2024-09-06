@@ -130,6 +130,15 @@ public class MessagePlusChatRoomController {
 
 
 
+
+    /**
+     * 获取聊天室总数
+     */
+    @GetMapping("/num")
+    public String getNum() {
+        return String.valueOf(chatRoomManage.getNum());
+    }
+
     /**
      * 查询聊天室分页
      * @param page 当前页码

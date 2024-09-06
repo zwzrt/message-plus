@@ -17,6 +17,12 @@ public interface GroupService {
 
 
 
+
+    /**
+     * 获取群组总数
+     */
+    Long selectGroupNum();
+
     /**
      * 获取全部群组
      */
@@ -70,4 +76,5 @@ public interface GroupService {
     boolean joinGroup(String groupId, String userId);
     
     boolean signOutGroup(String groupId, String userId);
+
 }

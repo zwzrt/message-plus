@@ -93,7 +93,13 @@ public class MessagePlusGroupController {
     }
 
 
-
+    /**
+     * 查询群组总数
+     */
+    @GetMapping("/num")
+    public String getNum() {
+        return String.valueOf(groupManage.getGroupNum());
+    }
 
     /**
      * 模糊搜索群组

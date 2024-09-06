@@ -2,6 +2,7 @@ package cn.redcoral.messageplus.controller;
 
 import cn.hutool.http.server.HttpServerRequest;
 import cn.redcoral.messageplus.data.entity.message.Message;
+import cn.redcoral.messageplus.manage.MessageManage;
 import cn.redcoral.messageplus.port.MessagePlusBase;
 import cn.redcoral.messageplus.properties.MessagePersistenceProperties;
 import cn.redcoral.messageplus.utils.CounterIdentifierUtil;
@@ -13,9 +14,9 @@ import org.springframework.web.bind.annotation.*;
  * 发送消息
  * @author mo
  **/
+@Slf4j
 @RestController
 @RequestMapping("/messageplus/system")
-@Slf4j
 public class MessagePlusSystemController {
 
     @Autowired
@@ -49,6 +50,18 @@ public class MessagePlusSystemController {
 
         // 计数器减一
         CounterIdentifierUtil.numberOfSendsDecrease(senderId);
+    }
+
+
+
+
+    /**
+     * 获取服务器总人数
+     * @return 总人数
+     */
+    @GetMapping("/onLineNum")
+    public String getOnLinePeopleNum() {
+        return MessageManage.getOnLinePeopleNum().toString();
     }
 
 }
