@@ -26,16 +26,12 @@ public class MessageInitialize {
         // 1.1、获取mapper类
         MessagePlusInitializeMapper initializeMapper = BeanUtil.messagePlusInitializeMapper();
         // 1.2、执行语句
-        // 创建历史消息表
-        initializeMapper.createHistoryMessage();
-        // 创建群组表
-        initializeMapper.createGroup();
-        // 创建群组黑名单表
-        initializeMapper.createGroupBlacklistTable();
-        // 创建聊天室表
-        initializeMapper.createChatRoomTable();
-        // 创建历史聊天室表
-        initializeMapper.createChatRoomHistoryTable();
+        initializeMapper.createHistoryMessage(); // 创建历史消息表
+        initializeMapper.createUserBlacklist(); // 创建用户黑名单表
+        initializeMapper.createGroup(); // 创建群组表
+        initializeMapper.createGroupBlacklistTable();// 创建群组黑名单表
+        initializeMapper.createChatRoomTable();// 创建聊天室表
+        initializeMapper.createChatRoomHistoryTable();// 创建历史聊天室表
 
 
         // 2、输出管理系统访问地址

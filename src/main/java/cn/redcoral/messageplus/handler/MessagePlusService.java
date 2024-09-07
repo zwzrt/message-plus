@@ -6,7 +6,7 @@ import cn.redcoral.messageplus.data.entity.po.HistoryMessagePo;
 import cn.redcoral.messageplus.data.service.HistoryMessageService;
 import cn.redcoral.messageplus.port.MessagePlusUtil;
 import cn.redcoral.messageplus.properties.MessagePersistenceProperties;
-import cn.redcoral.messageplus.manage.MessageManage;
+import cn.redcoral.messageplus.manage.UserManage;
 import cn.redcoral.messageplus.properties.MessagePlusProperties;
 import cn.redcoral.messageplus.utils.BeanUtil;
 import cn.redcoral.messageplus.utils.RetryUtil;
@@ -50,7 +50,7 @@ public class MessagePlusService {
         }
         this.client_id = sid;
         // 加入聊天
-        MessageManage.joinChat(sid, this, session);
+        UserManage.joinChat(sid, this, session);
         // 消息重发，直接调用messagecahche遍历发送，简化代码
         ChatSingleCacheUtil chatSingleCacheUtil = BeanUtil.chatSingleCache();
         BlockingQueue blockingQueue = chatSingleCacheUtil.getChatSingleContent(sid);
@@ -75,7 +75,7 @@ public class MessagePlusService {
                         () -> {
                             Message msg = cn.hutool.core.bean.BeanUtil.copyProperties(message, Message.class);
                             msg.setData(JSON.parse(message.getData()));
-                            boolean flag = MessageManage.sendMessage(sid,
+                            boolean flag = UserManage.sendMessage(sid,
                                     msg);
                             if (!flag) {
                                 throw new RuntimeException();
@@ -101,7 +101,7 @@ public class MessagePlusService {
     @OnClose
     public void baseOnClose() {
         // 删除用户的会话
-        MessageManage.quitChat(this.client_id);
+        UserManage.quitChat(this.client_id);
         BeanUtil.messagePlusBase().onClose(this.client_id);
     }
     

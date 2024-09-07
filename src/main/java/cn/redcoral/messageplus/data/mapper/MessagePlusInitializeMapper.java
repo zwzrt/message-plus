@@ -12,6 +12,11 @@ public interface MessagePlusInitializeMapper {
     void createHistoryMessage();
 
     /**
+     * 创建用户黑名单表
+     */
+    void createUserBlacklist();
+
+    /**
      * 创建群组表
      */
     void createGroup();

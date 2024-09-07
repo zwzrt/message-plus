@@ -2,7 +2,7 @@ package cn.redcoral.messageplus.controller;
 
 import cn.hutool.http.server.HttpServerRequest;
 import cn.redcoral.messageplus.data.entity.message.Message;
-import cn.redcoral.messageplus.manage.MessageManage;
+import cn.redcoral.messageplus.manage.UserManage;
 import cn.redcoral.messageplus.manage.SystemManage;
 import cn.redcoral.messageplus.port.MessagePlusBase;
 import cn.redcoral.messageplus.properties.MessagePersistenceProperties;
@@ -96,7 +96,7 @@ public class MessagePlusSystemController {
      */
     @GetMapping("/onLineNum")
     public String getOnLinePeopleNum() {
-        return MessageManage.getOnLinePeopleNum().toString();
+        return UserManage.getOnLinePeopleNum().toString();
     }
 
 

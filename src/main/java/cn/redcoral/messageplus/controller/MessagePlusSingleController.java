@@ -3,7 +3,6 @@ package cn.redcoral.messageplus.controller;
 import cn.hutool.http.server.HttpServerRequest;
 import cn.redcoral.messageplus.data.entity.message.Message;
 import cn.redcoral.messageplus.handler.MessageHandler;
-import cn.redcoral.messageplus.port.MessagePlusBase;
 import cn.redcoral.messageplus.properties.MessagePersistenceProperties;
 import cn.redcoral.messageplus.utils.CounterIdentifierUtil;
 import lombok.extern.slf4j.Slf4j;
@@ -20,9 +19,9 @@ import org.springframework.web.bind.annotation.*;
 public class MessagePlusSingleController {
 
     @Autowired
-    private MessagePlusBase messagePlusBase;
-    @Autowired
     private MessageHandler messageHandler;
+
+
 
     /**
      * 发送单发类消息
@@ -48,6 +47,27 @@ public class MessagePlusSingleController {
 
         // 计数器减一
         CounterIdentifierUtil.numberOfSendsDecrease(senderId);
+    }
+
+    /**
+     * 拉黑
+     * @param token 令牌
+     * @param id 拉黑用户ID
+     */
+    @PostMapping("/black")
+    public void black(@RequestHeader("token") String token, @RequestParam String id) {
+    }
+
+
+
+
+    /**
+     * 取消拉黑
+     * @param token 令牌
+     * @param id 取消拉黑用户ID
+     */
+    @PostMapping("/noBlack")
+    public void noBlack(@RequestHeader("token") String token, @RequestParam String id) {
     }
 
 }

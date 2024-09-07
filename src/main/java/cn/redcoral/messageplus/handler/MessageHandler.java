@@ -7,7 +7,7 @@ import cn.redcoral.messageplus.data.entity.message.MessageType;
 import cn.redcoral.messageplus.data.entity.po.HistoryMessagePo;
 import cn.redcoral.messageplus.data.service.HistoryMessageService;
 import cn.redcoral.messageplus.manage.ChatRoomManage;
-import cn.redcoral.messageplus.manage.MessageManage;
+import cn.redcoral.messageplus.manage.UserManage;
 import cn.redcoral.messageplus.port.MessagePlusBase;
 import cn.redcoral.messageplus.properties.MessagePersistenceProperties;
 import cn.redcoral.messageplus.utils.BeanUtil;
@@ -82,7 +82,7 @@ public class MessageHandler {
      */
     public void handleSingleMessage(String senderId, String receiverId, Message message) {
         // 查看用户是否在线
-        String onLineTag = MessageManage.isOnLine(receiverId);
+        String onLineTag = UserManage.isOnLine(receiverId);
         switch (onLineTag)
         {
             // 不在线
@@ -101,7 +101,7 @@ public class MessageHandler {
             case "0":
             {
                 // 调用发送方法
-                boolean sended = MessageManage.sendMessage(receiverId, message);
+                boolean sended = UserManage.sendMessage(receiverId, message);
 //                log.info("用户在线");
                 if (!sended)
                 {
@@ -125,10 +125,10 @@ public class MessageHandler {
      */
     public void handleMassMessage(String senderId, String groupId, Message message) {
         // 调用开发者实现的群发接口
-        Group group = MessageManage.getGroupById(groupId);
+        Group group = UserManage.getGroupById(groupId);
 
         // 调用接收方法
-        List<String> faildList = MessageManage.sendMessageToGroupBarringMe(senderId, groupId, message);
+        List<String> faildList = UserManage.sendMessageToGroupBarringMe(senderId, groupId, message);
         // 提示出现失败消息
         ChatGroupCacheUtil chatGroupCacheUtil = BeanUtil.chatGroupCacheUtil();
         //有元素表名有用户不在线没收到消息
@@ -142,7 +142,7 @@ public class MessageHandler {
                 RetryUtil.retry(properties.getRetryCount(), properties.getIntervalTime(),
                         () -> {
                             //先重发，再缓存
-                            boolean flag = MessageManage.sendMessage(receiverId, message);
+                            boolean flag = UserManage.sendMessage(receiverId, message);
                             if(!flag){
                                 throw new RuntimeException();
                             }
@@ -187,7 +187,7 @@ public class MessageHandler {
         // 1.调用开发者实现的群发接口
         ChatRoom chatRoom = chatRoomManage.getChatRoomById(chatRoomId);
         // 2.发送消息
-        List<String> offLineClientIdList = MessageManage.sendMessageToChatRoomBarringMe(senderId, chatRoomId, message);
+        List<String> offLineClientIdList = UserManage.sendMessageToChatRoomBarringMe(senderId, chatRoomId, message);
         // 3.未发送成功，查询对应服务ID，通知对应服务进行再次发送
         for (String receiverId : offLineClientIdList)
         {
@@ -199,7 +199,7 @@ public class MessageHandler {
     private void reTry(String senderId, String receiverId, Message message) {
         RetryUtil.retry(properties.getRetryCount(), properties.getIntervalTime(), () -> {
                     //执行重发
-                    boolean flag = MessageManage.sendMessage(receiverId, message);
+                    boolean flag = UserManage.sendMessage(receiverId, message);
                     if(!flag){
                         throw new RuntimeException();
                     }
