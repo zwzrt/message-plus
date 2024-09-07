@@ -4,6 +4,7 @@ import cn.redcoral.messageplus.data.entity.Group;
 import cn.redcoral.messageplus.data.entity.po.GroupPo;
 import cn.redcoral.messageplus.data.mapper.MessagePlusGroupMapper;
 import cn.redcoral.messageplus.data.service.GroupService;
+import cn.redcoral.messageplus.port.MessagePlusUtil;
 import cn.redcoral.messageplus.utils.cache.ChatGroupCacheUtil;
 import com.alibaba.fastjson.JSON;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
@@ -133,6 +134,25 @@ public class GroupServiceImpl implements GroupService {
         wrp.set("client_ids",JSON.toJSONString(ids));
         int update = groupMapper.update(wrp);
         return update>0;
+    }
+    
+    @Override
+    public boolean forbiddenSpeech(String token, String groupId) {
+        String userId = MessagePlusUtil.getIdByToken(token);
+        GroupPo groupPo = groupMapper.selectById(groupId);
+        boolean newStatus;
+        if(groupPo==null){
+            throw new RuntimeException("没有这个群组");
+        }
+        if(groupPo.getCreateUserId().equals(userId)){
+            Boolean isForbiddenSpeak = groupPo.getIsForbiddenSpeak();
+            newStatus = !isForbiddenSpeak;
+            groupPo.setIsForbiddenSpeak(newStatus);
+            groupMapper.updateById(groupPo);
+        }else {
+            throw new RuntimeException("你没有权限禁言或解禁");
+        }
+        return newStatus;
     }
     
     

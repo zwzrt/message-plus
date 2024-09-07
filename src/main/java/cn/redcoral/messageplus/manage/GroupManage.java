@@ -159,6 +159,9 @@ public class GroupManage {
     public boolean signOutGroup(String groupId, String userId) {
         return groupService.signOutGroup(groupId,userId);
     }
-
-
+    
+    
+    public boolean forbiddenSpeech(String token, String groupId) {
+       return groupService.forbiddenSpeech(token,groupId);
+    }
 }

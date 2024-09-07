@@ -23,7 +23,8 @@
             `create_user_id` varchar(30) NOT NULL COMMENT '创建者id',
             `name` varchar(30) NOT NULL COMMENT '群组名称',
             `user_num` int NOT NULL COMMENT '用户数量',
-            `client_ids` varchar(1000) NOT NULL COMMENT '用户ID列表'
+            `client_ids` varchar(1000) NOT NULL COMMENT '用户ID列表',
+            'IsForbiddenSpeak' int(1) default 0 COMMENT '是否禁言，1禁言，0未禁言'
         ) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT comment '群组';
     </update>
     <update id="createGroupBlacklistTable">
@@ -38,7 +39,8 @@
             `id` varchar(30) PRIMARY KEY COMMENT '主键id',
             `create_user_id` varchar(30) NOT NULL COMMENT '创建者id',
             `name` varchar(30) NOT NULL COMMENT '聊天室名称',
-            `opening_time` timestamp not null comment '开播时间'
+            `opening_time` timestamp not null comment '开播时间',
+            'IsForbiddenSpeak' int(1) default 0 COMMENT '是否禁言，1禁言，0未禁言'
         ) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT comment '聊天室';
     </update>
     <update id="createChatRoomHistoryTable">

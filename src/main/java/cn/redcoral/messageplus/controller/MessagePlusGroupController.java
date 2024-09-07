@@ -6,6 +6,7 @@ import cn.redcoral.messageplus.data.entity.message.Message;
 import cn.redcoral.messageplus.handler.MessageHandler;
 import cn.redcoral.messageplus.manage.GroupManage;
 import cn.redcoral.messageplus.port.MessagePlusBase;
+import cn.redcoral.messageplus.port.MessagePlusUtil;
 import cn.redcoral.messageplus.properties.MessagePersistenceProperties;
 import cn.redcoral.messageplus.utils.CounterIdentifierUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -155,6 +156,17 @@ public class MessagePlusGroupController {
     public boolean signOut(@RequestParam("id")String groupId,@RequestParam("userId")String userId){
         return groupManage.signOutGroup(groupId,userId);
     }
-
+    
+    /**
+     * 群组禁言/解禁
+     * @param token TOKEN
+     * @param groupId 群组Id
+     * @return 更新状态，true禁言，false未禁言
+     */
+    @PutMapping("ForbiddenSpeech")
+    public boolean forbiddenSpeech(@RequestHeader("token")String token, @RequestParam("id")String groupId){
+        return groupManage.forbiddenSpeech(token,groupId);
+    }
+    
     //TODO 被踢出群组
 }

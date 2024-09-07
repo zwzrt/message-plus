@@ -76,5 +76,6 @@ public interface GroupService {
     boolean joinGroup(String groupId, String userId);
     
     boolean signOutGroup(String groupId, String userId);
-
+    
+    boolean forbiddenSpeech(String token, String groupId);
 }

@@ -46,7 +46,7 @@ public class MessageInitialize {
             String HOSTNAME = localHost.getHostName();
             String PORT = SpringUtils.getBean(ServerProperties.class).getPort().toString();
             log.info("消息增强器初始化完成！");
-            log.info("管理系统访问地址：http://{}:{}/messageplus/manage/index.html", IP, PORT);
+            log.info("管理系统访问地址：http://{}:{}/messageplus", IP, PORT);
         } catch (UnknownHostException e) {
             e.printStackTrace();
         }

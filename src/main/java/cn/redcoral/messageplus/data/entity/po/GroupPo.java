@@ -39,6 +39,11 @@ public class GroupPo implements Serializable {
      * 用户ID列表（数据库存储字段）
      */
     private String clientIds;
+    
+    /**
+     * 是否开启禁言
+     */
+    private Boolean IsForbiddenSpeak;
     /**
      * 用户ID列表
      */
