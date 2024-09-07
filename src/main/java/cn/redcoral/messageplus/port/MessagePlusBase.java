@@ -1,12 +1,9 @@
 package cn.redcoral.messageplus.port;
 
-import cn.hutool.http.server.HttpServerRequest;
-import cn.redcoral.messageplus.data.entity.message.Message;
-
 import javax.websocket.*;
 
 /**
- * 消息接收实现类
+ * 开发者实现类
  * @author mo
  **/
 public interface MessagePlusBase {
@@ -20,16 +17,16 @@ public interface MessagePlusBase {
      */
     public void onClose(String sid);
     /**
-     * 发送消息时的权限校验
-     * @param request HTTP请求信息
-     * @param message 消息对象
-     * @return 是否允许发送消息
-     */
-    public boolean onMessageCheck(HttpServerRequest request, Message message) throws Exception;
-    /**
      * 收到系统消息
      * @param senderId 发送者ID
      * @param message 消息内容
      */
     public void onMessageBySystem(String senderId, String message);
+    /**
+     * 登录接口
+     * @param username 用户名
+     * @param password 密码
+     * @return token（为null或""时登录失败）
+     */
+    public String login(String username, String password);
 }

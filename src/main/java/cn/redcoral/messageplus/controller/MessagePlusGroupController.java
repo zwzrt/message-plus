@@ -65,14 +65,8 @@ public class MessagePlusGroupController {
 
         // TODO 2.查询是否禁言
 
-        // 3.权限校验
+        // 3.发送群发消息
         Message message = Message.buildMass(senderId, groupId, msg);
-        // 进行权限校验
-        boolean bo = messagePlusBase.onMessageCheck(request, message);
-        // 权限校验不通过
-        if (!bo) return;
-
-        // 4.发送群发消息
         messageHandler.handleMassMessage(senderId, groupId, message);
 
         // 计数器减一

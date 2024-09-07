@@ -42,14 +42,8 @@ public class MessagePlusSingleController {
 
         // TODO 2.查询是否禁言
 
-        // 3.权限校验
+        // 3.发送消息
         Message message = Message.buildSingle(senderId, receiverId, msg);
-        // 进行权限校验(用户自己实现)
-        boolean bo = messagePlusBase.onMessageCheck(request, message);
-        // 权限校验不通过
-        if (!bo) return;
-
-        // 4.发送消息
         messageHandler.handleSingleMessage(senderId, receiverId, message);
 
         // 计数器减一

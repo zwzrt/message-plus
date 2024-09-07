@@ -89,18 +89,13 @@ public class MessagePlusChatRoomController {
 
         // TODO 2.查询是否禁言
 
-        // 3.权限校验
-        Message message = Message.buildChatRoom(senderId, chatRoomId, msg);
-        // 进行权限校验
-        boolean bo = messagePlusBase.onMessageCheck(request, message);
-        // 权限校验不通过
-        if (!bo) return;
 
-        // 4.发送消息
+        // 3.发送消息
+        Message message = Message.buildChatRoom(senderId, chatRoomId, msg);
         // 广播
         simpMessagingTemplate.convertAndSend("/messageplus/chatroom/"+chatRoomId, message);
 
-        // 5.临时存储消息
+        // 4.临时存储消息
         expirationQueueUtil.add("chatroom:"+chatRoomId, message);
 
         // 计数器减一

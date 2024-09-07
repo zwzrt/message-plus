@@ -22,6 +22,19 @@ public class MessagePlusSystemController {
     @Autowired
     private MessagePlusBase messagePlusBase;
 
+
+
+    /**
+     * 登录接口
+     * @param username 用户名
+     * @param password 密码
+     * @return token（为null或""时登录失败）
+     */
+    @PostMapping("/login")
+    public String login(@RequestParam String username, @RequestParam String password) {
+        return messagePlusBase.login(username, password);
+    }
+
     /**
      * 发送系统类消息
      * @param msg 消息体
@@ -38,14 +51,9 @@ public class MessagePlusSystemController {
 
         // TODO 2.查询是否禁言
 
-        // 3.权限校验
-        Message message = Message.buildSystem(senderId, msg);
-        // 进行权限校验
-        boolean bo = messagePlusBase.onMessageCheck(request, message);
-        // 权限校验不通过
-        if (!bo) return;
 
-        // 4.发送消息
+        // 3.发送消息
+        Message message = Message.buildSystem(senderId, msg);
         messagePlusBase.onMessageBySystem(senderId, message.getData().toString());
 
         // 计数器减一
