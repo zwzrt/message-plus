@@ -1,7 +1,8 @@
 package cn.redcoral.messageplus.config;
 
 import cn.redcoral.messageplus.interceptor.ControllerInterceptor;
-import org.springframework.context.annotation.Bean;
+import cn.redcoral.messageplus.interceptor.SystemInterceptor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
@@ -12,15 +13,10 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 @Configuration
 public class WebConfig implements WebMvcConfigurer {
 
-    /**
-     * 创建并配置ControllerInterceptor拦截器
-     *
-     * @return ControllerInterceptor拦截器实例
-     */
-    @Bean
-    public ControllerInterceptor controllerInterceptor() {
-        return new ControllerInterceptor();
-    }
+    @Autowired
+    private ControllerInterceptor controllerInterceptor;
+    @Autowired
+    private SystemInterceptor systemInterceptor;
 
     /**
      * 配置拦截器的路径规则
@@ -30,14 +26,25 @@ public class WebConfig implements WebMvcConfigurer {
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
         // 注册controllerInterceptor拦截器，并指定其拦截的路径
-        registry.addInterceptor(controllerInterceptor()).addPathPatterns(
+        registry.addInterceptor(controllerInterceptor).addPathPatterns(
                 "/messageplus/single/**",
-                "/messageplus/system/**",
+                "/messageplus/system/send",
                 "/messageplus/group/**",
                 "/messageplus/chatroom/**"
+        ).excludePathPatterns(
+                "/messageplus/group/num",
+                "/messageplus/chatroom/num"
         );
-//        .excludePathPatterns(
-//                "/messageplus/**"
-//        );
+        // 注册SystemInterceptor拦截器
+        registry.addInterceptor(systemInterceptor).addPathPatterns(
+                "/messageplus/system/**",
+                "/messageplus/group/num",
+                "/messageplus/chatroom/num"
+        ).excludePathPatterns(
+                "/messageplus/system/send",
+                "/messageplus/system/login",
+                "/messageplus/system/logout",
+                "/messageplus/system/isOnLine"
+        );
     }
 }

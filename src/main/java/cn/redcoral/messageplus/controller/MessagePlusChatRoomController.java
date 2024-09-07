@@ -93,7 +93,7 @@ public class MessagePlusChatRoomController {
         // 3.发送消息
         Message message = Message.buildChatRoom(senderId, chatRoomId, msg);
         // 广播
-        simpMessagingTemplate.convertAndSend("/messageplus/chatroom/"+chatRoomId, message);
+        simpMessagingTemplate.convertAndSend("/messageplus/chatroom/" +chatRoomId, message);
 
         // 4.临时存储消息
         expirationQueueUtil.add("chatroom:"+chatRoomId, message);

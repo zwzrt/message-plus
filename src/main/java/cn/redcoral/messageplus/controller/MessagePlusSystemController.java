@@ -3,6 +3,7 @@ package cn.redcoral.messageplus.controller;
 import cn.hutool.http.server.HttpServerRequest;
 import cn.redcoral.messageplus.data.entity.message.Message;
 import cn.redcoral.messageplus.manage.MessageManage;
+import cn.redcoral.messageplus.manage.SystemManage;
 import cn.redcoral.messageplus.port.MessagePlusBase;
 import cn.redcoral.messageplus.properties.MessagePersistenceProperties;
 import cn.redcoral.messageplus.utils.CounterIdentifierUtil;
@@ -21,6 +22,8 @@ public class MessagePlusSystemController {
 
     @Autowired
     private MessagePlusBase messagePlusBase;
+    @Autowired
+    private SystemManage systemManage;
 
 
 
@@ -32,7 +35,10 @@ public class MessagePlusSystemController {
      */
     @PostMapping("/login")
     public String login(@RequestParam String username, @RequestParam String password) {
-        return messagePlusBase.login(username, password);
+        String token = messagePlusBase.login(username, password);
+        if (token == null || token.isEmpty()) return null;
+        systemManage.put(token, username);
+        return token;
     }
 
     /**
@@ -64,6 +70,27 @@ public class MessagePlusSystemController {
 
 
     /**
+     * 登出接口
+     * @param token 令牌
+     */
+    @DeleteMapping("/logout")
+    public void logout(@RequestParam String token) {
+        systemManage.remove(token);
+    }
+
+
+
+
+    /**
+     * 是否登录
+     * @param token 令牌
+     * @return 是否
+     */
+    @GetMapping("/isOnLine")
+    public String isOnline(@RequestParam String token) {
+        return systemManage.get(token);
+    }
+    /**
      * 获取服务器总人数
      * @return 总人数
      */
@@ -71,5 +98,7 @@ public class MessagePlusSystemController {
     public String getOnLinePeopleNum() {
         return MessageManage.getOnLinePeopleNum().toString();
     }
+
+
 
 }
