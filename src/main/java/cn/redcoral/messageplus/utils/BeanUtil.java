@@ -3,6 +3,7 @@ package cn.redcoral.messageplus.utils;
 import cn.redcoral.messageplus.config.cache.CacheConfig;
 import cn.redcoral.messageplus.data.mapper.MessagePlusInitializeMapper;
 import cn.redcoral.messageplus.data.service.HistoryMessageService;
+import cn.redcoral.messageplus.data.service.UserBlacklistService;
 import cn.redcoral.messageplus.handler.MessageHandler;
 import cn.redcoral.messageplus.manage.ChatRoomManage;
 import cn.redcoral.messageplus.port.MessagePlusBase;
@@ -40,7 +41,11 @@ public class BeanUtil {
     private static MessagePersistenceProperties messagePersistenceProperties;
     
     private static HistoryMessageService historyMessageService;
-    
+
+    private static UserBlacklistService userBlacklistService;
+
+
+
     public static HistoryMessageService historyService(){
         if (historyMessageService == null) historyMessageService = SpringUtils.getBean(HistoryMessageService.class);
         return historyMessageService;
@@ -55,8 +60,6 @@ public class BeanUtil {
         if (chatGroupCache == null) chatGroupCache = SpringUtils.getBean(ChatGroupCacheUtil.class);
         return chatGroupCache;
     }
-    
-    
     
     public static ChatSingleCacheUtil chatSingleCache(){
         if (chatSingleCache == null) chatSingleCache = SpringUtils.getBean(ChatSingleCacheUtil.class);
@@ -124,5 +127,10 @@ public class BeanUtil {
     public static MessagePlusInitializeMapper messagePlusInitializeMapper() {
         if (messagePlusInitializeMapper1 == null) messagePlusInitializeMapper1 = SpringUtils.getBean(MessagePlusInitializeMapper.class);
         return messagePlusInitializeMapper1;
+    }
+
+    public static UserBlacklistService userBlacklistService() {
+        if (userBlacklistService == null) userBlacklistService = SpringUtils.getBean(UserBlacklistService.class);
+        return userBlacklistService;
     }
 }

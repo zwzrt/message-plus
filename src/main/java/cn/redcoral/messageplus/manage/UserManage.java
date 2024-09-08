@@ -49,6 +49,8 @@ public class UserManage {
      */
     private static Long onLinePeopleNum = 0L;
 
+
+
     /**
      * 加入聊天
      * @param id 用户ID
@@ -99,12 +101,14 @@ public class UserManage {
     }
 
     /**
+     * @deprecated
      * 创建群组
      * @param createUserId 创建者ID
      * @param name 群组名称
      * @param client_ids 群成员ID
      * @return 群组ID
      */
+    @Deprecated
     public static Group createGroup(String createUserId, String name, List<String> client_ids) {
         return getGroupManage().createGroup(createUserId, name, client_ids);
     }
@@ -115,10 +119,40 @@ public class UserManage {
      * @param session 用户session（为空则代表不在线）
      * @param groupId 群组ID
      */
+    @Deprecated
     public static int joinGroup(String userId, Session session, String groupId) {
         Group group = getGroupManage().getGroupById(groupId);
         if (group==null) return -1;
         return group.joinGroup(userId);
+    }
+
+
+    /**
+     * 是否被拉黑
+     * @param id1 我的ID
+     * @param id2 拉黑我的用户ID
+     * @return 是否
+     */
+    public static boolean whetherPulledBlack(String id1, String id2) {
+        return BeanUtil.userBlacklistService().whetherPulledBlack(id1, id2);
+    }
+
+    /**
+     * 拉黑
+     * @param id1 用户ID
+     * @param id2 拉黑用户ID
+     */
+    public static boolean black(String id1, String id2) {
+        return BeanUtil.userBlacklistService().black(id1, id2);
+    }
+
+    /**
+     * 取消拉黑
+     * @param id1 用户ID
+     * @param id2 拉黑用户ID
+     */
+    public static boolean noBlack(String id1, String id2) {
+        return BeanUtil.userBlacklistService().noBlack(id1, id2);
     }
 
     /**

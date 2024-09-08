@@ -31,6 +31,10 @@ public class ChatRoomPo implements Serializable {
      * 开播时间
      */
     private Timestamp openingTime = new Timestamp(System.currentTimeMillis());
+    /**
+     * 是否开启禁言
+     */
+    private Boolean isForbiddenSpeak;
 
 
     /**

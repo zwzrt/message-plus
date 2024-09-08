@@ -45,6 +45,10 @@ public class Group {
      * 用户ID列表
      */
     private List<String> clientIdList;
+    /**
+     * 是否开启禁言
+     */
+    private Boolean isForbiddenSpeak;
 
     public Group() {
         this.id = SnowflakeIDUtil.getGroupID();

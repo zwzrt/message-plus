@@ -60,6 +60,10 @@ public class ChatRoom implements Serializable {
      * 停播时间
      */
     private Timestamp offTime;
+    /**
+     * 是否开启禁言
+     */
+    private Boolean isForbiddenSpeak;
 
     {
         this.id = SnowflakeIDUtil.getID();

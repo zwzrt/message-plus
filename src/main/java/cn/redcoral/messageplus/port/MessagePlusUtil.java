@@ -117,11 +117,20 @@ public class MessagePlusUtil {
         }
     }
 
+    /**
+     * 通过token获取ID
+     * @param token 令牌
+     * @return ID
+     */
     public static String getIdByToken(String token) {
         User user = tokenUserMap.get(token);
         long now = System.currentTimeMillis();
-        if (user.loginTime + tokenExpirationTime < now) return user.id;
-            // 不在线
+
+        // 在线
+        if (user.loginTime + tokenExpirationTime < now) {
+            return user.id;
+        }
+        // 不在线（Token已过期）
         else  {
             // 顺便删除
             logout(user);
