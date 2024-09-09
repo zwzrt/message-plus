@@ -101,4 +101,28 @@ public class MessagePlusSingleController {
         }
     }
 
+
+
+
+    /**
+     * 重发失败消息
+     */
+    @PutMapping("/resend")
+    public void resend(@RequestHeader(value = "token", required = false) String token,
+                       @RequestParam String id) {
+        // 开启了权限校验
+        if (MessagePlusProperties.tokenExpirationTime!=0) {
+            String idByToken = MessagePlusUtil.getIdByToken(token);
+            // 不在线，或服务器存储的ID与请求ID不相同
+            if (idByToken == null || idByToken.equals(id)) return;
+            else {
+                // TODO 重发
+            }
+        }
+        // 未开启权限校验
+        else {
+            // TODO 重发
+        }
+    }
+
 }
