@@ -2,6 +2,7 @@ package cn.redcoral.messageplus.utils.cache;
 
 import cn.redcoral.messageplus.data.entity.po.HistoryMessagePo;
 
+import java.util.List;
 import java.util.concurrent.BlockingQueue;
 
 /**
@@ -11,11 +12,8 @@ import java.util.concurrent.BlockingQueue;
  */
 public interface ChatSingleCacheUtil {
     
-    //添加聊天内容
-    void addChatContent(String receiverId, HistoryMessagePo message);
-    
     //获得该Id的聊天内容
-    BlockingQueue getChatSingleContent(String receiverId);
+    List<HistoryMessagePo> getChatSingleContent(String receiverId);
     
     void removeCache(String receiverId);
 }

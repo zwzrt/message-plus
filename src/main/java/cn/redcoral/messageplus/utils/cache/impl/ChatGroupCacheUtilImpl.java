@@ -7,13 +7,12 @@ import cn.redcoral.messageplus.data.entity.po.HistoryMessagePo;
 import cn.redcoral.messageplus.utils.cache.ChatGroupCacheUtil;
 import cn.redcoral.messageplus.utils.cache.MPCache;
 import com.alibaba.fastjson.JSON;
-import com.github.benmanes.caffeine.cache.Cache;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.concurrent.ArrayBlockingQueue;
-import java.util.concurrent.BlockingQueue;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.Callable;
 import java.util.function.Function;
 
@@ -29,7 +28,8 @@ public class ChatGroupCacheUtilImpl implements ChatGroupCacheUtil {
     @Autowired
     private MPCache<String, Integer> intCache;
     @Autowired
-    private MPCache<String,BlockingQueue> messageQueueCache;
+    private MPCache<String, List<HistoryMessagePo>> messageListCache;
+    
 
     @Override
     public void setGroup(Group group) {
@@ -60,17 +60,17 @@ public class ChatGroupCacheUtilImpl implements ChatGroupCacheUtil {
     public void addChatContent(String senderId, String receiverId, HistoryMessagePo message) {
 //        log.info("准备缓存");
         //key:prefix+receiverId，value:queue<message>
-        String key = CachePrefixConstant.CHAT_GROUP_CONTENT+receiverId;
-        BlockingQueue queue = messageQueueCache.getIfPresent(key);
+        String key = CachePrefixConstant.FAIL_MSG +receiverId;
+        List<HistoryMessagePo> list = messageListCache.getIfPresent(key);
         //队列不存在
-        if(queue==null){
-            BlockingQueue blockingQueue = new ArrayBlockingQueue(1000);
-            blockingQueue.add(message);
-            messageQueueCache.put(key,blockingQueue);
+        if(list==null){
+            ArrayList<HistoryMessagePo> list1 = new ArrayList<>();
+            list1.add(message);
+            messageListCache.put(key,list1);
             return;
         }
         //队列存在
-        queue.add(message);
+        list.add(message);
     }
 
     

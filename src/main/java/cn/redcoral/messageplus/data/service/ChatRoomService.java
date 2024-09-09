@@ -52,4 +52,8 @@ public interface ChatRoomService {
      * @return 未关闭的聊天室列表
      */
     List<ChatRoom> selectNotCloseChatRoomListByCreateId(String userId);
+    
+    boolean seerchForbiddenSpeech(String chatRoomId);
+    
+    boolean forbiddenSpeech(String userId, String chatRoomId);
 }

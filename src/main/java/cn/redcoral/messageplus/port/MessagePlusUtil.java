@@ -1,7 +1,19 @@
 package cn.redcoral.messageplus.port;
 
+import cn.redcoral.messageplus.constant.CachePrefixConstant;
+import cn.redcoral.messageplus.data.entity.message.Message;
+import cn.redcoral.messageplus.data.entity.po.HistoryMessagePo;
+import cn.redcoral.messageplus.data.service.HistoryMessageService;
+import cn.redcoral.messageplus.manage.UserManage;
+import cn.redcoral.messageplus.properties.MessagePersistenceProperties;
 import cn.redcoral.messageplus.properties.MessagePlusProperties;
+import cn.redcoral.messageplus.utils.BeanUtil;
+import cn.redcoral.messageplus.utils.RetryUtil;
+import cn.redcoral.messageplus.utils.cache.CacheUtil;
+import cn.redcoral.messageplus.utils.cache.ChatSingleCacheUtil;
+import com.alibaba.fastjson.JSON;
 
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.TimeUnit;
@@ -126,6 +138,9 @@ public class MessagePlusUtil {
         User user = tokenUserMap.get(token);
         long now = System.currentTimeMillis();
 
+        if(user==null){
+            return null;
+        }
         // 在线
         if (user.loginTime + tokenExpirationTime < now) {
             return user.id;
@@ -135,6 +150,64 @@ public class MessagePlusUtil {
             // 顺便删除
             logout(user);
             return null;
+        }
+    }
+    
+    public static boolean checkIdAndToken(String token,String userId){
+        if(MessagePlusProperties.tokenExpirationTime==0){
+            return true;
+        }
+        if(userId==null){
+            return false;
+        }
+        String Id = getIdByToken(token);
+        return userId.equals(Id);
+    }
+    
+    public static void ResendMessage(String receiverId) {
+        // 消息重发，直接调用messagecahche遍历发送，简化代码
+        CacheUtil cacheUtil = BeanUtil.chatCache();
+        List<HistoryMessagePo> list = cacheUtil.getChatSingleContent(receiverId);
+        
+        MessagePersistenceProperties properties = BeanUtil.messagePersistenceProperties();
+        HistoryMessageService historyMessageService = BeanUtil.historyService();
+        
+        synchronized (CachePrefixConstant.FAIL_MSG + receiverId)
+        {
+            if (list != null)
+            {
+                //准备重发
+                while (true)
+                {
+                    if (list.isEmpty())
+                    {
+                        // 队列为空删除缓存
+                        //                    chatSingleCacheUtil.removeCache(sid);
+                        break;
+                    }
+                    HistoryMessagePo message = list.remove(0);
+                    //取到了消息准备重发
+                    RetryUtil.retry(properties.getRetryCount(), properties.getIntervalTime(),
+                            () -> {
+                                Message msg = cn.hutool.core.bean.BeanUtil.copyProperties(message, Message.class);
+                                msg.setData(JSON.parse(message.getData()));
+                                boolean flag = UserManage.sendMessage(receiverId, msg);
+                                if (!flag)
+                                {
+                                    throw new RuntimeException();
+                                }
+                            },
+                            (bo) -> {
+                                if (bo)
+                                {
+                                    //成功重发，修改数据库
+                                    historyMessageService.updateMessage(message.getId(), false);
+                                }
+                            }
+                    );
+                }
+                
+            }
         }
     }
 }

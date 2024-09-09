@@ -185,4 +185,16 @@ public class ChatRoomServiceImpl implements ChatRoomService {
         List<ChatRoomPo> chatRoomPoList = chatRoomMapper.selectList(lqw);
         return ChatRoom.BuildChatRoomList(chatRoomPoList);
     }
+    
+    @Override
+    public boolean seerchForbiddenSpeech(String chatRoomId) {
+        ChatRoomPo chatRoomPo = chatRoomMapper.selectById(chatRoomId);
+        Boolean isForbiddenSpeak = chatRoomPo.getIsForbiddenSpeak();
+        return isForbiddenSpeak;
+    }
+    
+    @Override
+    public boolean forbiddenSpeech(String userId, String chatRoomId) {
+        return false;
+    }
 }

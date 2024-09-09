@@ -19,6 +19,8 @@ import javax.websocket.*;
 import javax.websocket.server.PathParam;
 import javax.websocket.server.ServerEndpoint;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.BlockingQueue;
 
 /**
@@ -51,45 +53,7 @@ public class MessagePlusService {
         this.client_id = sid;
         // 加入聊天
         UserManage.joinChat(sid, this, session);
-        // 消息重发，直接调用messagecahche遍历发送，简化代码
-        ChatSingleCacheUtil chatSingleCacheUtil = BeanUtil.chatSingleCache();
-        BlockingQueue blockingQueue = chatSingleCacheUtil.getChatSingleContent(sid);
-        
-        MessagePersistenceProperties properties = BeanUtil.messagePersistenceProperties();
-        HistoryMessageService historyMessageService = BeanUtil.historyService();
-        
-        if (blockingQueue != null)
-        {
-            //准备重发
-            while (true)
-            {
-                HistoryMessagePo message = (HistoryMessagePo) blockingQueue.poll();
-                if (message == null)
-                {
-                    // 队列为空删除缓存
-                    chatSingleCacheUtil.removeCache(sid);
-                    break;
-                }
-                //取到了消息准备重发
-                RetryUtil.retry(properties.getRetryCount(), properties.getIntervalTime(),
-                        () -> {
-                            Message msg = cn.hutool.core.bean.BeanUtil.copyProperties(message, Message.class);
-                            msg.setData(JSON.parse(message.getData()));
-                            boolean flag = UserManage.sendMessage(sid,
-                                    msg);
-                            if (!flag) {
-                                throw new RuntimeException();
-                            }
-                        }
-                        , (bo) -> {
-                            if(bo){
-                                //成功重发，修改数据库
-                                historyMessageService.updateMessage(message.getId(),false);
-                            }
-                        });
-            }
-            
-        }
+        MessagePlusUtil.ResendMessage(sid);
         
         // 调用下游方法
         BeanUtil.messagePlusBase().onOpen(session, sid);

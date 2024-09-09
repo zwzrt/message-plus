@@ -1,16 +1,15 @@
 package cn.redcoral.messageplus.config.cache;
 
 import cn.redcoral.messageplus.data.entity.ChatRoom;
+import cn.redcoral.messageplus.data.entity.po.HistoryMessagePo;
 import cn.redcoral.messageplus.properties.MessagePersistenceProperties;
 import cn.redcoral.messageplus.utils.cache.MPCache;
-import cn.redcoral.messageplus.utils.cache.impl.ChatSingleCacheUtilImpl;
 import com.github.benmanes.caffeine.cache.Cache;
 import com.github.benmanes.caffeine.cache.Caffeine;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Import;
 
-import java.util.concurrent.BlockingQueue;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -18,7 +17,6 @@ import java.util.concurrent.TimeUnit;
  * @author mo
  */
 @Configuration
-@Import(ChatSingleCacheUtilImpl.class)
 public class CacheConfig {
 
     /**
@@ -74,7 +72,7 @@ public class CacheConfig {
             .expireAfterWrite(MessagePersistenceProperties.cycleRestrictionsTime, TimeUnit.SECONDS)
             .build();
 
-    public static Cache<String, BlockingQueue> messageQueueCache = Caffeine.newBuilder()
+    public static Cache<String, List<HistoryMessagePo>> messageQueueCache = Caffeine.newBuilder()
             .initialCapacity(100) // 初始容量设置为1000，适应较大的初始需求
             .maximumSize(10000000) // 设置一个较大的最大容量以适应大量消息限制数据
             // 根据消息持久化属性中的周期限制时间设置过期时间，确保与业务逻辑一致
@@ -118,7 +116,7 @@ public class CacheConfig {
     }
     
     @Bean
-    public MPCache<String, BlockingQueue> messageQueueCache() {
-        return new MPCache<>(messageQueueCache);
+    public MPCache<String, List<HistoryMessagePo>> messageListCache() {
+        return new MPCache<String, List<HistoryMessagePo>>(messageQueueCache);
     }
 }

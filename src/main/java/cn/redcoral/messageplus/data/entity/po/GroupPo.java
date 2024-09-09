@@ -4,6 +4,7 @@ import cn.hutool.core.bean.BeanUtil;
 import cn.redcoral.messageplus.data.entity.Group;
 import com.alibaba.fastjson.JSON;
 import com.baomidou.mybatisplus.annotation.TableField;
+import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 
@@ -22,6 +23,7 @@ public class GroupPo implements Serializable {
     /**
      * 群组ID
      */
+    @TableId
     private String id;
     /**
      * 创建者ID

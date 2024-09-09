@@ -29,16 +29,11 @@ public class CachePrefixConstant {
     /**
      * 聊天室点赞
      */
-    public static final String CHAT_ROOM_THUMBS_UP = HEAD_PREFIX + "CHAT_ROOM:THUMBS_UP:";
+    public static final String CHAT_ROOM_THUMBS_UP = HEAD_PREFIX + "CHATROOM:THUMBS_UP:";
     
     /**
      * 单聊消息存储
      */
-    public static final String CHAT_SINGLE_CONTENT = HEAD_PREFIX + "CHAT_SINGLE_CONTENT:";
-    
-    /**
-     * 群发消息存储
-     */
-    public static final String CHAT_GROUP_CONTENT = HEAD_PREFIX + "CHAT_GROUP_CONTENT:";
+    public static final String FAIL_MSG = HEAD_PREFIX + "FAIL_MSG:";
     
 }

@@ -95,11 +95,11 @@ public class ChatRoomManage {
      * @param client_id 用户ID，用于标识用户
      * @param chatRoomId 聊天室ID，用于查找和加入特定的聊天室
      */
-    public void joinChatRoomById(String client_id, String chatRoomId) {
+    public Integer joinChatRoomById(String client_id, String chatRoomId) {
         // 通过聊天室ID获取聊天室对象
         ChatRoom chatRoom = chatRoomByIdMap.get(chatRoomId);
         // 如果聊天室不存在，直接返回不进行任何操作
-        if (chatRoom == null) return;
+        if (chatRoom == null) return 4001;
         // 用户加入聊天室
         chatRoom.joinChatRoom(client_id);
         // 获取用户加入的聊天室列表
@@ -118,6 +118,7 @@ public class ChatRoomManage {
         CounterMaxUtil.plusOne("chatroom:maxUserNum:" + chatRoomId, client_id);
         // 记录聊天室总人数
         CounterMaxUtil.plusOne("chatroom:allUserNum:" + chatRoomId, client_id);
+        return 2000;
     }
 
 
@@ -142,8 +143,8 @@ public class ChatRoomManage {
      * @param quitId 退出者ID
      * @param chatRoomId 聊天室ID
      */
-    public void quitChatRoomById(String quitId, String chatRoomId) {
-        chatRoomByIdMap.get(chatRoomId).quitChatRoom(quitId);
+    public Integer quitChatRoomById(String quitId, String chatRoomId) {
+        return chatRoomByIdMap.get(chatRoomId).quitChatRoom(quitId);
     }
 
 
@@ -206,8 +207,16 @@ public class ChatRoomManage {
      * @param senderId 点赞者ID
      * @param chatRoomId 聊天室ID
      */
-    public void thumbsUpNum(String senderId, String chatRoomId) {
+    public Integer thumbsUpNum(String senderId, String chatRoomId) {
         chatRoomService.upvote(senderId, chatRoomId);
+        return 2000;
     }
-
+    
+    public boolean seerchForbiddenSpeech(String chatRoomId) {
+        return chatRoomService.seerchForbiddenSpeech(chatRoomId);
+    }
+    
+    public boolean forbiddenSpeech(String userId, String chatRoomId) {
+        return chatRoomService.forbiddenSpeech(userId, chatRoomId);
+    }
 }

@@ -137,8 +137,8 @@ public class GroupManage {
         return groupService.selectUserNumById(groupId);
     }
     
-    public boolean deleteGroup(String groupId) {
-       return groupService.deleteGroup(groupId);
+    public boolean deleteGroup(String groupId,String userId) {
+       return groupService.deleteGroup(groupId,userId);
     }
     
     public boolean joinGroup(String groupId, String userId) {
@@ -152,8 +152,8 @@ public class GroupManage {
      * @param newName 群组新名称
      * @return 是否成功
      */
-    public boolean updateGroupName(String groupId, String newName) {
-        return groupService.updateGroupName(groupId, newName);
+    public boolean updateGroupName(String userId,String groupId, String newName) {
+        return groupService.updateGroupName(userId,groupId, newName);
     }
     
     public boolean signOutGroup(String groupId, String userId) {
@@ -161,7 +161,11 @@ public class GroupManage {
     }
     
     
-    public boolean forbiddenSpeech(String token, String groupId) {
-       return groupService.forbiddenSpeech(token,groupId);
+    public boolean forbiddenSpeech(String token,String userId, String groupId) {
+       return groupService.forbiddenSpeech(token,userId,groupId);
+    }
+    
+    public boolean seerchForbiddenSpeech(String groupId){
+        return groupService.seerchForbiddenSpeech(groupId);
     }
 }

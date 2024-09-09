@@ -69,13 +69,15 @@ public interface GroupService {
      * @param newName 群组新名称
      * @return 是否成功
      */
-    boolean updateGroupName(String groupId, String newName);
+    boolean updateGroupName(String userId,String groupId, String newName);
     
-    boolean deleteGroup(String groupId);
+    boolean deleteGroup(String groupId,String userId);
     
     boolean joinGroup(String groupId, String userId);
     
     boolean signOutGroup(String groupId, String userId);
     
-    boolean forbiddenSpeech(String token, String groupId);
+    boolean forbiddenSpeech(String token, String userId,String groupId);
+    
+    boolean seerchForbiddenSpeech(String groupId);
 }

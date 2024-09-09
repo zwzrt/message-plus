@@ -12,6 +12,7 @@ import cn.redcoral.messageplus.port.MessagePlusBase;
 import cn.redcoral.messageplus.properties.MessagePersistenceProperties;
 import cn.redcoral.messageplus.utils.BeanUtil;
 import cn.redcoral.messageplus.utils.RetryUtil;
+import cn.redcoral.messageplus.utils.cache.CacheUtil;
 import cn.redcoral.messageplus.utils.cache.ChatGroupCacheUtil;
 import cn.redcoral.messageplus.utils.cache.ChatSingleCacheUtil;
 import lombok.AllArgsConstructor;
@@ -37,7 +38,7 @@ public class MessageHandler {
     
     
     @Autowired
-    private ChatSingleCacheUtil chatSingleCacheUtil;
+    private CacheUtil cacheUtil;
     
     @Autowired
     private MessagePersistenceProperties properties;
@@ -80,7 +81,7 @@ public class MessageHandler {
      *
      * @param message 消息类
      */
-    public void handleSingleMessage(String senderId, String receiverId, Message message) {
+    public boolean handleSingleMessage(String senderId, String receiverId, Message message) {
         // 查看用户是否在线
         String onLineTag = UserManage.isOnLine(receiverId);
         switch (onLineTag)
@@ -94,8 +95,12 @@ public class MessageHandler {
                 //                messagePlusBase.onFailedMessage(message);
                 //TODO 返回值改为布尔类型，提示开发者发送消息失败
                 
-                reTry(senderId, receiverId, message);
-                break;
+                historyMessageService.insertMessage(message, true);
+                //将消息缓存
+                cacheUtil.addChatContent( receiverId,
+                        new HistoryMessagePo(message,true));
+                
+                return false;
             }
             // 本地在线
             case "0":
@@ -108,12 +113,18 @@ public class MessageHandler {
                     // TODO 提示出现失败消息
                     //                    messagePlusBase.onFailedMessage(message);
                     
-                    reTry(senderId, receiverId, message);
+                    
+                    historyMessageService.insertMessage(message, true);
+                    //将消息缓存
+                    cacheUtil.addChatContent( receiverId,
+                            new HistoryMessagePo(message,true));
+                    return false;
                 }
                 //成功发送
-                historyMessageService.insertMessage(message, false);
-                break;
+//                historyMessageService.insertMessage(message, false);
+                return true;
             }
+            default:return false;
         }
     }
     
@@ -138,25 +149,10 @@ public class MessageHandler {
             //用户不在线，有需要缓存的数据
             for (String receiverId : faildList)
             {
-                //给没有收到消息的缓存
-                RetryUtil.retry(properties.getRetryCount(), properties.getIntervalTime(),
-                        () -> {
-                            //先重发，再缓存
-                            boolean flag = UserManage.sendMessage(receiverId, message);
-                            if(!flag){
-                                throw new RuntimeException();
-                            }
-                        }, (bo) -> {
-                            Message messageCopy = cn.hutool.core.bean.BeanUtil.copyProperties(message, Message.class);
-                            messageCopy.setReceiverId(receiverId);
-                            //保存在数据库中
-                            Long id = historyMessageService.insertMessage(messageCopy, !bo);
-                            if(!bo){
-                                //缓存
-                                chatGroupCacheUtil.addChatContent(senderId, receiverId, new HistoryMessagePo(message,
-                                        true,id));
-                            }
-                        });
+                historyMessageService.insertMessage(message, true);
+                //将消息缓存
+                cacheUtil.addChatContent( receiverId,
+                        new HistoryMessagePo(message,true));
             }
             allIdList.removeAll(faildList);
             allIdList.remove(senderId);
@@ -194,33 +190,5 @@ public class MessageHandler {
             // TODO 提示出现失败消息
         }
     }
-    
-    
-    private void reTry(String senderId, String receiverId, Message message) {
-        RetryUtil.retry(properties.getRetryCount(), properties.getIntervalTime(), () -> {
-                    //执行重发
-                    boolean flag = UserManage.sendMessage(receiverId, message);
-                    if(!flag){
-                        throw new RuntimeException();
-                    }
-//                    log.info("失败重发");
-                },
-                (bo) -> {
-//            log.info("重发"+bo);
-                    Long id = historyMessageService.insertMessage(message, !bo);
-                    if (id==null)
-                    {
-                        log.error("存储失败，请检查数据库情况");
-                    }
-                    if (!bo)
-                    {
-                        //将消息缓存
-                        chatSingleCacheUtil.addChatContent( receiverId,
-                                new HistoryMessagePo(message,true,id));
-                    }
-                }
-        );
-    }
-    
     
 }

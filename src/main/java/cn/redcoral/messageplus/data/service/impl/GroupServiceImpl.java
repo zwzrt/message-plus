@@ -107,7 +107,11 @@ public class GroupServiceImpl implements GroupService {
     }
     
     @Override
-    public boolean deleteGroup(String groupId) {
+    public boolean deleteGroup(String groupId,String userId) {
+        GroupPo groupPo = groupMapper.selectById(groupId);
+        if(!userId.equals(groupPo.getCreateUserId())){
+            return false;
+        }
         int flag = groupMapper.deleteById(groupId);
         return flag>0;
     }
@@ -137,30 +141,35 @@ public class GroupServiceImpl implements GroupService {
     }
     
     @Override
-    public boolean forbiddenSpeech(String token, String groupId) {
-        String userId = MessagePlusUtil.getIdByToken(token);
+    public boolean forbiddenSpeech(String token,String userId, String groupId) {
         GroupPo groupPo = groupMapper.selectById(groupId);
-        boolean newStatus;
         if(groupPo==null){
-            throw new RuntimeException("没有这个群组");
+            return false;
         }
         if(groupPo.getCreateUserId().equals(userId)){
             Boolean isForbiddenSpeak = groupPo.getIsForbiddenSpeak();
-            newStatus = !isForbiddenSpeak;
-            groupPo.setIsForbiddenSpeak(newStatus);
+            groupPo.setIsForbiddenSpeak(!isForbiddenSpeak);
             groupMapper.updateById(groupPo);
         }else {
-            throw new RuntimeException("你没有权限禁言或解禁");
+            return false;
         }
-        return newStatus;
+        return true;
+    }
+    
+    @Override
+    public boolean seerchForbiddenSpeech(String groupId) {
+        GroupPo groupPo = groupMapper.selectById(groupId);
+        Boolean isForbiddenSpeak = groupPo.getIsForbiddenSpeak();
+        return isForbiddenSpeak;
     }
     
     
     @Override
-    public boolean updateGroupName(String groupId, String newName) {
+    public boolean updateGroupName(String userId,String groupId, String newName) {
         LambdaUpdateWrapper<GroupPo> lqw = new LambdaUpdateWrapper<>();
         lqw.eq(GroupPo::getId, groupId);
         lqw.set(GroupPo::getName, newName);
+        lqw.eq(GroupPo::getCreateUserId,userId);
         return groupMapper.update(lqw) > 0;
     }
 

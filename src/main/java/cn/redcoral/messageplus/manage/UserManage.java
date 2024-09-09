@@ -89,6 +89,7 @@ public class UserManage {
 
     /**
      * 给指定用户发送消息
+     * @param id 接受者Id
      */
     public static boolean sendMessage(String id, Message msg) {
         Session session = userIdSessionMap.get(id);
