@@ -24,19 +24,17 @@ public class CacheUtilImpl implements CacheUtil {
     
     @Override
     public void addChatContent(String receiverId, HistoryMessagePo message) {
-        //        log.info("准备缓存");
         //key:prefix+receiverId，value:queue<message>
         String key = CachePrefixConstant.FAIL_MSG +receiverId;
         List<HistoryMessagePo> list = messageListCache.getIfPresent(key);
         //队列不存在
-        if(list==null){
-            List<HistoryMessagePo> list1 = new ArrayList<>();
-            list1.add(message);
-            messageListCache.put(key,list1);
-            return;
+        if(list==null) {
+            list = new ArrayList<>();
+            list.add(message);
+            messageListCache.put(key, list);
         }
         //队列存在
-        list.add(message);
+        else list.add(message);
     }
     
     @Override

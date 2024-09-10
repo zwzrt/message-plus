@@ -11,7 +11,7 @@ import cn.redcoral.messageplus.data.entity.message.Message;
 import cn.redcoral.messageplus.manage.SystemManage;
 import cn.redcoral.messageplus.manage.UserManage;
 import cn.redcoral.messageplus.port.MessagePlusBase;
-import cn.redcoral.messageplus.properties.MessagePersistenceProperties;
+import cn.redcoral.messageplus.properties.MessagePlusMessageProperties;
 import cn.redcoral.messageplus.utils.CounterIdentifierUtil;
 import com.sun.management.OperatingSystemMXBean;
 import java.text.DecimalFormat;
@@ -66,7 +66,7 @@ public class MessagePlusSystemController {
     public void sendSystemMessage(HttpServerRequest request, @RequestParam("id1") String senderId, @RequestBody Object msg) throws Exception {
         // 1.并发限流
         // 短时间发送消息达到上限，禁止发送消息
-        if (CounterIdentifierUtil.isLessThanOrEqual(senderId, MessagePersistenceProperties.concurrentNumber)) {
+        if (CounterIdentifierUtil.isLessThanOrEqual(senderId, MessagePlusMessageProperties.concurrentNumber)) {
             return;
         }
         // 计数器加一

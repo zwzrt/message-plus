@@ -3,6 +3,7 @@ package cn.redcoral.messageplus.data.service.impl;
 import cn.redcoral.messageplus.data.entity.po.UserBlacklistPo;
 import cn.redcoral.messageplus.data.mapper.UserBlacklistMapper;
 import cn.redcoral.messageplus.data.service.UserBlacklistService;
+import cn.redcoral.messageplus.utils.cache.UserCacheUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -15,6 +16,8 @@ public class UserBlacklistServiceImpl implements UserBlacklistService {
 
     @Autowired
     private UserBlacklistMapper userBlacklistMapper;
+    @Autowired
+    private UserCacheUtil userCacheUtil;
 
     @Override
     public boolean black(String id1, String id2) {
@@ -41,8 +44,10 @@ public class UserBlacklistServiceImpl implements UserBlacklistService {
 
     @Override
     public boolean whetherPulledBlack(String id1, String id2) {
-        LambdaQueryWrapper<UserBlacklistPo> lqw = new LambdaQueryWrapper<>();
-        lqw.eq(UserBlacklistPo::getId1, id2).eq(UserBlacklistPo::getId2, id1);
-        return userBlacklistMapper.selectCount(lqw)==1;
+        return userCacheUtil.getIsBlack(id2, id1, (k)->{
+            LambdaQueryWrapper<UserBlacklistPo> lqw = new LambdaQueryWrapper<>();
+            lqw.eq(UserBlacklistPo::getId1, id2).eq(UserBlacklistPo::getId2, id1);
+            return userBlacklistMapper.selectCount(lqw)==1;
+        });
     }
 }

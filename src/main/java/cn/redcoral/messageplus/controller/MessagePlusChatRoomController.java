@@ -1,13 +1,12 @@
 package cn.redcoral.messageplus.controller;
 
-import cn.hutool.http.server.HttpServerRequest;
 import cn.redcoral.messageplus.data.entity.ChatRoom;
 import cn.redcoral.messageplus.data.entity.message.Message;
 import cn.redcoral.messageplus.data.service.ChatRoomService;
 import cn.redcoral.messageplus.manage.ChatRoomManage;
 import cn.redcoral.messageplus.port.MessagePlusBase;
 import cn.redcoral.messageplus.port.MessagePlusUtil;
-import cn.redcoral.messageplus.properties.MessagePersistenceProperties;
+import cn.redcoral.messageplus.properties.MessagePlusMessageProperties;
 import cn.redcoral.messageplus.properties.MessagePlusChatRoomProperties;
 import cn.redcoral.messageplus.utils.CounterIdentifierUtil;
 import cn.redcoral.messageplus.utils.ExpirationQueueUtil;
@@ -123,7 +122,7 @@ public class MessagePlusChatRoomController {
         {
             return 4001;
         }
-        if (CounterIdentifierUtil.isLessThanOrEqual(senderId, MessagePersistenceProperties.concurrentNumber))
+        if (CounterIdentifierUtil.isLessThanOrEqual(senderId, MessagePlusMessageProperties.concurrentNumber))
         {
             return 4001;
         }

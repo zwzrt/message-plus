@@ -1,17 +1,10 @@
 package cn.redcoral.messageplus.handler;
 
 import cn.redcoral.messageplus.config.MessageEncoder;
-import cn.redcoral.messageplus.data.entity.message.Message;
-import cn.redcoral.messageplus.data.entity.po.HistoryMessagePo;
-import cn.redcoral.messageplus.data.service.HistoryMessageService;
 import cn.redcoral.messageplus.port.MessagePlusUtil;
-import cn.redcoral.messageplus.properties.MessagePersistenceProperties;
 import cn.redcoral.messageplus.manage.UserManage;
 import cn.redcoral.messageplus.properties.MessagePlusProperties;
 import cn.redcoral.messageplus.utils.BeanUtil;
-import cn.redcoral.messageplus.utils.RetryUtil;
-import cn.redcoral.messageplus.utils.cache.ChatSingleCacheUtil;
-import com.alibaba.fastjson.JSON;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
@@ -19,9 +12,6 @@ import javax.websocket.*;
 import javax.websocket.server.PathParam;
 import javax.websocket.server.ServerEndpoint;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.concurrent.BlockingQueue;
 
 /**
  * 消息处理器

@@ -7,11 +7,10 @@ import cn.redcoral.messageplus.data.service.UserBlacklistService;
 import cn.redcoral.messageplus.handler.MessageHandler;
 import cn.redcoral.messageplus.manage.ChatRoomManage;
 import cn.redcoral.messageplus.port.MessagePlusBase;
-import cn.redcoral.messageplus.properties.MessagePersistenceProperties;
+import cn.redcoral.messageplus.properties.MessagePlusMessageProperties;
 import cn.redcoral.messageplus.properties.MessagePlusProperties;
 import cn.redcoral.messageplus.utils.cache.CacheUtil;
 import cn.redcoral.messageplus.utils.cache.ChatGroupCacheUtil;
-import cn.redcoral.messageplus.utils.cache.ChatSingleCacheUtil;
 import cn.redcoral.messageplus.utils.exterior.SpringUtils;
 import com.github.benmanes.caffeine.cache.Cache;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
@@ -39,7 +38,7 @@ public class BeanUtil {
     
     private static ChatGroupCacheUtil chatGroupCache;
     
-    private static MessagePersistenceProperties messagePersistenceProperties;
+    private static MessagePlusMessageProperties messagePlusMessageProperties;
     
     private static HistoryMessageService historyMessageService;
 
@@ -52,9 +51,9 @@ public class BeanUtil {
         return historyMessageService;
     }
     
-    public static MessagePersistenceProperties messagePersistenceProperties(){
-        if (messagePersistenceProperties == null) messagePersistenceProperties = SpringUtils.getBean(MessagePersistenceProperties.class);
-        return messagePersistenceProperties;
+    public static MessagePlusMessageProperties messagePersistenceProperties(){
+        if (messagePlusMessageProperties == null) messagePlusMessageProperties = SpringUtils.getBean(MessagePlusMessageProperties.class);
+        return messagePlusMessageProperties;
     }
     
     public static ChatGroupCacheUtil chatGroupCacheUtil(){

@@ -5,12 +5,11 @@ import cn.redcoral.messageplus.data.entity.message.Message;
 import cn.redcoral.messageplus.data.entity.po.HistoryMessagePo;
 import cn.redcoral.messageplus.data.service.HistoryMessageService;
 import cn.redcoral.messageplus.manage.UserManage;
-import cn.redcoral.messageplus.properties.MessagePersistenceProperties;
+import cn.redcoral.messageplus.properties.MessagePlusMessageProperties;
 import cn.redcoral.messageplus.properties.MessagePlusProperties;
 import cn.redcoral.messageplus.utils.BeanUtil;
 import cn.redcoral.messageplus.utils.RetryUtil;
 import cn.redcoral.messageplus.utils.cache.CacheUtil;
-import cn.redcoral.messageplus.utils.cache.ChatSingleCacheUtil;
 import com.alibaba.fastjson.JSON;
 
 import java.util.List;
@@ -169,7 +168,7 @@ public class MessagePlusUtil {
         CacheUtil cacheUtil = BeanUtil.chatCache();
         List<HistoryMessagePo> list = cacheUtil.getChatSingleContent(receiverId);
         
-        MessagePersistenceProperties properties = BeanUtil.messagePersistenceProperties();
+        MessagePlusMessageProperties properties = BeanUtil.messagePersistenceProperties();
         HistoryMessageService historyMessageService = BeanUtil.historyService();
         
         synchronized (CachePrefixConstant.FAIL_MSG + receiverId)
