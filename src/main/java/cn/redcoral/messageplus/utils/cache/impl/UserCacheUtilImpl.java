@@ -29,6 +29,21 @@ public class UserCacheUtilImpl implements UserCacheUtil {
     public void setUserService(String id) {
         stringCache.put(CachePrefixConstant.USER_MESSAGES_PREFIX + id, MessagePlusProperties.serviceId);
     }
+
+    /**
+     * 存储是否被拉黑
+     * @param id 拉黑用户
+     * @param blackId 被拉黑用户
+     * @param isBlack 是否拉黑
+     */
+    @Override
+    public void setIsBlack(String id, String blackId, boolean isBlack) {
+        // 删除
+        stringBooleanCache.invalidate(BLACK_PREFIX + id + ":" + blackId);
+        // 添加
+        stringBooleanCache.put(BLACK_PREFIX + id + ":" + blackId, isBlack);
+    }
+
     /**
      * 获取用户ID及所在服务ID
      * @param id 用户ID

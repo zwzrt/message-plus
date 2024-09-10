@@ -28,6 +28,7 @@ public class UserBlacklistServiceImpl implements UserBlacklistService {
         if (userBlacklistPo != null) return false;
         // 未拉黑
         else {
+            userCacheUtil.setIsBlack(id1, id2, true);
             userBlacklistPo = new UserBlacklistPo();
             userBlacklistPo.setId1(id1);
             userBlacklistPo.setId2(id2);
@@ -37,6 +38,7 @@ public class UserBlacklistServiceImpl implements UserBlacklistService {
 
     @Override
     public boolean noBlack(String id1, String id2) {
+        userCacheUtil.setIsBlack(id1, id2, false);
         LambdaQueryWrapper<UserBlacklistPo> lqw = new LambdaQueryWrapper<>();
         lqw.eq(UserBlacklistPo::getId1, id1).eq(UserBlacklistPo::getId2, id2);
         return userBlacklistMapper.delete(lqw)>=1;

@@ -14,6 +14,13 @@ public interface UserCacheUtil {
      */
     public void setUserService(String id);
 
+    /**
+     * 存储是否被拉黑
+     * @param id 拉黑用户
+     * @param blackId 被拉黑用户
+     * @param isBlack 是否拉黑
+     */
+    public void setIsBlack(String id, String blackId, boolean isBlack);
 
 
 
