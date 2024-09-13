@@ -4,7 +4,6 @@ import cn.redcoral.messageplus.data.entity.Group;
 import cn.redcoral.messageplus.data.entity.message.Message;
 import cn.redcoral.messageplus.handler.MessageHandler;
 import cn.redcoral.messageplus.manage.GroupManage;
-import cn.redcoral.messageplus.port.MessagePlusBase;
 import cn.redcoral.messageplus.port.MessagePlusUtil;
 import cn.redcoral.messageplus.properties.MessagePlusMessageProperties;
 import cn.redcoral.messageplus.utils.CounterIdentifierUtil;
@@ -26,39 +25,25 @@ public class MessagePlusGroupController {
     private GroupManage groupManage;
     
     @Autowired
-    private MessagePlusBase messagePlusBase;
-    
-    @Autowired
     private MessageHandler messageHandler;
-    
-    /**
-     * 拉入黑名单
-     */
-    public void a() {
-    
-    }
+
     
     
     /**
      * 创建群组
-     *
      * @param createUserId 创建者ID
      * @param name         群组名称
      * @param client_ids   成员ID
      */
     @PostMapping
     public Integer createGroup(@RequestHeader(value = "token", required = false) String token,
-                               String createUserId,
-                               String name,
-                               List<String> client_ids) {
+                               String createUserId, String name, List<String> client_ids) {
         boolean flag = MessagePlusUtil.checkIdAndToken(token, createUserId);
-        if (!flag)
-        {
+        if (!flag) {
             return 4001;
         }
         Group group = groupManage.createGroup(createUserId, name, client_ids);
-        if (group == null)
-        {
+        if (group == null) {
             return 4002;
         }
         return 2000;
@@ -71,7 +56,7 @@ public class MessagePlusGroupController {
      * @param msg     消息体
      */
     @PostMapping("/send")
-    public Integer sendMassMessage( @RequestParam("id1") String sendId, @RequestHeader(value =
+    public Integer sendMassMessage(@RequestParam("id1") String sendId, @RequestHeader(value =
             "token", required = false) String token, @RequestParam("id2") String groupId, @RequestBody String msg) throws Exception {
         // 1.并发限流
         // 短时间发送消息达到上限，禁止发送消息
@@ -158,7 +143,14 @@ public class MessagePlusGroupController {
     public int selectUserNumById(@RequestParam("id") String groupId) {
         return groupManage.getUserNum(groupId);
     }
-    
+
+    @GetMapping("searchforspeech")
+    public boolean forbiddenSpeech(@RequestParam("id") String groupId) {
+        return groupManage.seerchForbiddenSpeech(groupId);
+    }
+
+
+
     
     /**
      * 修改群组名称
@@ -169,11 +161,9 @@ public class MessagePlusGroupController {
      */
     @PutMapping("updatename")
     public boolean updateGroupNameById(@RequestHeader(value = "token", required = false) String token,
-                                       @RequestParam("userId") String userId,
-                                       @RequestParam("id") String groupId, @RequestParam("name") String groupName) {
+                                       @RequestParam("userId") String userId, @RequestParam("id") String groupId, @RequestParam("name") String groupName) {
         boolean flag = MessagePlusUtil.checkIdAndToken(token, userId);
-        if (!flag)
-        {
+        if (!flag) {
             return false;
         }
         return groupManage.updateGroupName(userId, groupId, groupName);
@@ -188,8 +178,7 @@ public class MessagePlusGroupController {
      */
     @PutMapping("join")
     public boolean joinGroup(@RequestHeader(value = "token", required = false) String token,
-                             @RequestParam("id") String groupId,
-                             @RequestParam("userId") String userId) {
+                             @RequestParam("id") String groupId, @RequestParam("userId") String userId) {
         boolean flag = MessagePlusUtil.checkIdAndToken(token, userId);
         if (!flag)
         {
@@ -207,8 +196,7 @@ public class MessagePlusGroupController {
      */
     @PutMapping("signout")
     public boolean signOut(@RequestHeader(value = "token", required = false) String token,
-                           @RequestParam("id") String groupId,
-                           @RequestParam("userId") String userId) {
+                           @RequestParam("id") String groupId, @RequestParam("userId") String userId) {
         boolean flag = MessagePlusUtil.checkIdAndToken(token, userId);
         if (!flag)
         {
@@ -219,18 +207,15 @@ public class MessagePlusGroupController {
     
     /**
      * 群组禁言
-     *
      * @param token   TOKEN
      * @param groupId 群组Id
      * @return 更新状态，true禁言，false未禁言
      */
     @PutMapping("forspeech")
     public boolean forbiddenSpeech(@RequestHeader(value = "token", required = false) String token,
-                                   @RequestParam("userId") String userId,
-                                   @RequestParam("id") String groupId) {
+                                   @RequestParam("userId") String userId, @RequestParam("id") String groupId) {
         boolean flag = MessagePlusUtil.checkIdAndToken(token, userId);
-        if (!flag)
-        {
+        if (!flag) {
             return false;
         }
         return groupManage.forbiddenSpeech(token, userId, groupId);
@@ -238,26 +223,18 @@ public class MessagePlusGroupController {
     
     /**
      * 群组解除禁言
-     *
      * @param token   TOKEN
      * @param groupId 群组Id
      * @return 更新状态，true禁言，false未禁言
      */
     @PutMapping("notforspeech")
     public boolean NotForbiddenSpeech(@RequestHeader(value = "token", required = false) String token,
-                                   @RequestParam("userId") String userId,
-                                   @RequestParam("id") String groupId) {
+                                      @RequestParam("userId") String userId, @RequestParam("id") String groupId) {
         boolean flag = MessagePlusUtil.checkIdAndToken(token, userId);
-        if (!flag)
-        {
+        if (!flag) {
             return false;
         }
         return groupManage.NotForbiddenSpeech(token, userId, groupId);
-    }
-    
-    @GetMapping("searchforspeech")
-    public boolean forbiddenSpeech(@RequestParam("id") String groupId) {
-        return groupManage.seerchForbiddenSpeech(groupId);
     }
     
     //TODO 被踢出群组

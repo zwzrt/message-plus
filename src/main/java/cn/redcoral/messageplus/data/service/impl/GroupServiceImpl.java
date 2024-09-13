@@ -4,7 +4,6 @@ import cn.redcoral.messageplus.data.entity.Group;
 import cn.redcoral.messageplus.data.entity.po.GroupPo;
 import cn.redcoral.messageplus.data.mapper.MessagePlusGroupMapper;
 import cn.redcoral.messageplus.data.service.GroupService;
-import cn.redcoral.messageplus.port.MessagePlusUtil;
 import cn.redcoral.messageplus.utils.cache.ChatGroupCacheUtil;
 import com.alibaba.fastjson.JSON;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
@@ -66,11 +65,9 @@ public class GroupServiceImpl implements GroupService {
         // 从缓存中获取
         Group group = groupCacheUtil.getGroupById(groupId);
         // 若不存在则再数据库查询
-        if (group == null)
-        {
+        if (group == null) {
             GroupPo groupPo = groupMapper.selectById(groupId);
-            if (groupPo != null)
-            {
+            if (groupPo != null) {
                 group = Group.BuildGroup(groupPo);
                 // 存储到缓存中
                 groupCacheUtil.setGroup(group);
@@ -84,15 +81,13 @@ public class GroupServiceImpl implements GroupService {
         // 1、从缓存中查询群组ID
         String groupId = groupCacheUtil.getGroupByNameAndCreateId(name, createId);
         // 不存在，向数据库查询
-        if (groupId == null)
-        {
+        if (groupId == null) {
             LambdaQueryWrapper<GroupPo> lqw = new LambdaQueryWrapper<>();
             lqw.eq(GroupPo::getName, name);
             lqw.eq(GroupPo::getCreateUserId, createId);
             GroupPo groupPo = groupMapper.selectOne(lqw);
             // 若查询到，则返回群组ID，并且重新向缓存添加数据
-            if (groupPo != null)
-            {
+            if (groupPo != null) {
                 groupId = groupPo.getId();
                 groupCacheUtil.setGroup(Group.BuildGroup(groupPo));
             }
@@ -104,12 +99,10 @@ public class GroupServiceImpl implements GroupService {
     public int selectUserNumById(String groupId) {
         return groupCacheUtil.getUserNumById(groupId, () -> {
             GroupPo groupPo = groupMapper.selectById(groupId);
-            if (groupPo != null)
-            {
+            if (groupPo != null) {
                 return groupPo.getUserNum();
             }
-            else
-            {
+            else {
                 return -1;
             }
         });
@@ -118,8 +111,7 @@ public class GroupServiceImpl implements GroupService {
     @Override
     public boolean deleteGroup(String groupId, String userId) {
         GroupPo groupPo = groupMapper.selectById(groupId);
-        if (!userId.equals(groupPo.getCreateUserId()))
-        {
+        if (!userId.equals(groupPo.getCreateUserId())) {
             return false;
         }
         int flag = groupMapper.deleteById(groupId);
@@ -156,7 +148,7 @@ public class GroupServiceImpl implements GroupService {
         lqw.select(GroupPo::getCreateUserId);
         lqw.eq(GroupPo::getId, groupId);
         GroupPo group = groupMapper.selectOne(lqw);
-        if(group==null||userId.equals(group.getCreateUserId())){
+        if(group==null||userId.equals(group.getCreateUserId())) {
             return false;
         }
         GroupPo groupPo = new GroupPo();
@@ -179,7 +171,7 @@ public class GroupServiceImpl implements GroupService {
         lqw.select(GroupPo::getCreateUserId);
         lqw.eq(GroupPo::getId, groupId);
         GroupPo group = groupMapper.selectOne(lqw);
-        if(group==null||userId.equals(group.getCreateUserId())){
+        if(group==null||userId.equals(group.getCreateUserId())) {
             return false;
         }
         GroupPo groupPo = new GroupPo();

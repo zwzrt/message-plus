@@ -22,7 +22,14 @@
 
 ### 介绍
 
-基于WebSocket的消息增强器，帮助开发者快速开发即时聊天系统。支持单发、群发、聊天室及系统功能;以及数据持久化；支持失败消息的持久化及重发功能。
+基于WebSocket的消息增强器，帮助开发者快速开发 即时聊天系统。
+
+功能：
+
+	支持单发、群发、聊天室及系统功能。
+	以及数据持久化。
+	支持失败消息的持久化及重发功能。
+	可视化的Web管理系统。
 
 此版本为单机版，集群版请前往[集群版仓库](https://gitee.com/modmb/message-plus-cluster)（Gitee）
 
@@ -81,7 +88,7 @@ Maven + SpringBoot + WebSocket + MyBatisPlus + Caffeine + Hutool
    <dependency>
        <groupId>io.github.zwzrt</groupId>
        <artifactId>message-plus</artifactId>
-       <version>0.2.1-beta</version>
+       <version>0.2.2-beta</version>
    </dependency>
    ```
 前往 [学习文档](https://www.red-coral.cn/nav)

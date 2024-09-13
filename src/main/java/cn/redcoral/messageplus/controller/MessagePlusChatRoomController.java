@@ -4,7 +4,6 @@ import cn.redcoral.messageplus.data.entity.ChatRoom;
 import cn.redcoral.messageplus.data.entity.message.Message;
 import cn.redcoral.messageplus.data.service.ChatRoomService;
 import cn.redcoral.messageplus.manage.ChatRoomManage;
-import cn.redcoral.messageplus.port.MessagePlusBase;
 import cn.redcoral.messageplus.port.MessagePlusUtil;
 import cn.redcoral.messageplus.properties.MessagePlusMessageProperties;
 import cn.redcoral.messageplus.properties.MessagePlusChatRoomProperties;
@@ -33,29 +32,24 @@ public class MessagePlusChatRoomController {
     private ChatRoomService chatRoomService;
     
     @Autowired
-    private MessagePlusBase messagePlusBase;
-    
-    @Autowired
     private SimpMessagingTemplate simpMessagingTemplate;
     
     /**
      * 消息过期队列
      */
     private static final ExpirationQueueUtil expirationQueueUtil = new ExpirationQueueUtil(MessagePlusChatRoomProperties.survivalTime, TimeUnit.SECONDS, MessagePlusChatRoomProperties.messageMaxSize);
-    
+
+
     
     /**
      * 创建聊天室
-     *
      * @param createId     创建者ID
      * @param chatRoomName 聊天室名称
      * @return 聊天室信息
      */
     @PostMapping("/create")
-    public ChatRoom createChatRoom(
-            @RequestHeader(value = "token", required = false) String token,
-            @RequestParam("createId") String createId,
-            @RequestParam("chatRoomName") String chatRoomName) {
+    public ChatRoom createChatRoom(@RequestHeader(value = "token", required = false) String token,
+                                   @RequestParam("createId") String createId, @RequestParam("chatRoomName") String chatRoomName) {
         boolean flag = MessagePlusUtil.checkIdAndToken(token, createId);
         if (!flag)
         {
@@ -71,10 +65,8 @@ public class MessagePlusChatRoomController {
      * @param chatRoomId 聊天室ID
      */
     @PostMapping("/add")
-    public Integer addChatRoom(
-            @RequestHeader(value = "token", required = false) String token,
-            @RequestParam("id1") String senderId,
-            @RequestParam("id2") String chatRoomId) {
+    public Integer addChatRoom(@RequestHeader(value = "token", required = false) String token,
+                               @RequestParam("id1") String senderId, @RequestParam("id2") String chatRoomId) {
         boolean flag = MessagePlusUtil.checkIdAndToken(token, senderId);
         if (!flag)
         {
@@ -90,10 +82,8 @@ public class MessagePlusChatRoomController {
      * @param chatRoomId 聊天室ID
      */
     @PostMapping("/thumbsUpNum")
-    public Integer thumbsUpNum(
-            @RequestHeader(value = "token", required = false) String token,
-            @RequestParam("id1") String senderId,
-            @RequestParam("id2") String chatRoomId) {
+    public Integer thumbsUpNum(@RequestHeader(value = "token", required = false) String token,
+                               @RequestParam("id1") String senderId, @RequestParam("id2") String chatRoomId) {
         boolean flag = MessagePlusUtil.checkIdAndToken(token, senderId);
         if (!flag)
         {
@@ -110,11 +100,8 @@ public class MessagePlusChatRoomController {
      * @param msg        消息体
      */
     @PostMapping("/send")
-    public Integer sendChatRoomMessage(
-            @RequestHeader(value = "token", required = false) String token,
-            @RequestParam("id1") String senderId,
-            @RequestParam("id2") String chatRoomId,
-            @RequestBody Object msg) throws Exception {
+    public Integer sendChatRoomMessage(@RequestHeader(value = "token", required = false) String token,
+                                       @RequestParam("id1") String senderId, @RequestParam("id2") String chatRoomId, @RequestBody Object msg) throws Exception {
         // 1.并发限流
         // 短时间发送消息达到上限，禁止发送消息
         boolean flag = MessagePlusUtil.checkIdAndToken(token, senderId);
@@ -157,10 +144,8 @@ public class MessagePlusChatRoomController {
      * @param chatRoomId 聊天室ID
      */
     @DeleteMapping("/close")
-    public boolean closeChatRoom(
-            @RequestHeader(value = "token", required = false) String token,
-            @RequestParam("id1") String closeId,
-            @RequestParam("id2") String chatRoomId) {
+    public boolean closeChatRoom(@RequestHeader(value = "token", required = false) String token,
+                                 @RequestParam("id1") String closeId, @RequestParam("id2") String chatRoomId) {
         boolean flag = MessagePlusUtil.checkIdAndToken(token, closeId);
         if (!flag)
         {
@@ -176,10 +161,8 @@ public class MessagePlusChatRoomController {
      * @param chatRoomId 聊天室ID
      */
     @DeleteMapping("/quit")
-    public Integer quitChatRoom(
-            @RequestHeader(value = "token", required = false) String token,
-            @RequestParam("id1") String quitId,
-            @RequestParam("id2") String chatRoomId) {
+    public Integer quitChatRoom(@RequestHeader(value = "token", required = false) String token,
+                                @RequestParam("id1") String quitId, @RequestParam("id2") String chatRoomId) {
         boolean flag = MessagePlusUtil.checkIdAndToken(token, quitId);
         if (!flag)
         {
@@ -205,7 +188,7 @@ public class MessagePlusChatRoomController {
      * @return 聊天室数组
      */
     @GetMapping
-    public List<ChatRoom> selectChatRoomList( @RequestParam("page") int page, @RequestParam("size") int size) {
+    public List<ChatRoom> selectChatRoomList(@RequestParam("page") int page, @RequestParam("size") int size) {
         return chatRoomManage.selectChatRoomList(page, size);
     }
     
@@ -216,7 +199,7 @@ public class MessagePlusChatRoomController {
      * @return 未关闭的聊天室ID
      */
     @GetMapping("/noclose")
-    public List<ChatRoom> selectMyChatRoomList( @RequestParam("id") String userId) {
+    public List<ChatRoom> selectMyChatRoomList(@RequestParam("id") String userId) {
         return chatRoomService.selectNotCloseChatRoomListByCreateId(userId);
     }
     
@@ -224,7 +207,7 @@ public class MessagePlusChatRoomController {
      * 获取聊天室当前人数
      */
     @GetMapping("/userNum")
-    public String selectChatRoomUserNumById( @RequestParam("id") String chatRoomId) {
+    public String selectChatRoomUserNumById(@RequestParam("id") String chatRoomId) {
         return String.valueOf(chatRoomManage.getUserNum(chatRoomId));
     }
     
@@ -232,7 +215,7 @@ public class MessagePlusChatRoomController {
      * 获取聊天室最大人数
      */
     @GetMapping("/maxUserNum")
-    public String selectChatRoomMaxUserNumById( @RequestParam("id") String chatRoomId) {
+    public String selectChatRoomMaxUserNumById(@RequestParam("id") String chatRoomId) {
         return String.valueOf(chatRoomManage.getMaxUserNum(chatRoomId));
     }
     
@@ -240,28 +223,34 @@ public class MessagePlusChatRoomController {
      * 获取聊天室总共人数
      */
     @GetMapping("/allUserNum")
-    public String selectChatRoomAllUserNumById( @RequestParam("id") String chatRoomId) {
+    public String selectChatRoomAllUserNumById(@RequestParam("id") String chatRoomId) {
         return String.valueOf(chatRoomManage.getAllUserNum(chatRoomId));
     }
     
     /**
      * 查询聊天室的历史消息
-     *
      * @param chatRoomId 聊天室ID
      * @return 历史消息
      */
     @GetMapping("/history/message")
-    public List<Message> selectChatRoomHistoryMessage( @RequestParam("id") String chatRoomId) {
+    public List<Message> selectChatRoomHistoryMessage(@RequestParam("id") String chatRoomId) {
         return expirationQueueUtil.getSurvivalList("chatroom:" + chatRoomId);
     }
-    
+
+
+
+    /**
+     * 禁言
+     * @param token 令牌
+     * @param userId 用户ID
+     * @param chatRoomId 聊天室ID
+     * @return 是否
+     */
     @PutMapping("forspeech")
     public boolean forbiddenSpeech(@RequestHeader(value = "token", required = false) String token,
-                                   @RequestParam("userId") String userId,
-                                   @RequestParam("id") String chatRoomId) {
+                                   @RequestParam("userId") String userId, @RequestParam("id") String chatRoomId) {
         boolean flag = MessagePlusUtil.checkIdAndToken(token, userId);
-        if (!flag)
-        {
+        if (!flag) {
             return false;
         }
         return chatRoomManage.forbiddenSpeech( userId, chatRoomId);
@@ -269,11 +258,9 @@ public class MessagePlusChatRoomController {
     
     @PutMapping("notforspeech")
     public boolean notForbiddenSpeech(@RequestHeader(value = "token", required = false) String token,
-                                   @RequestParam("userId") String userId,
-                                   @RequestParam("id") String chatRoomId) {
+                                      @RequestParam("userId") String userId, @RequestParam("id") String chatRoomId) {
         boolean flag = MessagePlusUtil.checkIdAndToken(token, userId);
-        if (!flag)
-        {
+        if (!flag) {
             return false;
         }
         return chatRoomManage.notForbiddenSpeech( userId, chatRoomId);

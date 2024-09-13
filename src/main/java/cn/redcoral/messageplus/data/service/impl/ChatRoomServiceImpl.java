@@ -35,6 +35,8 @@ public class ChatRoomServiceImpl implements ChatRoomService {
     @Autowired
     private ChatRoomCacheUtil chatRoomCacheUtil;
 
+
+
     @Override
     public ChatRoom insertChatRoom(ChatRoom chatRoom) {
         if (chatRoom == null) return null;
