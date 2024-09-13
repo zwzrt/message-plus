@@ -195,6 +195,33 @@ public class ChatRoomServiceImpl implements ChatRoomService {
     
     @Override
     public boolean forbiddenSpeech(String userId, String chatRoomId) {
-        return false;
+        LambdaQueryWrapper<ChatRoomPo> lqw = new LambdaQueryWrapper<>();
+        lqw.select(ChatRoomPo::getCreateUserId);
+        lqw.eq(ChatRoomPo::getId,chatRoomId);
+        ChatRoomPo chatRoom = chatRoomMapper.selectOne(lqw);
+        if(chatRoom==null||!chatRoomId.equals(chatRoom.getCreateUserId())){
+            return false;
+        }
+        ChatRoomPo chatRoomPo = new ChatRoomPo();
+        chatRoomPo.setId(chatRoomId);
+        chatRoomPo.setIsForbiddenSpeak(true);
+        int flag = chatRoomMapper.updateById(chatRoomPo);
+        return flag>0;
+    }
+    
+    @Override
+    public boolean notForbiddenSpeech(String userId, String chatRoomId) {
+        LambdaQueryWrapper<ChatRoomPo> lqw = new LambdaQueryWrapper<>();
+        lqw.select(ChatRoomPo::getCreateUserId);
+        lqw.eq(ChatRoomPo::getId,chatRoomId);
+        ChatRoomPo chatRoom = chatRoomMapper.selectOne(lqw);
+        if(chatRoom==null||!chatRoomId.equals(chatRoom.getCreateUserId())){
+            return false;
+        }
+        ChatRoomPo chatRoomPo = new ChatRoomPo();
+        chatRoomPo.setId(chatRoomId);
+        chatRoomPo.setIsForbiddenSpeak(false);
+        int flag = chatRoomMapper.updateById(chatRoomPo);
+        return flag>0;
     }
 }

@@ -219,4 +219,8 @@ public class ChatRoomManage {
     public boolean forbiddenSpeech(String userId, String chatRoomId) {
         return chatRoomService.forbiddenSpeech(userId, chatRoomId);
     }
+    
+    public boolean notForbiddenSpeech(String userId, String chatRoomId) {
+        return chatRoomService.notForbiddenSpeech(userId, chatRoomId);
+    }
 }

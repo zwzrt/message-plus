@@ -56,4 +56,6 @@ public interface ChatRoomService {
     boolean seerchForbiddenSpeech(String chatRoomId);
     
     boolean forbiddenSpeech(String userId, String chatRoomId);
+    
+    boolean notForbiddenSpeech(String userId, String chatRoomId);
 }

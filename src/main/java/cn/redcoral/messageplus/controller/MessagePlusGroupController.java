@@ -219,7 +219,7 @@ public class MessagePlusGroupController {
     }
     
     /**
-     * 群组禁言/解禁
+     * 群组禁言
      *
      * @param token   TOKEN
      * @param groupId 群组Id
@@ -235,6 +235,25 @@ public class MessagePlusGroupController {
             return false;
         }
         return groupManage.forbiddenSpeech(token, userId, groupId);
+    }
+    
+    /**
+     * 群组解除禁言
+     *
+     * @param token   TOKEN
+     * @param groupId 群组Id
+     * @return 更新状态，true禁言，false未禁言
+     */
+    @PutMapping("notforspeech")
+    public boolean NotForbiddenSpeech(@RequestHeader(value = "token", required = false) String token,
+                                   @RequestParam("userId") String userId,
+                                   @RequestParam("id") String groupId) {
+        boolean flag = MessagePlusUtil.checkIdAndToken(token, userId);
+        if (!flag)
+        {
+            return false;
+        }
+        return groupManage.NotForbiddenSpeech(token, userId, groupId);
     }
     
     @GetMapping("searchforspeech")

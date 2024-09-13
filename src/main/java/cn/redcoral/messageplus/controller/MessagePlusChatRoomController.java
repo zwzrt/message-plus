@@ -267,4 +267,16 @@ public class MessagePlusChatRoomController {
         }
         return chatRoomManage.forbiddenSpeech( userId, chatRoomId);
     }
+    
+    @PutMapping("notforspeech")
+    public boolean notForbiddenSpeech(@RequestHeader(value = "token", required = false) String token,
+                                   @RequestParam("userId") String userId,
+                                   @RequestParam("id") String chatRoomId) {
+        boolean flag = MessagePlusUtil.checkIdAndToken(token, userId);
+        if (!flag)
+        {
+            return false;
+        }
+        return chatRoomManage.notForbiddenSpeech( userId, chatRoomId);
+    }
 }

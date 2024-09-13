@@ -168,4 +168,8 @@ public class GroupManage {
     public boolean seerchForbiddenSpeech(String groupId){
         return groupService.seerchForbiddenSpeech(groupId);
     }
+    
+    public boolean NotForbiddenSpeech(String token, String userId, String groupId) {
+        return groupService.notForbiddenSpeech(token, userId, groupId);
+    }
 }

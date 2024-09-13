@@ -80,4 +80,6 @@ public interface GroupService {
     boolean forbiddenSpeech(String token, String userId,String groupId);
     
     boolean seerchForbiddenSpeech(String groupId);
+    
+    boolean notForbiddenSpeech(String token, String userId, String groupId);
 }
