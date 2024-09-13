@@ -1,13 +1,12 @@
 package cn.redcoral.messageplus.controller;
 
-import cn.hutool.http.server.HttpServerRequest;
 import cn.redcoral.messageplus.data.entity.Group;
 import cn.redcoral.messageplus.data.entity.message.Message;
 import cn.redcoral.messageplus.handler.MessageHandler;
 import cn.redcoral.messageplus.manage.GroupManage;
 import cn.redcoral.messageplus.port.MessagePlusBase;
 import cn.redcoral.messageplus.port.MessagePlusUtil;
-import cn.redcoral.messageplus.properties.MessagePersistenceProperties;
+import cn.redcoral.messageplus.properties.MessagePlusMessageProperties;
 import cn.redcoral.messageplus.utils.CounterIdentifierUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -76,7 +75,7 @@ public class MessagePlusGroupController {
             "token", required = false) String token, @RequestParam("id2") String groupId, @RequestBody String msg) throws Exception {
         // 1.并发限流
         // 短时间发送消息达到上限，禁止发送消息
-        if (CounterIdentifierUtil.isLessThanOrEqual(sendId, MessagePersistenceProperties.concurrentNumber)) {
+        if (CounterIdentifierUtil.isLessThanOrEqual(sendId, MessagePlusMessageProperties.concurrentNumber)) {
             return 4000;
         }
         // 计数器加一

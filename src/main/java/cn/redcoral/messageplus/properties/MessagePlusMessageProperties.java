@@ -12,7 +12,7 @@ import org.springframework.stereotype.Component;
 @Component("messagePersistenceProperties")
 @ConfigurationProperties(prefix = "messageplus.message")
 @Slf4j
-public class MessagePersistenceProperties {
+public class MessagePlusMessageProperties {
     /**
      * 消息持久化
      */
@@ -55,7 +55,7 @@ public class MessagePersistenceProperties {
     /**
      * 消息存储条数(一个群组或双人会话)
      */
-    public static long storedRecords = 1000;
+    public static long storedRecords = 100;
     
     /**
      * 消息最大存储时间(单位:天)
@@ -72,7 +72,7 @@ public class MessagePersistenceProperties {
     }
     
     public void setStoredRecords(long storedRecords) {
-        MessagePersistenceProperties.storedRecords = storedRecords;
+        MessagePlusMessageProperties.storedRecords = storedRecords;
     }
     
     public int getSurvivalTime() {
@@ -80,7 +80,7 @@ public class MessagePersistenceProperties {
     }
     
     public void setSurvivalTime(int survivalTime) {
-        MessagePersistenceProperties.survivalTime = survivalTime;
+        MessagePlusMessageProperties.survivalTime = survivalTime;
     }
     
     public int getCheckTime() {
@@ -92,28 +92,28 @@ public class MessagePersistenceProperties {
     }
     
     public boolean isMessagePersistence() {
-        return MessagePersistenceProperties.messagePersistence;
+        return MessagePlusMessageProperties.messagePersistence;
     }
     public void setMessagePersistence(boolean messagePersistence) {
-        MessagePersistenceProperties.messagePersistence = messagePersistence;
+        MessagePlusMessageProperties.messagePersistence = messagePersistence;
     }
     public int getExpirationTime() {
         return expirationTime;
     }
     public void setExpirationTime(int expirationTime) {
-        MessagePersistenceProperties.expirationTime = expirationTime;
+        MessagePlusMessageProperties.expirationTime = expirationTime;
     }
     public int getConcurrentNumber() {
         return concurrentNumber;
     }
     public void setConcurrentNumber(int concurrentNumber) {
-        MessagePersistenceProperties.concurrentNumber = concurrentNumber;
+        MessagePlusMessageProperties.concurrentNumber = concurrentNumber;
     }
     public int getCycleRestrictionsTime() {
         return cycleRestrictionsTime;
     }
     public void setCycleRestrictionsTime(int cycleRestrictionsTime) {
-        MessagePersistenceProperties.cycleRestrictionsTime = cycleRestrictionsTime;
+        MessagePlusMessageProperties.cycleRestrictionsTime = cycleRestrictionsTime;
     }
     
     public int getMessageTimeOut() {
@@ -121,14 +121,14 @@ public class MessagePersistenceProperties {
     }
     
     public void setMessageTimeOut(int messageTimeOut) {
-        MessagePersistenceProperties.messageTimeOut = messageTimeOut;
+        MessagePlusMessageProperties.messageTimeOut = messageTimeOut;
     }
     
     public int getCycleRestrictionsNum() {
         return cycleRestrictionsNum;
     }
     public void setCycleRestrictionsNum(int cycleRestrictionsNum) {
-        MessagePersistenceProperties.cycleRestrictionsNum = cycleRestrictionsNum;
+        MessagePlusMessageProperties.cycleRestrictionsNum = cycleRestrictionsNum;
     }
     
     public int getRetryCount() {
@@ -139,7 +139,7 @@ public class MessagePersistenceProperties {
         if(retryCount<1){
             retryCount=1;
         }
-        MessagePersistenceProperties.retryCount = retryCount;
+        MessagePlusMessageProperties.retryCount = retryCount;
     }
     
     public long getIntervalTime() {
@@ -147,6 +147,6 @@ public class MessagePersistenceProperties {
     }
     
     public void setIntervalTime(long intervalTime) {
-        MessagePersistenceProperties.intervalTime = intervalTime;
+        MessagePlusMessageProperties.intervalTime = intervalTime;
     }
 }

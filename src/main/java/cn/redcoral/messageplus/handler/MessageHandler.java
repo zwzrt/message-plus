@@ -9,12 +9,10 @@ import cn.redcoral.messageplus.data.service.HistoryMessageService;
 import cn.redcoral.messageplus.manage.ChatRoomManage;
 import cn.redcoral.messageplus.manage.UserManage;
 import cn.redcoral.messageplus.port.MessagePlusBase;
-import cn.redcoral.messageplus.properties.MessagePersistenceProperties;
+import cn.redcoral.messageplus.properties.MessagePlusMessageProperties;
 import cn.redcoral.messageplus.utils.BeanUtil;
-import cn.redcoral.messageplus.utils.RetryUtil;
 import cn.redcoral.messageplus.utils.cache.CacheUtil;
 import cn.redcoral.messageplus.utils.cache.ChatGroupCacheUtil;
-import cn.redcoral.messageplus.utils.cache.ChatSingleCacheUtil;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,7 +39,7 @@ public class MessageHandler {
     private CacheUtil cacheUtil;
     
     @Autowired
-    private MessagePersistenceProperties properties;
+    private MessagePlusMessageProperties properties;
     
     @Autowired
     private HistoryMessageService historyMessageService;
@@ -84,44 +82,39 @@ public class MessageHandler {
     public boolean handleSingleMessage(String senderId, String receiverId, Message message) {
         // 查看用户是否在线
         String onLineTag = UserManage.isOnLine(receiverId);
-        switch (onLineTag)
-        {
+        switch (onLineTag) {
             // 不在线
-            case "-1":
-            {
+            case "-1": {
                 // 提示出现失败消息(用户实现)
 //                log.info("用户不在线");
                 // TODO 提示出现失败消息
                 //                messagePlusBase.onFailedMessage(message);
                 //TODO 返回值改为布尔类型，提示开发者发送消息失败
                 
-                historyMessageService.insertMessage(message, true);
+//                historyMessageService.insertMessage(message, true);
                 //将消息缓存
-                cacheUtil.addChatContent( receiverId,
-                        new HistoryMessagePo(message,true));
+                cacheUtil.addChatContent(receiverId, new HistoryMessagePo(message,true));
                 
                 return false;
             }
             // 本地在线
-            case "0":
-            {
+            case "0": {
                 // 调用发送方法
                 boolean sended = UserManage.sendMessage(receiverId, message);
 //                log.info("用户在线");
-                if (!sended)
-                {
+                if (!sended) {
                     // TODO 提示出现失败消息
                     //                    messagePlusBase.onFailedMessage(message);
                     
                     
-                    historyMessageService.insertMessage(message, true);
+//                    historyMessageService.insertMessage(message, true);
                     //将消息缓存
-                    cacheUtil.addChatContent( receiverId,
+                    cacheUtil.addChatContent(receiverId,
                             new HistoryMessagePo(message,true));
                     return false;
                 }
                 //成功发送
-//                historyMessageService.insertMessage(message, false);
+                historyMessageService.insertMessage(message, false);
                 return true;
             }
             default:return false;

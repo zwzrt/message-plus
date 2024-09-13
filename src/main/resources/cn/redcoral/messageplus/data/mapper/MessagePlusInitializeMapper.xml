@@ -20,8 +20,9 @@
     <update id="createUserBlacklist">
         CREATE TABLE IF NOT EXISTS `mp_user_blacklist` (
             `id` bigint(30) PRIMARY KEY AUTO_INCREMENT COMMENT '主键id',
-            `id1` varchar(30) NOT NULL COMMENT '用户id',
-            `id2` varchar(30) NOT NULL COMMENT '拉黑用户id'
+            `id1` varchar(30) NOT NULL COMMENT '拉黑用户id',
+            `id2` varchar(30) NOT NULL COMMENT '被拉黑用户id',
+            INDEX (`id1`, `id2`)
         ) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT comment '用户黑名单';
     </update>
     <update id="createGroup">

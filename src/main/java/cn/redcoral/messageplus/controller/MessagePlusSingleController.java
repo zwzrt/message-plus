@@ -1,11 +1,10 @@
 package cn.redcoral.messageplus.controller;
 
-import cn.hutool.http.server.HttpServerRequest;
 import cn.redcoral.messageplus.data.entity.message.Message;
 import cn.redcoral.messageplus.handler.MessageHandler;
 import cn.redcoral.messageplus.manage.UserManage;
 import cn.redcoral.messageplus.port.MessagePlusUtil;
-import cn.redcoral.messageplus.properties.MessagePersistenceProperties;
+import cn.redcoral.messageplus.properties.MessagePlusMessageProperties;
 import cn.redcoral.messageplus.properties.MessagePlusProperties;
 import cn.redcoral.messageplus.utils.CounterIdentifierUtil;
 import lombok.extern.slf4j.Slf4j;
@@ -36,8 +35,7 @@ public class MessagePlusSingleController {
                                   @RequestParam("id1") String senderId, @RequestParam("id2") String receiverId, @RequestBody Object msg) throws Exception {
         // 1.并发限流
         // 短时间发送消息达到上限，禁止发送消息(默认为1)
-        // 开启了权限校验
-        if (CounterIdentifierUtil.isLessThanOrEqual(senderId, MessagePersistenceProperties.concurrentNumber)) {
+        if (CounterIdentifierUtil.isLessThanOrEqual(senderId, MessagePlusMessageProperties.concurrentNumber)) {
             return 4000;
         }
         // 计数器加一
