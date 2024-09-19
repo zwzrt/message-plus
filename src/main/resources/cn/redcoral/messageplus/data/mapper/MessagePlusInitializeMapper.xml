@@ -12,7 +12,7 @@
             `group_id` varchar(30) COMMENT '群组id',
             `chat_room_id` varchar(30) COMMENT '聊天室ID',
             `receiver_id` varchar(30) COMMENT '接收者ID',
-            `data` varchar(30) NOT NULL COMMENT '消息数据',
+            `data` varchar(2000) NOT NULL COMMENT '消息数据',
             `is_fail` int(1) NOT NULL COMMENT '是否失败',
             `create_time` timestamp not null comment '创建时间'
         ) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT comment '历史消息表';

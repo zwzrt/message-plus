@@ -26,10 +26,10 @@
 
 功能：
 
-	支持单发、群发、聊天室及系统功能。
-	以及数据持久化。
-	支持失败消息的持久化及重发功能。
-	可视化的Web管理系统。
+	1、支持单发、群发、聊天室及系统功能。
+	2、以及数据持久化。
+	3、支持失败消息的持久化及重发功能。
+	4、可视化的Web管理系统。
 
 此版本为单机版，集群版请前往[集群版仓库](https://gitee.com/modmb/message-plus-cluster)（Gitee）
 
@@ -97,6 +97,10 @@ Maven + SpringBoot + WebSocket + MyBatisPlus + Caffeine + Hutool
 
 1.  如果你想要测试一下，可以去我的仓库中的message-plus-test拉取代码来测试。(https://github.com/zwzrt/message-plus-test.git、 https://gitee.com/modmb/message-plus-test.git)
 2.  如果使用过程出现bug或者存在不足，可以向red_coral20240606@163.com发送邮箱，我们将会积极修复并提供更强大的功能。
+
+### 管理系统界面
+
+![管理系统界面](./doc/img/manage_system_home.png)
 
 ### 贡献者
 
