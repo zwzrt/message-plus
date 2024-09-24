@@ -60,7 +60,7 @@
             `all_user_num` int NOT NULL COMMENT '总人数',
             `thumbs_up_num` bigint(30) NOT NULL COMMENT '点赞数量',
             `opening_time` timestamp not null comment '开播时间',
-            `off_time` timestamp not null comment '停播时间'
+            `off_time` timestamp not null DEFAULT NOW() comment '停播时间'
         ) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT comment '聊天室历史表';
     </update>
 </mapper>
