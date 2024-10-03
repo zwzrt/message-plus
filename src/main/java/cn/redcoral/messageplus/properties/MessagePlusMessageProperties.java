@@ -1,7 +1,7 @@
 package cn.redcoral.messageplus.properties;
 
+import cn.redcoral.messageplus.data.dictionary.PropertiesDictionary;
 import lombok.Data;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;
 
@@ -11,7 +11,6 @@ import org.springframework.stereotype.Component;
 @Data
 @Component("messagePersistenceProperties")
 @ConfigurationProperties(prefix = "messageplus.message")
-@Slf4j
 public class MessagePlusMessageProperties {
     /**
      * 消息持久化
@@ -66,6 +65,17 @@ public class MessagePlusMessageProperties {
      * 检查时间间隔(单位:天)
      */
     public static int CheckTime = 1;
+
+
+
+    static {
+        // 加入字典
+        PropertiesDictionary.putMessage("concurrentNumber", "消息并发数");
+        PropertiesDictionary.putMessage("retryCount", "发送失败后重试次数");
+        PropertiesDictionary.putMessage("intervalTime", "每次重试间隔时间");
+    }
+
+
     
     public long getStoredRecords() {
         return storedRecords;

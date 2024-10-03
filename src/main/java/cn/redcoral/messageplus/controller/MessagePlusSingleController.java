@@ -32,7 +32,8 @@ public class MessagePlusSingleController {
      */
     @PostMapping("/send")
     public int sendSingleMessage(@RequestHeader(value = "token", required = false) String token,
-                                  @RequestParam("id1") String senderId, @RequestParam("id2") String receiverId, @RequestBody Object msg) throws Exception {
+                                 @RequestParam("id1") String senderId, @RequestParam("id2") String receiverId,
+                                 @RequestBody Object msg) {
         // 1.并发限流
         // 短时间发送消息达到上限，禁止发送消息(默认为1)
         if (CounterIdentifierUtil.isLessThanOrEqual(senderId, MessagePlusMessageProperties.concurrentNumber)) {

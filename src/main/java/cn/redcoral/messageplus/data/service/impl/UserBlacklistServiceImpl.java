@@ -49,7 +49,9 @@ public class UserBlacklistServiceImpl implements UserBlacklistService {
         return userCacheUtil.getIsBlack(id2, id1, (k)->{
             LambdaQueryWrapper<UserBlacklistPo> lqw = new LambdaQueryWrapper<>();
             lqw.eq(UserBlacklistPo::getId1, id2).eq(UserBlacklistPo::getId2, id1);
-            return userBlacklistMapper.selectCount(lqw)==1;
+            long l = userBlacklistMapper.selectCountById1AndId2(id1, id2);
+            return l == 1;
         });
     }
+
 }

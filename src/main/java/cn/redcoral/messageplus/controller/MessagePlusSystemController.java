@@ -6,14 +6,20 @@ import java.lang.management.MemoryMXBean;
 import java.lang.management.MemoryUsage;
 
 import cn.hutool.http.server.HttpServerRequest;
+import cn.redcoral.messageplus.data.dictionary.PropertiesDictionary;
 import cn.redcoral.messageplus.data.entity.Computer;
+import cn.redcoral.messageplus.data.entity.ConfNode;
 import cn.redcoral.messageplus.data.entity.message.Message;
 import cn.redcoral.messageplus.manage.SystemManage;
 import cn.redcoral.messageplus.manage.UserManage;
 import cn.redcoral.messageplus.port.MessagePlusBase;
+import cn.redcoral.messageplus.properties.MessagePlusChatRoomProperties;
 import cn.redcoral.messageplus.properties.MessagePlusMessageProperties;
+import cn.redcoral.messageplus.properties.MessagePlusProperties;
 import cn.redcoral.messageplus.utils.CounterIdentifierUtil;
 import com.sun.management.OperatingSystemMXBean;
+
+import java.lang.reflect.Field;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
@@ -193,6 +199,73 @@ public class MessagePlusSystemController {
             computer.setUn(un);
             list.add(computer);
         }
+        return list;
+    }
+
+    @GetMapping("/configuration")
+    public List<ConfNode> getConfiguration() throws IllegalAccessException {
+        List<ConfNode> list = new ArrayList<>();
+
+        // 1.获取基础配置类内容
+        MessagePlusProperties mpp = new MessagePlusProperties();
+        Field[] mppFs = mpp.getClass().getDeclaredFields();
+        // 1.1.创建属性列表
+        List<ConfNode> mppList = new ArrayList<>();
+        // 1.2.创建属性列表的父节点
+        ConfNode mppParentNode = new ConfNode("mpp", mppList);
+        // 1.3.加入总列表
+        list.add(mppParentNode);
+        // 1.4.遍历属性并加入属性列表
+        for (Field declaredField : mppFs) {
+            String k = declaredField.getName();
+            Object v = declaredField.get(mpp);
+            String n = PropertiesDictionary.getValue(k);
+            if (n!=null) {
+                ConfNode cn = new ConfNode(k, n, v);
+                mppList.add(cn);
+            }
+        }
+
+        // 2.获取消息配置类内容
+        MessagePlusMessageProperties mpmp = new MessagePlusMessageProperties();
+        Field[] mpmpFs = mpmp.getClass().getDeclaredFields();
+        // 2.1.创建属性列表
+        List<ConfNode> mpmpList = new ArrayList<>();
+        // 2.2.创建属性列表的父节点
+        ConfNode mpmpParentNode = new ConfNode("mpmp", mpmpList);
+        // 2.3.加入总列表
+        list.add(mpmpParentNode);
+        // 2.4.遍历属性并加入属性列表
+        for (Field df : mpmpFs) {
+            String k = df.getName();
+            Object v = df.get(mpmp);
+            String n = PropertiesDictionary.getMessageValue(k);
+            if (n!=null) {
+                ConfNode cn = new ConfNode(k, n, v);
+                mpmpList.add(cn);
+            }
+        }
+
+        // 3.获取聊天室配置类内容
+        MessagePlusChatRoomProperties mpcp = new MessagePlusChatRoomProperties();
+        Field[] mpcpFs = mpcp.getClass().getDeclaredFields();
+        // 3.1.创建属性列表
+        List<ConfNode> mpcpList = new ArrayList<>();
+        // 3.2.创建属性列表的父节点
+        ConfNode mpcpParentNode = new ConfNode("mpcp", mpcpList);
+        // 3.3.加入总列表
+        list.add(mpcpParentNode);
+        // 3.4.遍历属性并加入属性列表
+        for (Field df : mpcpFs) {
+            String k = df.getName();
+            Object v = df.get(mpcp);
+            String n = PropertiesDictionary.getChatroomValue(k);
+            if (n!=null) {
+                ConfNode cn = new ConfNode(k, n, v);
+                mpcpList.add(cn);
+            }
+        }
+
         return list;
     }
 

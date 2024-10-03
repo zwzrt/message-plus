@@ -1,6 +1,7 @@
 package cn.redcoral.messageplus.properties;
 
 import cn.hutool.core.lang.UUID;
+import cn.redcoral.messageplus.data.dictionary.PropertiesDictionary;
 import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;
@@ -22,6 +23,14 @@ public class MessagePlusProperties {
      * Token过期时间（默认：0，单位：分钟）
      */
     public static int tokenExpirationTime = 0;
+
+
+
+    static {
+        // 加入字典
+        PropertiesDictionary.put("serviceId", "服务ID");
+        PropertiesDictionary.put("tokenExpirationTime", "Token过期时间");
+    }
 
 
 

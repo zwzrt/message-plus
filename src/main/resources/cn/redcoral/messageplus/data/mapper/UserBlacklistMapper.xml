@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.redcoral.messageplus.data.mapper.UserBlacklistMapper">
+    <select id="selectCountById1AndId2" resultType="java.lang.Long">
+        select count(*) from `mp_user_blacklist` where `id1` = #{id1} and `id2` = #{id2}
+    </select>
+</mapper>
