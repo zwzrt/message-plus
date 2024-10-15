@@ -100,7 +100,16 @@ Maven + SpringBoot + WebSocket + MyBatisPlus + Caffeine + Hutool
 
 ### 管理系统界面
 
-![管理系统界面](./doc/img/manage_system_home.png)
+<table>
+	<tr>
+		<td>
+			<img src="./doc/home_pic/img.png" alt="">
+		</td>
+		<td>
+			<img src="./doc/home_pic/img_1.png" alt="">
+		</td>
+	</tr>
+</table>
 
 ### 贡献者
 
