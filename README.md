@@ -15,6 +15,10 @@
 
 ---
 
+### -- 未来更新计划
+
+未来 [消息增强器]()（简称MP）将基于 [消息增强器器核心](https://gitee.com/modmb/message-plus-core)（简称MPC）来作为底层框架。但是 [MPC](https://gitee.com/modmb/message-plus-core) 目前还在初期阶段，而 [MP]() 需要 [MPC](https://gitee.com/modmb/message-plus-core) 来作为底层框架。所以 [MP]() 短时间不会有太大更新，可以先去关注 [MPC](https://gitee.com/modmb/message-plus-core) 的进度。（注：因为本人为学生，学业较为繁重，所以更新可能会比较慢。）
+
 <a href="https://www.red-coral.cn/">前往主页</a>
 
 [//]: # (&ensp;|&ensp;)
